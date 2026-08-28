@@ -1,0 +1,47 @@
+name: skill-gate
+
+# Authoritative merge gate for skills. Pre-commit is advisory (bypassable
+# with --no-verify); this workflow is the enforcement that actually blocks.
+
+on:
+  pull_request:
+    paths:
+      - ".agents/skills/**"
+      - ".agents/agents/**"
+      - ".agents/skills/skill-tester/scripts/skill_gate.py"
+      - ".agents/skills/skill-builder/scripts/check_frontmatter.py"
+      - ".agents/skills/skill-builder/scripts/check_skill_names.py"
+  push:
+    branches: [main]
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install PyYAML (frontmatter parsing)
+        run: pip install pyyaml
+
+      - name: Run skill gate on all skills (min score 90)
+        run: |
+          python .agents/skills/skill-tester/scripts/skill_gate.py --all --json > skill-gate-report.json
+          cat skill-gate-report.json
+          # --json exits non-zero on FAIL, which is the gate behavior we want;
+          # registry update is done by the human-side run, not CI.
+          python .agents/skills/skill-tester/scripts/skill_gate.py --all
+
+      - name: Repo-wide checklist audit (aggregate report)
+        run: python .agents/skills/skill-tester/scripts/audit_skills.py
+
+      - name: Upload gate report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: skill-gate-report
+          path: skill-gate-report.json
+          if-no-files-found: ignore

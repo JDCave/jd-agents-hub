@@ -1,0 +1,8 @@
+{
+  "tool": "skill_validator.py",
+  "skill": "sample-skill (fixture)",
+  "overall_score": 95.0,
+  "compliance_level": "GOOD",
+  "errors": [],
+  "warnings": []
+}

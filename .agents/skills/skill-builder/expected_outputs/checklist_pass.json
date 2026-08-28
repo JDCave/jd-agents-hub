@@ -1,0 +1,12 @@
+{
+  "skill": "pdf-extract (sample used by the review checklist runner)",
+  "checks": [
+    {"rule": "1. Description includes triggers", "pass": true},
+    {"rule": "2. SKILL.md under 100 lines", "pass": true},
+    {"rule": "3. No time-sensitive info", "pass": true},
+    {"rule": "4. Consistent terminology", "pass": true},
+    {"rule": "5. Concrete examples included", "pass": true},
+    {"rule": "6. References one level deep", "pass": true}
+  ],
+  "overall": "PASS"
+}

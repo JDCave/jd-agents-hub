@@ -1,0 +1,8 @@
+{
+  "skill": "unsafe-sample (fixture for skill_security_auditor.py)",
+  "verdict": "FAIL",
+  "expected_findings": [
+    {"severity": "CRITICAL", "category": "CMD-INJECT", "file": "unsafe_sample.py", "pattern_contains": "os.system"},
+    {"severity": "CRITICAL", "category": "CODE-EXEC", "file": "unsafe_sample.py", "pattern_contains": "eval"}
+  ]
+}

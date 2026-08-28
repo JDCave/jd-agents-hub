@@ -1,0 +1,2 @@
+# benign fixture for batch-audit examples
+skills/*/  

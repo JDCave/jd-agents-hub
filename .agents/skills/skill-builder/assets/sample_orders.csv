@@ -1,0 +1,4 @@
+order_id,customer,amount,currency,status
+1001,alice,49.90,USD,shipped
+1002,bob,12.50,EUR,pending
+1003,carol,99.00,USD,refunded

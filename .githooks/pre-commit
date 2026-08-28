@@ -1,0 +1,34 @@
+#!/bin/sh
+# Pre-commit gate: run the skill gate on every staged skill directory.
+# Fast path: only skills with staged changes are gated. Run manually with
+# `sh .githooks/pre-commit`, or install once with
+#   git config core.hooksPath .githooks
+
+# Cross-platform staged-file listing: `git diff --cached --name-only`
+# works everywhere; to-ports need GNU diff. Use --no-renames to keep
+# each rename a delete+add pair.
+STAGED=$(git diff --cached --name-only --no-renames --diff-filter=ACMR -- '.agents/skills/*' | cut -d/ -f1-3 | sort -u)
+
+[ -z "$STAGED" ] && exit 0
+
+echo "== skill gate: staged skill changes detected =="
+FAIL=0
+for skill_dir in $STAGED; do
+    if [ -f "$skill_dir/SKILL.md" ]; then
+        # Guard: the skill must exist on disk (deleted paths are filtered
+        # by --diff-filter but renames can still leave an orphan).
+        echo "-- gating $skill_dir"
+        if ! python .agents/skills/skill-tester/scripts/skill_gate.py "$skill_dir" --update-registry; then
+            FAIL=1
+        fi
+    fi
+done
+
+if [ $FAIL -ne 0 ]; then
+    echo ""
+    echo "SKILL GATE FAILED. Fix the failing checks (see above) or apply the"
+    echo "top improvement_roadmap item and re-run. To bypass (NOT recommended):"
+    echo "  git commit --no-verify"
+    exit 1
+fi
+exit 0

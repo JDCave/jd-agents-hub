@@ -1,0 +1,26 @@
+{
+  "skill-security-auditor": {
+    "status": "draft",
+    "last_gate": {
+      "timestamp": "2026-08-28T15:30:35+00:00",
+      "verdict": "PASS",
+      "quality_score": 91.6
+    }
+  },
+  "skill-tester": {
+    "status": "draft",
+    "last_gate": {
+      "timestamp": "2026-08-28T15:30:35+00:00",
+      "verdict": "PASS",
+      "quality_score": 90.0
+    }
+  },
+  "skill-builder": {
+    "status": "draft",
+    "last_gate": {
+      "timestamp": "2026-08-28T15:30:35+00:00",
+      "verdict": "PASS",
+      "quality_score": 90.7
+    }
+  }
+}

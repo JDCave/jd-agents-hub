@@ -1,0 +1,15 @@
+{
+  "tool": "quality_scorer.py",
+  "skill": "sample-skill (fixture)",
+  "overall_score": 92.0,
+  "letter_grade": "A",
+  "tier_recommendation": "STANDARD",
+  "dimensions": {
+    "Documentation": 90.0,
+    "Code Quality": 92.0,
+    "Completeness": 95.0,
+    "Usability": 91.0,
+    "Security": 92.0
+  },
+  "improvement_roadmap": []
+}

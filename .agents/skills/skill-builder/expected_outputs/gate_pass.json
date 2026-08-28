@@ -1,0 +1,15 @@
+{
+  "gate": "skill-gate",
+  "skill": "sample-skill (fixture)",
+  "verdict": "PASS",
+  "quality_score": 93.5,
+  "checks": {
+    "frontmatter": "PASS",
+    "checklist": "PASS",
+    "structure": "PASS",
+    "scripts": "PASS",
+    "quality": "PASS",
+    "security": "PASS",
+    "name_shadow": "PASS"
+  }
+}

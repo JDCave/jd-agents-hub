@@ -1,0 +1,6 @@
+{
+  "tool": "check_skill_names.py",
+  "mode": "--all --json (fixture expectation)",
+  "files_checked": 4,
+  "failures": {}
+}

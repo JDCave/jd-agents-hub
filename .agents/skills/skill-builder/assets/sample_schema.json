@@ -1,0 +1,4 @@
+{
+  "columns": ["order_id", "customer", "amount", "currency", "status"],
+  "types": {"order_id": "int", "customer": "string", "amount": "float", "currency": "string", "status": "enum"}
+}
