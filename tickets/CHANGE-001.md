@@ -19,6 +19,7 @@ updated: 2026-08-29
 - [x] skill_gate 对 change-management 判 PASS（质量分 ≥90），全仓 audit_skills 无 ERROR
 - [x] ticket_utils.py 三条子命令（new-ticket / next-id / next-version）可用，单元测试全部通过
 - [x] 本工单 CHANGE-001 自身按工作流完成 record → start → verify，状态推进在进展日志留痕
+- [x] 验收打 tag 时维护根目录 CHANGELOG.md（Keep a Changelog 风格，每版本一条，引用工单号）
 
 ## 验证证据
 
@@ -33,6 +34,7 @@ updated: 2026-08-29
 - 2026-08-29 — open：工单创建
 - 2026-08-29 — open → in-progress；分支 feature/CHANGE-001-change-management-skill 已创建
 - 2026-08-29 — in-progress → awaiting-acceptance；skill 已提交（pre-commit 门禁自动通过），验证证据见上
+- 2026-08-29 — 按用户要求补充 CHANGELOG.md 机制（accept 步骤打 tag 时维护，已并入本工单范围），门禁复跑 PASS 91.3
 
 ## 验收记录
 
