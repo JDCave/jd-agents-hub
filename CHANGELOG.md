@@ -6,8 +6,8 @@ All notable changes to this repo are documented here. Format based on
 change-management workflow at acceptance/tag time from the corresponding ticket
 (`tickets/CHANGE-NNN.md`).
 
-## [Unreleased]
+## [v0.1.0] - 2026-08-29
 
 ### Added
 
-- CHANGE-001: add change ticket management workflow (change-management skill, `tickets/`, and this changelog mechanism). (awaiting acceptance)
+- CHANGE-001: add change ticket management workflow (change-management skill, `tickets/`, and this changelog mechanism).

@@ -2,7 +2,7 @@
 branch: feature/CHANGE-001-change-management-skill
 created: 2026-08-29
 id: CHANGE-001
-status: awaiting-acceptance
+status: accepted
 tag: (none)
 title: Add change ticket management workflow
 type: idea
@@ -44,14 +44,15 @@ Instructions, resume-by-ticket = Session Lifecycle).
 - 2026-08-29 — in-progress → awaiting-acceptance; skill committed (pre-commit gate passed automatically), evidence above
 - 2026-08-29 — scope extended with the CHANGELOG.md mechanism per user request (maintained at tag time); gate re-run PASS 91.3
 - 2026-08-29 — ticket content converted to English per user request; gates re-run green
+- 2026-08-29 — awaiting-acceptance → accepted; user approved delivery (accept + push + PR); tagged v0.1.0
 
 ## Acceptance record
 
-(Awaiting user acceptance: verdict / date / notes)
+Accepted · 2026-08-29 · user approved via interactive prompt (accept, push, and create PR)
 
 ## Release record
 
-- Version: (pending, expected v0.1.0 from next-version after acceptance)
-- Tag: (pending)
+- Version: v0.1.0
+- Tag: v0.1.0
 - PR: (pending)
 - Merged: (pending)
