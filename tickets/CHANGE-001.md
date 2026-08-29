@@ -1,8 +1,8 @@
 ---
-branch: (none)
+branch: feature/CHANGE-001-change-management-skill
 created: 2026-08-29
 id: CHANGE-001
-status: open
+status: in-progress
 tag: (none)
 title: 新增变更工单管理工作流
 type: idea
@@ -31,6 +31,7 @@ updated: 2026-08-29
 ## 进展日志
 
 - 2026-08-29 — open：工单创建
+- 2026-08-29 — open → in-progress；分支 feature/CHANGE-001-change-management-skill 已创建
 
 ## 验收记录
 
