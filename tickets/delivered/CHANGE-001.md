@@ -46,6 +46,7 @@ Instructions, resume-by-ticket = Session Lifecycle).
 - 2026-08-29 — ticket content converted to English per user request; gates re-run green
 - 2026-08-29 — awaiting-acceptance → accepted; user approved delivery (accept + push + PR); tagged v0.1.0
 - 2026-08-29 — accepted → delivered; branch + tag pushed; PR body prepared at tickets/CHANGE-001-pr.md (gh CLI not installed — PR to be opened manually via GitHub compare URL)
+- 2026-08-29 — layout change per user request: single ticket file (PR body = the ticket itself; CHANGE-001-pr.md removed), tickets reorganized into backlog/ + delivered/; this ticket moved to delivered/
 
 ## Acceptance record
 
@@ -55,5 +56,5 @@ Accepted · 2026-08-29 · user approved via interactive prompt (accept, push, an
 
 - Version: v0.1.0
 - Tag: v0.1.0
-- PR: manual (body at tickets/CHANGE-001-pr.md — open via https://github.com/JDCave/jd-agents-hub/compare/main...feature/CHANGE-001-change-management-skill)
+- PR: manual (body = this ticket file — open via https://github.com/JDCave/jd-agents-hub/compare/main...feature/CHANGE-001-change-management-skill)
 - Merged: (pending)

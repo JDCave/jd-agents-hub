@@ -9,10 +9,10 @@ that drives a branch → verify → acceptance → tag → PR lifecycle.
 From the repo root:
 
 ```bash
-# 1. record a ticket (allocates tickets/CHANGE-NNN.md from the template)
+# 1. record a ticket (allocates tickets/backlog/CHANGE-NNN.md from the template)
 python .agents/skills/change-management/scripts/ticket_utils.py new-ticket --type idea --title "add dark mode"
 # fill in description + acceptance criteria, then:
-git add tickets/CHANGE-001.md; git commit -m "ticket: record CHANGE-001 (idea)"
+git add tickets/backlog/CHANGE-001.md; git commit -m "ticket: record CHANGE-001 (idea)"
 
 # 2. start work on a dedicated branch
 git switch -c feature/CHANGE-001-dark-mode main
@@ -39,11 +39,14 @@ Full transition table, tagging rules, and edge cases: [references/lifecycle.md](
 | `scripts/ticket_utils.py` | Deterministic helpers: `new-ticket`, `next-id`, `next-version` |
 | `assets/ticket-template.md` | Ticket skeleton copied for every new ticket |
 | `assets/example-ticket.md` | A fully filled-in example ticket |
-| `assets/example-pr-body.md` | PR body example for the deliver step |
 | `examples/session-example.md` | Per-state command cheat sheet |
+| `examples/pr-example.md` | Opening a PR by hand when gh CLI is absent |
 | `expected_outputs/*.json` | Documented `--json` output shapes of the helpers |
 | `tests/test_ticket_utils.py` | Unit tests (`python -m unittest discover -s tests`) |
 | `references/*.md` | Lifecycle, ticket fields, versioning, verification/delivery |
+
+Tickets live in `tickets/backlog/` until they are delivered, then move to
+`tickets/delivered/`; id allocation scans both so numbers are never reused.
 
 The workflow implements the harness-engineering model (doc/harness-engineering.md):
 the ticket file is State, its acceptance checklist is Scope, the repo skill gate is

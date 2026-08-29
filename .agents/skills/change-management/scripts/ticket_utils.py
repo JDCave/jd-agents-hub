@@ -2,7 +2,7 @@
 """Deterministic helpers for the change-management ticket workflow.
 
 Subcommands:
-  new-ticket    Allocate the next CHANGE id and scaffold tickets/CHANGE-NNN.md
+  new-ticket    Allocate the next CHANGE id and scaffold tickets/backlog/CHANGE-NNN.md
   next-id       Print the next available CHANGE id without creating anything
   next-version  Print the next semantic version for a ticket type
 
@@ -20,6 +20,7 @@ from pathlib import Path
 SCRIPT_DIR = Path(__file__).resolve().parent
 TEMPLATE = SCRIPT_DIR.parent / "assets" / "ticket-template.md"
 ID_RE = re.compile(r"^CHANGE-(\d+)\.md$")
+TICKETS_SUBDIRS = ("backlog", "delivered")
 
 
 def find_repo_root(start: Path) -> Path:
@@ -30,20 +31,26 @@ def find_repo_root(start: Path) -> Path:
     raise RuntimeError(f"no git repository found above {start}")
 
 
-def existing_ids(tickets_dir: Path):
-    """Return sorted numeric ticket ids found as CHANGE-NNN.md in tickets_dir."""
+def existing_ids(tickets_root: Path):
+    """Return sorted numeric ids across tickets/backlog/ AND tickets/delivered/.
+
+    Both directories must be scanned so ids are never reused after a ticket
+    moves from backlog to delivered.
+    """
     ids = []
-    if tickets_dir.is_dir():
-        for entry in tickets_dir.iterdir():
-            match = ID_RE.match(entry.name)
-            if match:
-                ids.append(int(match.group(1)))
+    for sub in TICKETS_SUBDIRS:
+        sub_dir = tickets_root / sub
+        if sub_dir.is_dir():
+            for entry in sub_dir.iterdir():
+                match = ID_RE.match(entry.name)
+                if match:
+                    ids.append(int(match.group(1)))
     return sorted(ids)
 
 
-def compute_next_id(tickets_dir: Path) -> tuple:
+def compute_next_id(tickets_root: Path) -> tuple:
     """Compute the next ticket id as (id, number, existing_ids)."""
-    ids = existing_ids(tickets_dir)
+    ids = existing_ids(tickets_root)
     number = (ids[-1] + 1) if ids else 1
     return f"CHANGE-{number:03d}", number, ids
 
@@ -82,15 +89,16 @@ def compute_next_version(ticket_type: str, repo_root: Path) -> str:
     return f"v{major}.{minor}.{patch + 1}"
 
 
-def scaffold_ticket(tickets_dir: Path, ticket_id: str, title: str,
+def scaffold_ticket(tickets_root: Path, ticket_id: str, title: str,
                     ticket_type: str) -> Path:
-    """Create tickets/<ticket_id>.md from the template with fields filled in."""
+    """Create tickets/backlog/<ticket_id>.md from the template, fields filled in."""
     if not TEMPLATE.is_file():
         raise RuntimeError(f"ticket template not found: {TEMPLATE}")
     if ":" in title:
         raise RuntimeError("title must not contain a colon (header value)")
-    tickets_dir.mkdir(parents=True, exist_ok=True)
-    target = tickets_dir / f"{ticket_id}.md"
+    backlog_dir = tickets_root / "backlog"
+    backlog_dir.mkdir(parents=True, exist_ok=True)
+    target = backlog_dir / f"{ticket_id}.md"
     if target.exists():
         raise RuntimeError(f"ticket already exists: {target}")
     try:
@@ -146,7 +154,7 @@ def build_parser():
 
     p_new = sub.add_parser(
         "new-ticket", help="allocate the next id and scaffold a ticket file")
-    add_common(p_new, "Scaffold tickets/CHANGE-NNN.md from the template.")
+    add_common(p_new, "Scaffold tickets/backlog/CHANGE-NNN.md from the template.")
     p_new.add_argument("--title", required=True,
                        help="short ticket title (no colons)")
     p_new.add_argument("--type", required=True, choices=["problem", "idea"],

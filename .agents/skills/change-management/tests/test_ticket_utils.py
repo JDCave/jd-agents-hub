@@ -17,25 +17,37 @@ class NextIdTests(unittest.TestCase):
         self.tmp = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.tmp, ignore_errors=True)
         self.tickets = self.tmp / "tickets"
-        self.tickets.mkdir()
+        (self.tickets / "backlog").mkdir(parents=True)
+        (self.tickets / "delivered").mkdir(parents=True)
 
-    def test_empty_dir_starts_at_001(self):
+    def test_empty_dirs_start_at_001(self):
         self.assertEqual(ticket_utils.compute_next_id(self.tickets),
                          ("CHANGE-001", 1, []))
 
     def test_increments_past_max(self):
         for name in ("CHANGE-001.md", "CHANGE-007.md", "CHANGE-003.md"):
-            (self.tickets / name).write_text("x", encoding="utf-8")
+            (self.tickets / "backlog" / name).write_text("x", encoding="utf-8")
         ticket_id, number, ids = ticket_utils.compute_next_id(self.tickets)
         self.assertEqual((ticket_id, number), ("CHANGE-008", 8))
         self.assertEqual(ids, [1, 3, 7])
 
+    def test_delivered_tickets_count_so_ids_never_reuse(self):
+        (self.tickets / "delivered" / "CHANGE-005.md").write_text("x", encoding="utf-8")
+        ticket_id, number, ids = ticket_utils.compute_next_id(self.tickets)
+        self.assertEqual((ticket_id, number), ("CHANGE-006", 6))
+        self.assertEqual(ids, [5])
+
+    def test_mixed_backlog_and_delivered(self):
+        (self.tickets / "backlog" / "CHANGE-002.md").write_text("x", encoding="utf-8")
+        (self.tickets / "delivered" / "CHANGE-009.md").write_text("x", encoding="utf-8")
+        self.assertEqual(ticket_utils.compute_next_id(self.tickets)[0], "CHANGE-010")
+
     def test_rollover_past_999(self):
-        (self.tickets / "CHANGE-999.md").write_text("x", encoding="utf-8")
+        (self.tickets / "backlog" / "CHANGE-999.md").write_text("x", encoding="utf-8")
         self.assertEqual(ticket_utils.compute_next_id(self.tickets)[0], "CHANGE-1000")
 
     def test_ignores_non_ticket_files(self):
-        (self.tickets / "README.md").write_text("x", encoding="utf-8")
+        (self.tickets / "backlog" / "README.md").write_text("x", encoding="utf-8")
         self.assertEqual(ticket_utils.compute_next_id(self.tickets)[0], "CHANGE-001")
 
 
@@ -69,9 +81,10 @@ class ScaffoldTests(unittest.TestCase):
         self.tmp = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.tmp, ignore_errors=True)
 
-    def test_creates_filled_ticket(self):
+    def test_creates_filled_ticket_in_backlog(self):
         target = ticket_utils.scaffold_ticket(
             self.tmp, "CHANGE-001", "add dark mode", "idea")
+        self.assertEqual(target, self.tmp / "backlog" / "CHANGE-001.md")
         content = target.read_text(encoding="utf-8")
         self.assertIn("id: CHANGE-001", content)
         self.assertIn("type: idea", content)

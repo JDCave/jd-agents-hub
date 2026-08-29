@@ -7,8 +7,8 @@ the ticket number. Detail: [../EXAMPLES.md](../EXAMPLES.md).
 
 ```bash
 python .agents/skills/change-management/scripts/ticket_utils.py new-ticket --type idea --title "short title"
-# fill Description + Acceptance criteria in tickets/CHANGE-NNN.md
-git add tickets/CHANGE-NNN.md && git commit -m "ticket: record CHANGE-NNN (idea)"
+# fill Description + Acceptance criteria in tickets/backlog/CHANGE-NNN.md
+git add tickets/backlog/CHANGE-NNN.md && git commit -m "ticket: record CHANGE-NNN (idea)"
 ```
 
 ## start — status: in-progress
@@ -43,7 +43,8 @@ git tag -a v0.1.1 -m "CHANGE-NNN: title"
 ## deliver — status: delivered → merged
 
 ```bash
+git mv tickets/backlog/CHANGE-NNN.md tickets/delivered/
 git push -u origin feature/CHANGE-NNN-short-slug && git push origin v0.1.1
-gh pr create --base main --title "[CHANGE-NNN] title" --body-file tickets/CHANGE-NNN-pr.md
+gh pr create --base main --title "[CHANGE-NNN] title" --body-file tickets/delivered/CHANGE-NNN.md
 # after merge: gh pr merge --squash --delete-branch; git switch main; git pull
 ```

@@ -8,14 +8,14 @@ A worked session for the change-management workflow. Commands run from the repo 
 ```bash
 $ python .agents/skills/change-management/scripts/ticket_utils.py new-ticket --type problem --title "audit runner path is wrong"
 id: CHANGE-001
-file: tickets/CHANGE-001.md
+file: tickets/backlog/CHANGE-001.md
 next: fill acceptance criteria, then commit
 ```
 
-Fill Description and Acceptance criteria in `tickets/CHANGE-001.md`, then:
+Fill Description and Acceptance criteria in `tickets/backlog/CHANGE-001.md`, then:
 
 ```bash
-git add tickets/CHANGE-001.md
+git add tickets/backlog/CHANGE-001.md
 git commit -m "ticket: record CHANGE-001 (problem)"
 git switch -c feature/CHANGE-001-fix-audit-runner main
 ```
@@ -46,11 +46,13 @@ type: problem
 next_version: v0.1.1
 
 git tag -a v0.1.1 -m "CHANGE-001: audit runner path is wrong"
+git mv tickets/backlog/CHANGE-001.md tickets/delivered/
 git push -u origin feature/CHANGE-001-fix-audit-runner
 git push origin v0.1.1
 gh pr create --base main --title "[CHANGE-001] Fix audit runner path" \
-  --body-file tickets/CHANGE-001-pr.md
+  --body-file tickets/delivered/CHANGE-001.md
 ```
 
-PR body skeleton: [assets/example-pr-body.md](assets/example-pr-body.md);
-a fully filled-in ticket: [assets/example-ticket.md](assets/example-ticket.md).
+The ticket file itself is the PR body. Opening the PR by hand instead (no gh CLI):
+[examples/pr-example.md](examples/pr-example.md); a fully filled-in ticket:
+[assets/example-ticket.md](assets/example-ticket.md).

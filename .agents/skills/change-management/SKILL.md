@@ -2,7 +2,7 @@
 name: "change-management"
 version: "1.0.0"
 license: MIT
-description: "Manages the full change lifecycle for reported problems and proposed ideas — record each as a numbered markdown ticket (tickets/CHANGE-001.md), create a feature branch, verify with the repo skill gate, tag accepted changes with semantic versions, and open PRs to main. Use when the user reports a problem or bug, proposes an idea or new requirement, or mentions a change ticket, CHANGE id, version tag, or asks to resume, accept, or deliver a change."
+description: "Manages the full change lifecycle for reported problems and proposed ideas — record each as a numbered markdown ticket (tickets/backlog/CHANGE-001.md), create a feature branch, verify with the repo skill gate, tag accepted changes with semantic versions, and open PRs to main. Use when the user reports a problem or bug, proposes an idea or new requirement, or mentions a change ticket, CHANGE id, version tag, or asks to resume, accept, or deliver a change."
 when_to_use: "Recording a reported problem or proposed idea as a ticket; starting, verifying, tagging, or PR-ing a change; resuming an in-flight change ticket."
 ---
 
@@ -40,7 +40,7 @@ On `main`, scaffold the ticket (allocates the next id from the existing files), 
 
 ```bash
 python .agents/skills/change-management/scripts/ticket_utils.py new-ticket --type problem --title "short title"
-git add tickets/CHANGE-NNN.md
+git add tickets/backlog/CHANGE-NNN.md
 git commit -m "ticket: record CHANGE-NNN (problem)"
 ```
 
@@ -63,12 +63,13 @@ Only after explicit user acceptance. Example: `python .agents/skills/change-mana
 
 ### 6. Deliver — `status: delivered`
 
-Prerequisites: `git remote` shows origin and `gh auth status` succeeds — otherwise write the PR body from `assets/example-pr-body.md` and ask the user to push manually.
+Prerequisites: `git remote` shows origin and `gh auth status` succeeds — otherwise open the PR manually on GitHub (title `[CHANGE-NNN] title`, body = the ticket file itself; see `examples/pr-example.md`).
 
 ```bash
+git mv tickets/backlog/CHANGE-NNN.md tickets/delivered/
 git push -u origin feature/CHANGE-NNN-short-slug
 git push origin v0.1.1
-gh pr create --base main --title "[CHANGE-NNN] title" --body-file tickets/CHANGE-NNN-pr.md
+gh pr create --base main --title "[CHANGE-NNN] title" --body-file tickets/delivered/CHANGE-NNN.md
 ```
 
 After merge: `gh pr merge --squash --delete-branch`, `git switch main`, `git pull`, set `status: merged`, commit on main.## Verification
@@ -82,7 +83,7 @@ python .agents/skills/skill-tester/scripts/audit_skills.py
 
 ## Resuming a session
 
-1. List `tickets/CHANGE-*.md` headers; find the newest ticket not `merged`/`abandoned`.
+1. List `tickets/backlog/` and `tickets/delivered/` headers; find the newest ticket not `merged`/`abandoned`.
 2. `git log --oneline -10` + `git status` to reconstruct state.
 3. Continue from that status; append a Progress log line on every transition.
 

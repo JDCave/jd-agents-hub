@@ -26,17 +26,18 @@ git remote          # must list an origin
 gh auth status      # must be logged in
 ```
 
-If either fails, do not push. Write `tickets/CHANGE-NNN-pr.md` from
-`assets/example-pr-body.md` (title `[CHANGE-NNN] <title>`; body = description +
-acceptance checklist + verification evidence + tag), then ask the user to push and
-open the PR manually.
+If either fails, do not push. Open the PR manually on GitHub (guide:
+[../examples/pr-example.md](../examples/pr-example.md)) — title
+`[CHANGE-NNN] <short title>`, body = the delivered ticket file's content. The ticket
+itself is the PR body; no separate PR-description file is created.
 
-## Push and PR
+## Push, move, and PR
 
 ```bash
+git mv tickets/backlog/CHANGE-NNN.md tickets/delivered/
 git push -u origin feature/CHANGE-NNN-short-slug
 git push origin v0.1.1
-gh pr create --base main --title "[CHANGE-NNN] title" --body-file tickets/CHANGE-NNN-pr.md
+gh pr create --base main --title "[CHANGE-NNN] title" --body-file tickets/delivered/CHANGE-NNN.md
 ```
 
 After merge: `gh pr merge --squash --delete-branch` (or `--merge` to keep the tagged
