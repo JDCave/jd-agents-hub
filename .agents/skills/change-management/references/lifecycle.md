@@ -10,8 +10,8 @@ from the repo root (PowerShell 7 or bash).
 | — | `open` | user reports a problem or idea | create ticket from template, commit on `main` |
 | `open` | `in-progress` | work starts | create branch, update header, append log line |
 | `in-progress` | `awaiting-acceptance` | implementation + gates done | record evidence, tick checklist, present to user |
-| `awaiting-acceptance` | `in-progress` | user rejects | record reason in 验收记录, continue work |
-| `awaiting-acceptance` | `accepted` | user accepts | create semver tag, fill 验收记录/发布记录 |
+| `awaiting-acceptance` | `in-progress` | user rejects | record reason in Acceptance record, continue work |
+| `awaiting-acceptance` | `accepted` | user accepts | create semver tag, fill Acceptance/Release records |
 | `accepted` | `delivered` | tag + branch pushed, PR opened | `gh pr create`, record PR URL |
 | `delivered` | `merged` | PR merged | switch to main, pull, final ticket commit |
 | any pre-acceptance | `abandoned` | user cancels | record reason, keep the file; no branch/tag cleanup unless asked |

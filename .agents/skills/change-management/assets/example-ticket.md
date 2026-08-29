@@ -4,40 +4,41 @@ created: 2026-08-29
 id: CHANGE-002
 status: awaiting-acceptance
 tag: (none)
-title: audit 脚本在本仓库路径错误无法运行
+title: audit script cannot run with wrong repo path
 type: problem
 updated: 2026-08-29
 ---
 
-## 问题描述 / 需求描述
+## Description
 
-运行仓库级 audit 时脚本报 FileNotFound：RUNNER 指向了源仓库的路径而非本仓库
-`.agents/skills/...` 下的实际位置。期望：audit 在本仓库直接可用。
+Running the repo-wide audit fails with FileNotFound: RUNNER points at the source
+repo's path instead of the actual location under `.agents/skills/...` in this repo.
+Expected: audit works out of the box here.
 
-## 验收标准
+## Acceptance criteria
 
-- [x] audit_skills.py 全仓运行不报 FileNotFound
-- [x] 退出码为 0，聚合报告输出正常
+- [x] audit_skills.py runs repo-wide without FileNotFound
+- [x] Exit code 0 and the aggregate report prints normally
 
-## 验证证据
+## Verification evidence
 
-| 命令 | 退出码 | 结果 |
+| Command | Exit code | Result |
 | --- | --- | --- |
 | python .agents/skills/skill-tester/scripts/audit_skills.py | 0 | 5 skills audited, no ERROR |
 
-## 进展日志
+## Progress log
 
-- 2026-08-29 — open：工单创建
-- 2026-08-29 — open → in-progress；分支 feature/CHANGE-002-fix-audit-runner 已创建
-- 2026-08-29 — in-progress → awaiting-acceptance；门禁通过，证据见上
+- 2026-08-29 — open: ticket created
+- 2026-08-29 — open → in-progress; branch feature/CHANGE-002-fix-audit-runner created
+- 2026-08-29 — in-progress → awaiting-acceptance; gates passed, evidence above
 
-## 验收记录
+## Acceptance record
 
-（待用户验收：结论 / 日期 / 备注）
+(Awaiting user acceptance: verdict / date / notes)
 
-## 发布记录
+## Release record
 
-- 版本：(pending，验收后由 next-version 计算)
-- tag：(pending)
-- PR：(pending)
-- 合并日期：(pending)
+- Version: (pending, computed by next-version after acceptance)
+- Tag: (pending)
+- PR: (pending)
+- Merged: (pending)

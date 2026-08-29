@@ -4,38 +4,38 @@ created: YYYY-MM-DD
 id: CHANGE-NNN
 status: open
 tag: (none)
-title: 简短标题（不含冒号）
+title: Short title (no colons)
 type: problem
 updated: YYYY-MM-DD
 ---
 
-## 问题描述 / 需求描述
+## Description
 
-（问题：什么场景下出了什么错、期望的正确行为；想法：期望达成什么、为什么）
+(Problem: what went wrong in which scenario, and the expected behavior. Idea: what the user wants to achieve and why.)
 
-## 验收标准
+## Acceptance criteria
 
-- [ ] 第一条可核验的标准
-- [ ] 第二条可核验的标准
+- [ ] First verifiable criterion
+- [ ] Second verifiable criterion
 
-## 验证证据
+## Verification evidence
 
-| 命令 | 退出码 | 结果 |
+| Command | Exit code | Result |
 | --- | --- | --- |
 | python .agents/skills/skill-tester/scripts/skill_gate.py --all |  |  |
 | python .agents/skills/skill-tester/scripts/audit_skills.py |  |  |
 
-## 进展日志
+## Progress log
 
-- YYYY-MM-DD — open：工单创建
+- YYYY-MM-DD — open: ticket created
 
-## 验收记录
+## Acceptance record
 
-（结论：通过 / 驳回 · 日期 · 备注）
+(Verdict: accepted / rejected · date · notes)
 
-## 发布记录
+## Release record
 
-- 版本：(pending)
-- tag：(pending)
-- PR：(pending)
-- 合并日期：(pending)
+- Version: (pending)
+- Tag: (pending)
+- PR: (pending)
+- Merged: (pending)

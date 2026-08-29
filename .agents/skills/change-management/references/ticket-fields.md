@@ -25,11 +25,13 @@ lives at `assets/ticket-template.md`; a filled example at `assets/example-ticket
 
 ## Body sections
 
-- **问题描述 / 需求描述** — what went wrong and the expected behavior (problem), or
-  what the user wants to achieve and why (idea)
-- **验收标准** — checklist that defines done; each item independently checkable
-- **验证证据** — gate commands with exit codes and results, recorded before
+- **Description** — what went wrong and the expected behavior (problem), or what the
+  user wants to achieve and why (idea)
+- **Acceptance criteria** — checklist that defines done; each item independently checkable
+- **Verification evidence** — gate commands with exit codes and results, recorded before
   requesting acceptance
-- **进展日志** — append-only, one dated line per transition (`- YYYY-MM-DD — from → to; what happened`)
-- **验收记录** — acceptance decision (通过/驳回), date, reviewer notes
-- **发布记录** — version, tag, PR URL, merge date (filled at accept/deliver time)
+- **Progress log** — append-only, one dated line per transition (`- YYYY-MM-DD — from → to; what happened`)
+- **Acceptance record** — acceptance decision (accepted/rejected), date, reviewer notes
+- **Release record** — version, tag, PR URL, merge date (filled at accept/deliver time)
+
+All ticket content is written in English.

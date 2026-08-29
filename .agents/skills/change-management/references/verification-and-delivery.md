@@ -6,7 +6,7 @@ machine.
 ## Verification gates
 
 Run from repo root before requesting acceptance; record command + exit code + result
-in 验证证据:
+in Verification evidence:
 
 - `python .agents/skills/skill-tester/scripts/skill_gate.py --all` — expect all PASS
   (min quality score 90 per skill)

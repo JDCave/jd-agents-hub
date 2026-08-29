@@ -12,7 +12,7 @@ file: tickets/CHANGE-001.md
 next: fill acceptance criteria, then commit
 ```
 
-Fill 问题描述 and 验收标准 in `tickets/CHANGE-001.md`, then:
+Fill Description and Acceptance criteria in `tickets/CHANGE-001.md`, then:
 
 ```bash
 git add tickets/CHANGE-001.md
@@ -21,11 +21,12 @@ git switch -c feature/CHANGE-001-fix-audit-runner main
 ```
 
 Update the ticket header (`branch: feature/CHANGE-001-fix-audit-runner`, `status:
-in-progress`) and append a 进展日志 line, commit.
+in-progress`) and append a Progress log line, commit.
 
 ## Example 2: verify, then request acceptance
 
-Implement the fix, then run the repo gates and paste the evidence into 验证证据:
+Implement the fix, then run the repo gates and paste the evidence into Verification
+evidence:
 
 ```bash
 python .agents/skills/skill-tester/scripts/skill_gate.py --all

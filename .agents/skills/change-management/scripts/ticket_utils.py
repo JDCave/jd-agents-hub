@@ -100,11 +100,11 @@ def scaffold_ticket(tickets_dir: Path, ticket_id: str, title: str,
     today = datetime.date.today().isoformat()
     replacements = {
         "CHANGE-NNN": ticket_id,
-        "title: 简短标题（不含冒号）": f"title: {title}",
+        "title: Short title (no colons)": f"title: {title}",
         "type: problem": f"type: {ticket_type}",
         "YYYY-MM-DD": today,
-        "第一条可核验的标准": "（待填写）",
-        "第二条可核验的标准": "（待填写）",
+        "First verifiable criterion": "(to be filled)",
+        "Second verifiable criterion": "(to be filled)",
     }
     for old, new in replacements.items():
         content = content.replace(old, new)

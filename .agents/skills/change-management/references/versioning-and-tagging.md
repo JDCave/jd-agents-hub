@@ -32,19 +32,20 @@ and turn the ticket into one bullet — Keep a Changelog style, newest section f
 
 ### Fixed
 
-- CHANGE-NNN：<标题一句话>。
+- CHANGE-NNN: one-line summary of the fix.
 ```
 
-Keyword by ticket type: `idea` → `Added`（新能力）或 `Changed`（行为变化）；`problem`
-→ `Fixed`。Bullet 一句话即可，细节留在工单里——CHANGELOG 是索引，工单是正文。
+Keyword by ticket type: `idea` → `Added` (new capability) or `Changed` (behavior
+change); `problem` → `Fixed`. One sentence per bullet is enough — details stay in the
+ticket; the CHANGELOG is the index, the ticket is the body.
 
 ## Rework after tagging (pre-merge)
 
 Default: leave the tag on the accepted commit, add new commits, re-run the gates, ask
 for acceptance again. Re-point a local tag only on explicit user instruction
-(`git tag -fa v0.1.1 -m "..."`) and note it in 发布记录. Never move a tag that has
-already been pushed — deleting/re-pushing remote tags is visible history surgery and
-requires separate user confirmation each time.
+(`git tag -fa v0.1.1 -m "..."`) and note it in the Release record. Never move a tag
+that has already been pushed — deleting/re-pushing remote tags is visible history
+surgery and requires separate user confirmation each time.
 
 ## Squash-merge caveat
 

@@ -48,18 +48,18 @@ Never `git add -A` — the repo carries unrelated untracked work.
 
 ### 2. Start — `status: in-progress`
 
-`git switch -c feature/CHANGE-NNN-short-slug main`, then update the ticket header (`branch`, `status`, `updated`), append a 进展日志 line, commit.
+`git switch -c feature/CHANGE-NNN-short-slug main`, then update the ticket header (`branch`, `status`, `updated`), append a Progress log line, commit.
 
 ### 3. Work & verify — still `in-progress`
 
-Implement only what the acceptance checklist covers. Before claiming done, run the gates in [Verification](#verification) and record command + exit code in 验证证据.
+Implement only what the acceptance checklist covers. Before claiming done, run the gates in [Verification](#verification) and record command + exit code in Verification evidence.
 
 ### 4. Await acceptance — `status: awaiting-acceptance`
 
-Tick the checklist, commit, present checklist + verification evidence to the user, then STOP — no tag, no push before acceptance. On rejection: record why in 验收记录, set `status: in-progress`, continue.
+Tick the checklist, commit, present checklist + verification evidence to the user, then STOP — no tag, no push before acceptance. On rejection: record why in Acceptance record, set `status: in-progress`, continue.
 ### 5. Accept & tag — `status: accepted`
 
-Only after explicit user acceptance. Example: `python .agents/skills/change-management/scripts/ticket_utils.py next-version --type problem` prints the next tag (first tag → `v0.1.0`; `problem` → patch; `idea` → minor). Annotated tag on the branch: `git tag -a v0.1.1 -m "CHANGE-NNN: title"`. Fill 验收记录 and 发布记录, set `tag:` in the header, add a `CHANGELOG.md` section for the new version (one bullet referencing CHANGE-NNN), commit.
+Only after explicit user acceptance. Example: `python .agents/skills/change-management/scripts/ticket_utils.py next-version --type problem` prints the next tag (first tag → `v0.1.0`; `problem` → patch; `idea` → minor). Annotated tag on the branch: `git tag -a v0.1.1 -m "CHANGE-NNN: title"`. Fill Acceptance record and Release record, set `tag:` in the header, add a `CHANGELOG.md` section for the new version (one bullet referencing CHANGE-NNN), commit.
 
 ### 6. Deliver — `status: delivered`
 
@@ -84,7 +84,7 @@ python .agents/skills/skill-tester/scripts/audit_skills.py
 
 1. List `tickets/CHANGE-*.md` headers; find the newest ticket not `merged`/`abandoned`.
 2. `git log --oneline -10` + `git status` to reconstruct state.
-3. Continue from that status; append a 进展日志 line on every transition.
+3. Continue from that status; append a Progress log line on every transition.
 
 Status machine: `open → in-progress → awaiting-acceptance → accepted → delivered → merged` (rejection → `in-progress`; abandon allowed pre-acceptance).
 
