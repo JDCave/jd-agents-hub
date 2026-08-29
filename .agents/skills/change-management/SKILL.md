@@ -59,7 +59,7 @@ Implement only what the acceptance checklist covers. Before claiming done, run t
 Tick the checklist, commit, present checklist + verification evidence to the user, then STOP — no tag, no push before acceptance. On rejection: record why in 验收记录, set `status: in-progress`, continue.
 ### 5. Accept & tag — `status: accepted`
 
-Only after explicit user acceptance. Example: `python .agents/skills/change-management/scripts/ticket_utils.py next-version --type problem` prints the next tag (first tag → `v0.1.0`; `problem` → patch; `idea` → minor). Annotated tag on the branch: `git tag -a v0.1.1 -m "CHANGE-NNN: title"`. Fill 验收记录 and 发布记录, set `tag:` in the header, commit.
+Only after explicit user acceptance. Example: `python .agents/skills/change-management/scripts/ticket_utils.py next-version --type problem` prints the next tag (first tag → `v0.1.0`; `problem` → patch; `idea` → minor). Annotated tag on the branch: `git tag -a v0.1.1 -m "CHANGE-NNN: title"`. Fill 验收记录 and 发布记录, set `tag:` in the header, add a `CHANGELOG.md` section for the new version (one bullet referencing CHANGE-NNN), commit.
 
 ### 6. Deliver — `status: delivered`
 

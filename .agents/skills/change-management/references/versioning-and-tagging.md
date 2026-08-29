@@ -22,6 +22,22 @@ Always annotated, message referencing the ticket:
 git tag -a v0.1.1 -m "CHANGE-NNN: <title>"
 ```
 
+## Changelog
+
+At tag time, add a section to the repo-root `CHANGELOG.md` (create the file if absent)
+and turn the ticket into one bullet — Keep a Changelog style, newest section first:
+
+```markdown
+## [v0.1.1] - 2026-08-29
+
+### Fixed
+
+- CHANGE-NNN：<标题一句话>。
+```
+
+Keyword by ticket type: `idea` → `Added`（新能力）或 `Changed`（行为变化）；`problem`
+→ `Fixed`。Bullet 一句话即可，细节留在工单里——CHANGELOG 是索引，工单是正文。
+
 ## Rework after tagging (pre-merge)
 
 Default: leave the tag on the accepted commit, add new commits, re-run the gates, ask
