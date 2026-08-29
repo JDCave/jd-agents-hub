@@ -2,7 +2,7 @@
 branch: feature/CHANGE-001-change-management-skill
 created: 2026-08-29
 id: CHANGE-001
-status: in-progress
+status: awaiting-acceptance
 tag: (none)
 title: 新增变更工单管理工作流
 type: idea
@@ -15,10 +15,10 @@ updated: 2026-08-29
 
 ## 验收标准
 
-- [ ] `.agents/skills/change-management/` 结构完整（SKILL.md ≤100 行 + scripts/assets/references/examples/expected_outputs/tests）
-- [ ] skill_gate 对 change-management 判 PASS（质量分 ≥90），全仓 audit_skills 无 ERROR
-- [ ] ticket_utils.py 三条子命令（new-ticket / next-id / next-version）可用，单元测试全部通过
-- [ ] 本工单 CHANGE-001 自身按工作流完成 record → start → verify，状态推进在进展日志留痕
+- [x] `.agents/skills/change-management/` 结构完整（SKILL.md ≤100 行 + scripts/assets/references/examples/expected_outputs/tests）
+- [x] skill_gate 对 change-management 判 PASS（质量分 ≥90），全仓 audit_skills 无 ERROR
+- [x] ticket_utils.py 三条子命令（new-ticket / next-id / next-version）可用，单元测试全部通过
+- [x] 本工单 CHANGE-001 自身按工作流完成 record → start → verify，状态推进在进展日志留痕
 
 ## 验证证据
 
@@ -32,6 +32,7 @@ updated: 2026-08-29
 
 - 2026-08-29 — open：工单创建
 - 2026-08-29 — open → in-progress；分支 feature/CHANGE-001-change-management-skill 已创建
+- 2026-08-29 — in-progress → awaiting-acceptance；skill 已提交（pre-commit 门禁自动通过），验证证据见上
 
 ## 验收记录
 
