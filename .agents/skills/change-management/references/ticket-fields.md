@@ -1,0 +1,35 @@
+# Ticket Fields Reference
+
+Semantics of the ticket header (simple `key: value` lines between `---` fences, keys
+alphabetically sorted per the dotagents protocol) and the body sections. The skeleton
+lives at `assets/ticket-template.md`; a filled example at `assets/example-ticket.md`.
+
+## Header fields
+
+| Field | Values | Meaning |
+| --- | --- | --- |
+| `branch` | `(none)` or branch name | Working branch for this ticket; set when work starts |
+| `created` | `YYYY-MM-DD` | Date the ticket was recorded |
+| `id` | `CHANGE-NNN` | Allocated by `ticket_utils.py next-id` / `new-ticket` |
+| `status` | see below | Current lifecycle state — the single source of truth for resuming |
+| `tag` | `(none)` or `vX.Y.Z` | Acceptance tag created in the accept step |
+| `title` | short text, no colon | One-line summary; colons would break naive `key: value` parsing |
+| `type` | `problem` \| `idea` | problem = fix (patch bump); idea = new requirement (minor bump) |
+| `updated` | `YYYY-MM-DD` | Touched on every header change |
+
+## Status values
+
+`open` → `in-progress` → `awaiting-acceptance` → `accepted` → `delivered` → `merged`;
+`abandoned` is terminal from any pre-acceptance state. See
+[lifecycle.md](lifecycle.md) for the full transition table.
+
+## Body sections
+
+- **问题描述 / 需求描述** — what went wrong and the expected behavior (problem), or
+  what the user wants to achieve and why (idea)
+- **验收标准** — checklist that defines done; each item independently checkable
+- **验证证据** — gate commands with exit codes and results, recorded before
+  requesting acceptance
+- **进展日志** — append-only, one dated line per transition (`- YYYY-MM-DD — from → to; what happened`)
+- **验收记录** — acceptance decision (通过/驳回), date, reviewer notes
+- **发布记录** — version, tag, PR URL, merge date (filled at accept/deliver time)
