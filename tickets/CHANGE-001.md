@@ -2,7 +2,7 @@
 branch: feature/CHANGE-001-change-management-skill
 created: 2026-08-29
 id: CHANGE-001
-status: accepted
+status: delivered
 tag: (none)
 title: Add change ticket management workflow
 type: idea
@@ -45,6 +45,7 @@ Instructions, resume-by-ticket = Session Lifecycle).
 - 2026-08-29 — scope extended with the CHANGELOG.md mechanism per user request (maintained at tag time); gate re-run PASS 91.3
 - 2026-08-29 — ticket content converted to English per user request; gates re-run green
 - 2026-08-29 — awaiting-acceptance → accepted; user approved delivery (accept + push + PR); tagged v0.1.0
+- 2026-08-29 — accepted → delivered; branch + tag pushed; PR body prepared at tickets/CHANGE-001-pr.md (gh CLI not installed — PR to be opened manually via GitHub compare URL)
 
 ## Acceptance record
 
@@ -54,5 +55,5 @@ Accepted · 2026-08-29 · user approved via interactive prompt (accept, push, an
 
 - Version: v0.1.0
 - Tag: v0.1.0
-- PR: (pending)
+- PR: manual (body at tickets/CHANGE-001-pr.md — open via https://github.com/JDCave/jd-agents-hub/compare/main...feature/CHANGE-001-change-management-skill)
 - Merged: (pending)
