@@ -1,7 +1,7 @@
 # Session Example — per-state command cheat sheet
 
 Compact command sequence for each lifecycle state. Run from the repo root; `NNN` is
-the ticket number. Detail: [../EXAMPLES.md](../EXAMPLES.md).
+the ticket number. Detail: [../examples.md](../examples.md).
 
 ## record (on main) — status: open
 

@@ -33,7 +33,7 @@ Single exit code: 0 = pass, 1 = blocked. Pre-commit and CI call this — see [do
 
 **Six forcing questions** (matches the review checklist):
 1. What's the description? Is it ≤1024 chars + third person + has "Use when ..."?
-2. Is SKILL.md under 100 lines? If not, where will the split land (REFERENCE.md / EXAMPLES.md / references/)?
+2. Is SKILL.md under 100 lines? If not, where will the split land (REFERENCE.md / examples.md / references/)?
 3. Are there time-sensitive claims (dates, "as of YYYY")?
 4. Is terminology consistent — same word for the same concept throughout?
 5. Concrete examples — at least 1 code block, ideally good/bad contrast?

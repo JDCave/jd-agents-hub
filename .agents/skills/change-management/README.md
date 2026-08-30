@@ -23,7 +23,7 @@ python .agents/skills/change-management/scripts/ticket_utils.py next-version --t
 
 More subcommand options: `--json` on any command for machine-readable output;
 `python .agents/skills/change-management/scripts/ticket_utils.py --help`.
-Worked sessions from ticket to PR: [EXAMPLES.md](EXAMPLES.md).
+Worked sessions from ticket to PR: [examples.md](examples.md).
 
 ## Lifecycle
 

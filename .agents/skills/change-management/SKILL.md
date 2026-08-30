@@ -91,7 +91,7 @@ Status machine: `open → in-progress → awaiting-acceptance → accepted → d
 
 ## Examples
 
-Example: a full session from ticket to PR lives in [EXAMPLES.md](EXAMPLES.md); a compact per-state command cheat sheet in [examples/session-example.md](examples/session-example.md); a filled-in ticket in `assets/example-ticket.md`.
+Example: a full session from ticket to PR lives in [examples.md](examples.md); a compact per-state command cheat sheet in [examples/session-example.md](examples/session-example.md); a filled-in ticket in `assets/example-ticket.md`.
 
 ## References
 
