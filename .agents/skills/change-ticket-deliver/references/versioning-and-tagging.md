@@ -6,7 +6,7 @@ user acceptance, before the PR.
 ## Next version
 
 ```bash
-python .agents/skills/change-management/scripts/ticket_utils.py next-version --type problem
+python .agents/skills/change-ticket-deliver/scripts/ticket_utils.py next-version --type problem
 ```
 
 Rules (implemented in `scripts/ticket_utils.py`):

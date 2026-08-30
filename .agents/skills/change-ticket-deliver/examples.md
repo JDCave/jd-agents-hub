@@ -1,12 +1,12 @@
 # Examples
 
-A worked session for the change-management workflow. Commands run from the repo root
+A worked session for the change-ticket-deliver workflow. Commands run from the repo root
 (PowerShell 7 or bash; `python` ≥ 3.9).
 
 ## Example 1: record and start a problem ticket
 
 ```bash
-$ python .agents/skills/change-management/scripts/ticket_utils.py new-ticket --type problem --title "audit runner path is wrong"
+$ python .agents/skills/change-ticket-deliver/scripts/ticket_utils.py new-ticket --type problem --title "audit runner path is wrong"
 id: CHANGE-001
 file: tickets/backlog/CHANGE-001.md
 next: fill acceptance criteria, then commit
@@ -41,7 +41,7 @@ the checklist + evidence to the user. Do NOT tag or push before acceptance.
 After the user accepts:
 
 ```bash
-$ python .agents/skills/change-management/scripts/ticket_utils.py next-version --type problem
+$ python .agents/skills/change-ticket-deliver/scripts/ticket_utils.py next-version --type problem
 type: problem
 next_version: v0.1.1
 

@@ -1,4 +1,4 @@
-# change-management
+# change-ticket-deliver
 
 Ticket-driven change workflow for this repo: every reported **problem** (bug hit while
 using agents/skills) or **idea** (new requirement) becomes a numbered markdown ticket
@@ -10,7 +10,7 @@ From the repo root:
 
 ```bash
 # 1. record a ticket (allocates tickets/backlog/CHANGE-NNN.md from the template)
-python .agents/skills/change-management/scripts/ticket_utils.py new-ticket --type idea --title "add dark mode"
+python .agents/skills/change-ticket-deliver/scripts/ticket_utils.py new-ticket --type idea --title "add dark mode"
 # fill in description + acceptance criteria, then:
 git add tickets/backlog/CHANGE-001.md; git commit -m "ticket: record CHANGE-001 (idea)"
 
@@ -18,11 +18,11 @@ git add tickets/backlog/CHANGE-001.md; git commit -m "ticket: record CHANGE-001 
 git switch -c feature/CHANGE-001-dark-mode main
 
 # 3. before acceptance: next semantic version for the eventual tag
-python .agents/skills/change-management/scripts/ticket_utils.py next-version --type idea
+python .agents/skills/change-ticket-deliver/scripts/ticket_utils.py next-version --type idea
 ```
 
 More subcommand options: `--json` on any command for machine-readable output;
-`python .agents/skills/change-management/scripts/ticket_utils.py --help`.
+`python .agents/skills/change-ticket-deliver/scripts/ticket_utils.py --help`.
 Worked sessions from ticket to PR: [examples.md](examples.md).
 
 ## Lifecycle

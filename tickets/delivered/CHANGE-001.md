@@ -3,10 +3,10 @@ branch: feature/CHANGE-001-change-management-skill
 created: 2026-08-29
 id: CHANGE-001
 status: delivered
-tag: (none)
+tag: v0.1.0
 title: Add change ticket management workflow
 type: idea
-updated: 2026-08-29
+updated: 2026-08-30
 ---
 
 ## Description
@@ -35,7 +35,8 @@ Instructions, resume-by-ticket = Session Lifecycle).
 | --- | --- | --- |
 | python .agents/skills/skill-tester/scripts/skill_gate.py .agents/skills/change-management --update-registry | 0 | PASS (quality 91.3/90, all 8 checks green) |
 | python .agents/skills/skill-tester/scripts/audit_skills.py | 0 | 6 skills all 6/6, no ERROR |
-| python -m unittest discover -s tests (inside change-management) | 0 | 11/11 OK |
+| python .agents/skills/skill-tester/scripts/skill_gate.py .agents/skills/change-ticket-deliver --update-registry | 0 | PASS (quality 90.7/90, all 8 checks green) — after rename |
+| python -m unittest discover -s tests (inside change-ticket-deliver) | 0 | 13/13 OK — after rename |
 
 ## Progress log
 
@@ -49,6 +50,9 @@ Instructions, resume-by-ticket = Session Lifecycle).
 - 2026-08-29 — layout change per user request: single ticket file (PR body = the ticket itself; CHANGE-001-pr.md removed), tickets reorganized into backlog/ + delivered/; this ticket moved to delivered/
 - 2026-08-30 — PR created via gh CLI after installation: https://github.com/JDCave/jd-agents-hub/pull/1
 - 2026-08-30 — CI fix: EXAMPLES.md renamed to examples.md in change-management and skill-builder (Linux glob is case-sensitive; uppercase files were not counted as example assets, dropping quality to 89.7 < 90); CI green on run 33293508179
+- 2026-08-30 — pre-merge rework per user decision: skill renamed change-management → change-ticket-deliver (directory, frontmatter name, registry key, and all path references); gates re-run below
+- 2026-08-30 — PR #1 merged into main (merge commit b6b04fe) carrying the pre-rename state; the rename commit was then rebased onto main as this ticket's follow-up
+- 2026-08-30 — v0.1.0 re-pointed from the pre-rename acceptance commit to the post-rename commit per user instruction (tag had already been pushed — force-push required; see Release record)
 
 ## Acceptance record
 
@@ -57,6 +61,6 @@ Accepted · 2026-08-29 · user approved via interactive prompt (accept, push, an
 ## Release record
 
 - Version: v0.1.0
-- Tag: v0.1.0
-- PR: https://github.com/JDCave/jd-agents-hub/pull/1 (body = this ticket file)
-- Merged: (pending)
+- Tag: v0.1.0 — originally annotated on the acceptance commit, pushed to origin; re-pointed to the post-rename commit on 2026-08-30 per user instruction (requires `git push origin v0.1.0 --force`)
+- PR: https://github.com/JDCave/jd-agents-hub/pull/1 (body = this ticket file) — merged 2026-08-30 (b6b04fe, pre-rename state)
+- Merged: 2026-08-30 via PR #1 (pre-rename); the rename follow-up is delivered from the same branch via PR #2: https://github.com/JDCave/jd-agents-hub/pull/2

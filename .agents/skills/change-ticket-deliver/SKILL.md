@@ -1,19 +1,19 @@
 ---
-name: "change-management"
+name: "change-ticket-deliver"
 version: "1.0.0"
 license: MIT
 description: "Manages the full change lifecycle for reported problems and proposed ideas — record each as a numbered markdown ticket (tickets/backlog/CHANGE-001.md), create a feature branch, verify with the repo skill gate, tag accepted changes with semantic versions, and open PRs to main. Use when the user reports a problem or bug, proposes an idea or new requirement, or mentions a change ticket, CHANGE id, version tag, or asks to resume, accept, or deliver a change."
 when_to_use: "Recording a reported problem or proposed idea as a ticket; starting, verifying, tagging, or PR-ing a change; resuming an in-flight change ticket."
 ---
 
-# Change Management
+# Change Ticket Deliver
 
 Record problems (bugs hit while using agents/skills) and ideas (new requirements) as numbered markdown tickets in `tickets/`, then drive each through branch → verify → user acceptance → semver tag → PR to main. One ticket per branch — never mix tickets.
 
 ## Quick Start
 
 ```bash
-python .agents/skills/change-management/scripts/ticket_utils.py new-ticket --type problem --title "fix login flow"
+python .agents/skills/change-ticket-deliver/scripts/ticket_utils.py new-ticket --type problem --title "fix login flow"
 git switch -c feature/CHANGE-001-short-slug main
 ```
 
@@ -39,7 +39,7 @@ git switch -c feature/CHANGE-001-short-slug main
 On `main`, scaffold the ticket (allocates the next id from the existing files), fill description and acceptance criteria, then stage ONLY this file:
 
 ```bash
-python .agents/skills/change-management/scripts/ticket_utils.py new-ticket --type problem --title "short title"
+python .agents/skills/change-ticket-deliver/scripts/ticket_utils.py new-ticket --type problem --title "short title"
 git add tickets/backlog/CHANGE-NNN.md
 git commit -m "ticket: record CHANGE-NNN (problem)"
 ```
@@ -59,7 +59,7 @@ Implement only what the acceptance checklist covers. Before claiming done, run t
 Tick the checklist, commit, present checklist + verification evidence to the user, then STOP — no tag, no push before acceptance. On rejection: record why in Acceptance record, set `status: in-progress`, continue.
 ### 5. Accept & tag — `status: accepted`
 
-Only after explicit user acceptance. Example: `python .agents/skills/change-management/scripts/ticket_utils.py next-version --type problem` prints the next tag (first tag → `v0.1.0`; `problem` → patch; `idea` → minor). Annotated tag on the branch: `git tag -a v0.1.1 -m "CHANGE-NNN: title"`. Fill Acceptance record and Release record, set `tag:` in the header, add a `CHANGELOG.md` section for the new version (one bullet referencing CHANGE-NNN), commit.
+Only after explicit user acceptance. Example: `python .agents/skills/change-ticket-deliver/scripts/ticket_utils.py next-version --type problem` prints the next tag (first tag → `v0.1.0`; `problem` → patch; `idea` → minor). Annotated tag on the branch: `git tag -a v0.1.1 -m "CHANGE-NNN: title"`. Fill Acceptance record and Release record, set `tag:` in the header, add a `CHANGELOG.md` section for the new version (one bullet referencing CHANGE-NNN), commit.
 
 ### 6. Deliver — `status: delivered`
 

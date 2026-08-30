@@ -1,6 +1,6 @@
 # Lifecycle Reference
 
-The status machine and conventions behind the change-management workflow. Commands run
+The status machine and conventions behind the change-ticket-deliver workflow. Commands run
 from the repo root (PowerShell 7 or bash).
 
 ## Status machine
@@ -27,8 +27,8 @@ by name. The logic lives in `scripts/ticket_utils.py`; commands work from any
 directory inside the repo:
 
 ```bash
-python .agents/skills/change-management/scripts/ticket_utils.py next-id            # peek
-python .agents/skills/change-management/scripts/ticket_utils.py new-ticket --type idea --title "add dark mode"
+python .agents/skills/change-ticket-deliver/scripts/ticket_utils.py next-id            # peek
+python .agents/skills/change-ticket-deliver/scripts/ticket_utils.py new-ticket --type idea --title "add dark mode"
 ```
 
 `new-ticket` allocates the id, copies `assets/ticket-template.md` to
