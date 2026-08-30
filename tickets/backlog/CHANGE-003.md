@@ -58,10 +58,10 @@ Two-part change:
 | Command | Exit code | Result |
 | --- | --- | --- |
 | python scripts/init_dotagents_folder.py validate | 0 | OK: 44 file(s) valid, 3 warning(s) — empty `models.json` placeholder; 2 agent names non-kebab (known decision §8.4, adapters derive identity from the directory name) |
-| python scripts/init_dotagents_folder.py distribute --scope project | 0 | 8 claude links (junctions), 2 codex `.toml` + 2 opencode `.md` generated, 8 copilot artifacts (2 file hardlinks + 6 skill junctions), 12 native (codex/opencode skills), 0 conflicts |
-| python scripts/init_dotagents_folder.py distribute --scope project (re-run) | 0 | 0 new, 0 updated, 20 unchanged, 12 native — idempotent |
-| python scripts/init_dotagents_folder.py undistribute | 0 | 20 removed, 0 kept, 0 foreign, 0 error(s); all six target dirs left empty |
-| python scripts/init_dotagents_folder.py distribute --config \<temp exclusions\> | 0 | globally excluded agent+skill absent from every target; per-target `copilot.skills` exclusion removed only `.github/skills/skill-tester` while claude kept its link |
+| python scripts/distribute.py distribute --scope project | 0 | 8 claude links (junctions), 2 codex `.toml` + 2 opencode `.md` generated, 8 copilot artifacts (2 file hardlinks + 6 skill junctions), 12 native (codex/opencode skills), 0 conflicts |
+| python scripts/distribute.py distribute --scope project (re-run) | 0 | 0 new, 0 updated, 20 unchanged, 12 native — idempotent |
+| python scripts/distribute.py undistribute | 0 | 20 removed, 0 kept, 0 foreign, 0 error(s); all six target dirs left empty |
+| python scripts/distribute.py distribute --config \<temp exclusions\> | 0 | globally excluded agent+skill absent from every target; per-target `copilot.skills` exclusion removed only `.github/skills/skill-tester` while claude kept its link |
 | python .agents/skills/skill-tester/scripts/skill_gate.py --all | 0 | 6/6 skills PASS (min score 90, security FAIL blocks) |
 | python .agents/skills/skill-tester/scripts/audit_skills.py | 0 | 6/6 skills PASS (100%), no ERROR |
 | git status after distribute → undistribute | 0 | nothing under `.agents/` — SSOT untouched; only the intended working-tree changes (script, config, .gitignore) remain |
@@ -75,6 +75,7 @@ Windows note: this machine runs without symlink privilege — directory links fe
 - 2026-08-30 — rename committed (9d67804); requirement analysis with §8 decisions committed (8e4842d)
 - 2026-08-30 — implemented `distribute`/`undistribute` (+ validate portability checks, exclusion config, manifest, Windows junction/hardlink fallbacks); validate adapted to reality: quoted frontmatter values parsed, skill `id` no longer required (Agent Skills standard), empty placeholder JSON warns; full test cycle distribute → idempotent re-run → exclusion matrix → undistribute recorded above; gates green
 - 2026-08-30 — in-progress → awaiting-acceptance; checklist ticked except manual tool-side discovery, which runs at acceptance (needs `distribute` + a fresh session in each tool)
+- 2026-08-30 — rework per user correction: `init_dotagents_folder.py` is init/validate only (the rename was to be recorded, not to host distribution) — distribution moved to its own `scripts/distribute.py`; full cycle re-tested with the split scripts, evidence above
 
 ## Acceptance record
 
