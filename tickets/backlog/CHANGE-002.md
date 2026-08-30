@@ -1,8 +1,8 @@
 ---
-branch: (none)
+branch: feature/CHANGE-002-agent-discovery-commit
 created: 2026-08-30
 id: CHANGE-002
-status: open
+status: in-progress
 tag: (none)
 title: Evaluate .agents agents discovery and commit pending repo work
 type: idea
@@ -44,6 +44,7 @@ Two-part housekeeping change:
 ## Progress log
 
 - 2026-08-30 — open: ticket created
+- 2026-08-30 — open → in-progress; branch feature/CHANGE-002-agent-discovery-commit created
 
 ## Acceptance record
 
