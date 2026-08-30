@@ -6,6 +6,17 @@ All notable changes to this repo are documented here. Format based on
 change-ticket-deliver workflow at acceptance/tag time from the corresponding ticket
 (`tickets/CHANGE-NNN.md`).
 
+## [v0.2.0] - 2026-08-30
+
+### Added
+
+- CHANGE-002: agent-discovery evaluation — verdict that `.agents/agents/` is not scanned by Claude Code (canonical location `.claude/agents/`), recorded with a follow-up recommendation.
+- CHANGE-002: land pending repo work — `agent-designer` and `agent-workflow-designer` skills, `agent-design-orchestrator` agent, `.agents` harness placeholders (`models.json`, `system-prompt.md`), and the harness-engineering guide.
+
+### Changed
+
+- CHANGE-002: reset skill frontmatter to the repo's own 1.0.0 baseline (license/attribution removed); `skill-tester` SKILL.md gained a When to Use section and now sits at 99 lines.
+
 ## [v0.1.0] - 2026-08-29
 
 ### Added
