@@ -6,8 +6,8 @@ Protocol reference: https://dotagentsprotocol.com/ (see doc/dotagents-protocol.m
 Pure standard library; runs on Windows / macOS / Linux with Python 3.8+.
 
 Usage:
-    python scripts/init_agents.py init [--root PATH] [--examples] [--force]
-    python scripts/init_agents.py validate [--root PATH]
+    python scripts/init_dotagents_folder.py init [--root PATH] [--examples] [--force]
+    python scripts/init_dotagents_folder.py validate [--root PATH]
 """
 
 import argparse
