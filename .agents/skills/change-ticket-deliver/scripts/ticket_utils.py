@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Deterministic helpers for the change-management ticket workflow.
+"""Deterministic helpers for the change-ticket-deliver workflow.
 
 Subcommands:
   new-ticket    Allocate the next CHANGE id and scaffold tickets/backlog/CHANGE-NNN.md
