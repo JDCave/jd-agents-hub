@@ -1,0 +1,44 @@
+{
+  "goal": "Build a document-processing pipeline: ingest, extract, validate, enrich, and publish",
+  "description": "Documents flow through fixed sequential stages. Each stage validates its input contract before hand-off; failures queue for repair. Throughput matters less than per-stage correctness.",
+  "tasks": [
+    "Ingest documents from a drop folder",
+    "Extract text and metadata",
+    "Validate extracted fields against schemas",
+    "Enrich records with reference data",
+    "Publish validated records to the warehouse"
+  ],
+  "constraints": {
+    "max_response_time": 600000,
+    "budget_per_task": 0.3,
+    "quality_threshold": 0.99,
+    "concurrent_tasks": 5
+  },
+  "team_size": 4,
+  "performance_requirements": {
+    "high_throughput": false,
+    "fault_tolerance": true,
+    "low_latency": false,
+    "scalability": "medium",
+    "availability": 0.98
+  },
+  "safety_requirements": [
+    "Quarantine malformed documents, never drop silently",
+    "Checksum every hand-off payload"
+  ],
+  "integration_requirements": [
+    "Object storage for drop folder and quarantine",
+    "Reference-data lookup service",
+    "Warehouse write API"
+  ],
+  "scale_requirements": {
+    "initial_users": 10,
+    "peak_concurrent_users": 20,
+    "data_volume_gb": 500,
+    "requests_per_hour": 500,
+    "geographic_regions": [
+      "US"
+    ],
+    "growth_projection": "30% per year"
+  }
+}

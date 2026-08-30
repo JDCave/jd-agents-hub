@@ -1,0 +1,46 @@
+{
+  "goal": "Automate pull-request review: static analysis, style checks, and a summarized review comment",
+  "description": "The system reviews each opened pull request, runs static analysis and style checks in parallel, synthesizes findings into a single structured review comment, and escalates risky changes to a human reviewer.",
+  "tasks": [
+    "Detect and classify changed files in a pull request",
+    "Run static analysis on modified source files",
+    "Run style and lint checks",
+    "Synthesize findings into one review comment",
+    "Escalate high-risk changes to a human reviewer"
+  ],
+  "constraints": {
+    "max_response_time": 120000,
+    "budget_per_task": 0.5,
+    "quality_threshold": 0.95,
+    "concurrent_tasks": 20,
+    "security_level": "standard"
+  },
+  "team_size": 3,
+  "performance_requirements": {
+    "high_throughput": true,
+    "fault_tolerance": false,
+    "low_latency": false,
+    "scalability": "medium",
+    "availability": 0.99
+  },
+  "safety_requirements": [
+    "Never auto-merge without human approval",
+    "Mask credentials found in diffs",
+    "Audit log every verdict"
+  ],
+  "integration_requirements": [
+    "Webhook listener for repository events",
+    "Read access to repository files",
+    "Comment API for review feedback"
+  ],
+  "scale_requirements": {
+    "initial_users": 30,
+    "peak_concurrent_users": 60,
+    "data_volume_gb": 5,
+    "requests_per_hour": 200,
+    "geographic_regions": [
+      "US"
+    ],
+    "growth_projection": "20% per year"
+  }
+}

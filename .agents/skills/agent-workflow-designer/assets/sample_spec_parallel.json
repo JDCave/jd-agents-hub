@@ -1,0 +1,5 @@
+{
+  "pattern": "parallel",
+  "name": "market-scan",
+  "notes": "Fan out market research across regions, then synthesize one report."
+}

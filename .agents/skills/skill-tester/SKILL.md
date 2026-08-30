@@ -1,7 +1,6 @@
 ---
 name: "skill-tester"
-version: "2.1.0"
-license: "MIT"
+version: "1.0.0"
 when_to_use: "When the skill gate fails and you need the underlying detail; when auditing a skill's tier; when extending the scoring rubric."
 description: "Validate, test, and score the quality of skills within the claude-skills ecosystem. Comprehensive meta-skill: structure validation, Python script testing (syntax + imports + runtime + output format), multi-dimensional quality scoring with letter grades and tier classification (BASIC/STANDARD/POWERFUL). Use when authoring a new skill, auditing existing skills for tier promotion, setting up pre-commit hooks for skill quality, or integrating skill QA into CI."
 ---
@@ -19,6 +18,11 @@ Meta-skill that validates, tests, and scores skills in this repository. Four too
 
 > **Scope note:** this skill's tier line-count minimums measure *legacy* skills. For authoring *new* skills, `skill-builder` (SKILL.md under ~100 lines, Matt Pocock doctrine) is the binding standard — do not pad a new skill to satisfy a tier minimum here.
 
+## When to Use
+
+- The skill gate failed and you need the underlying detail behind a check verdict
+- Auditing a skill's tier (BASIC/STANDARD/POWERFUL), extending the scoring rubric, or wiring skill QA into pre-commit/CI
+
 ## Quick Start (exact, runnable from repo root)
 
 ```bash
@@ -32,7 +36,7 @@ python .agents/skills/skill-tester/scripts/script_tester.py .agents/skills/skill
 python .agents/skills/skill-tester/scripts/quality_scorer.py .agents/skills/skill-builder --json --detailed --minimum-score 90
 ```
 
-Consume the JSON: validator emits `overall_score`, `compliance_level`, per-check `checks{}`; scorer emits `overall_score`, `letter_grade`, `tier_recommendation`, `dimensions`, and an `improvement_roadmap` — work the roadmap top-down, then re-run until the target score is met.
+Consume the JSON: validator emits `overall_score`, `compliance_level`, per-check `checks{}`; scorer emits `overall_score`, `letter_grade`, `tier_recommendation`, `dimensions`, and an `improvement_roadmap` — work the roadmap top-down, then re-run until the target score is met. For repo-wide auditing prefer `.agents/skills/skill-tester/scripts/audit_skills.py` (wraps the skill-builder checklist runner across all skills).
 
 For one-command gating of a skill (frontmatter + names + checklist + all tools above + security audit, single exit code), use the repo-root gate:
 
@@ -40,8 +44,6 @@ For one-command gating of a skill (frontmatter + names + checklist + all tools a
 python .agents/skills/skill-tester/scripts/skill_gate.py .agents/skills/<name>    # one skill, min score 90
 python .agents/skills/skill-tester/scripts/skill_gate.py --all                   # every skill
 ```
-
-For repo-wide auditing prefer `.agents/skills/skill-tester/scripts/audit_skills.py` (wraps the skill-builder checklist runner across all skills).
 
 ## What Each Script Checks
 
@@ -65,8 +67,6 @@ Four dimensions, 25% each: **Documentation** (depth, examples, references), **Co
 | BASIC | ≥ 100 lines | 1 (100-300 LOC) | basic argparse |
 | STANDARD | ≥ 200 lines | 1-2 (300-500 LOC) | subcommands, JSON + text output |
 | POWERFUL | ≥ 300 lines | 2-3 (500-800 LOC) | multiple modes, CI integration |
-
-(Advisory for legacy skills; new skills follow skill-builder — see scope note above.)
 
 ## CI Integration
 

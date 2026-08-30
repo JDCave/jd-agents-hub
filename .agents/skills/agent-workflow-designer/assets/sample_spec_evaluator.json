@@ -1,0 +1,5 @@
+{
+  "pattern": "evaluator",
+  "name": "draft-polish",
+  "notes": "A generator drafts, an evaluator gates on accuracy, format, and safety, looping until the threshold is met."
+}

@@ -1,0 +1,19 @@
+{
+  "name": "incident-triage",
+  "pattern": "orchestrator",
+  "orchestrator": {
+    "agent": "orchestrator",
+    "planning": "dynamic"
+  },
+  "specialists": [
+    "researcher",
+    "coder",
+    "analyst",
+    "writer"
+  ],
+  "execution": {
+    "dependency_mode": "dag",
+    "max_parallel": 3,
+    "completion_policy": "all_required"
+  }
+}

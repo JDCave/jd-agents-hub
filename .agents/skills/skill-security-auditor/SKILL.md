@@ -1,7 +1,6 @@
 ---
 name: "skill-security-auditor"
-version: "1.1.0"
-license: "MIT"
+version: "1.0.0"
 when_to_use: "Before installing a skill from an untrusted source; when the gate's security check fails; when a user asks whether a skill is safe."
 description: >
   Security audit and vulnerability scanner for AI agent skills before installation.
