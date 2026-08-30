@@ -63,4 +63,4 @@ Accepted · 2026-08-29 · user approved via interactive prompt (accept, push, an
 - Version: v0.1.0
 - Tag: v0.1.0 — originally annotated on the acceptance commit, pushed to origin; re-pointed to the post-rename commit on 2026-08-30 per user instruction (requires `git push origin v0.1.0 --force`)
 - PR: https://github.com/JDCave/jd-agents-hub/pull/1 (body = this ticket file) — merged 2026-08-30 (b6b04fe, pre-rename state)
-- Merged: 2026-08-30 via PR #1 (pre-rename); the rename follow-up is delivered from the same branch via a subsequent PR
+- Merged: 2026-08-30 via PR #1 (pre-rename); the rename follow-up is delivered from the same branch via PR #2: https://github.com/JDCave/jd-agents-hub/pull/2
