@@ -1,8 +1,8 @@
 ---
-branch: (none)
+branch: feature/CHANGE-003-multi-tool-distribution
 created: 2026-08-30
 id: CHANGE-003
-status: open
+status: in-progress
 tag: (none)
 title: Distribute agents and skills to Claude, Codex, OpenCode, and Copilot
 type: idea
@@ -63,6 +63,7 @@ Two-part change:
 ## Progress log
 
 - 2026-08-30 — open: ticket created
+- 2026-08-30 — open → in-progress; branch feature/CHANGE-003-multi-tool-distribution created; scope decisions recorded: distribution scope is user-selectable per run (`--scope project|user`, default project); exclusion config lives next to the script at `scripts/distribute.json`; OpenCode agents dir configurable (default `agents` per current docs); non-kebab agent `name` handled as validate warning (adapters derive names from directory), no SSOT normalization in this change
 
 ## Acceptance record
 
