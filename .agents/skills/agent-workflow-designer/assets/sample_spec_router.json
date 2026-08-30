@@ -1,0 +1,5 @@
+{
+  "pattern": "router",
+  "name": "request-triage",
+  "notes": "Classify inbound requests by intent; route sales, support, and engineering to specialists."
+}

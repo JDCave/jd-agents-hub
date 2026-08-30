@@ -18,7 +18,31 @@
   "skill-builder": {
     "status": "draft",
     "last_gate": {
-      "timestamp": "2026-08-28T15:30:35+00:00",
+      "timestamp": "2026-08-30T04:54:01+00:00",
+      "verdict": "PASS",
+      "quality_score": 90.7
+    }
+  },
+  "agent-designer": {
+    "status": "draft",
+    "last_gate": {
+      "timestamp": "2026-08-28T16:43:04+00:00",
+      "verdict": "PASS",
+      "quality_score": 94.5
+    }
+  },
+  "agent-workflow-designer": {
+    "status": "draft",
+    "last_gate": {
+      "timestamp": "2026-08-28T16:43:04+00:00",
+      "verdict": "PASS",
+      "quality_score": 92.8
+    }
+  },
+  "change-ticket-deliver": {
+    "status": "draft",
+    "last_gate": {
+      "timestamp": "2026-08-30T08:27:14+00:00",
       "verdict": "PASS",
       "quality_score": 90.7
     }

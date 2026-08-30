@@ -1,0 +1,26 @@
+{
+  "name": "request-triage",
+  "pattern": "router",
+  "router": {
+    "agent": "router",
+    "routes": [
+      "sales",
+      "support",
+      "engineering"
+    ]
+  },
+  "handlers": {
+    "sales": {
+      "agent": "sales_specialist"
+    },
+    "support": {
+      "agent": "support_specialist"
+    },
+    "engineering": {
+      "agent": "engineering_specialist"
+    }
+  },
+  "fallback": {
+    "agent": "generalist"
+  }
+}

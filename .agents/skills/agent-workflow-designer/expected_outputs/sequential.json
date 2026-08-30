@@ -1,0 +1,25 @@
+{
+  "name": "content-pipeline",
+  "pattern": "sequential",
+  "steps": [
+    {
+      "id": "research",
+      "agent": "researcher",
+      "next": "draft"
+    },
+    {
+      "id": "draft",
+      "agent": "writer",
+      "next": "review"
+    },
+    {
+      "id": "review",
+      "agent": "reviewer",
+      "next": null
+    }
+  ],
+  "retry": {
+    "max_attempts": 2,
+    "backoff_seconds": 2
+  }
+}

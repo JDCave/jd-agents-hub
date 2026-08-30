@@ -1,0 +1,5 @@
+{
+  "pattern": "sequential",
+  "name": "content-pipeline",
+  "notes": "Three fixed stages \u2014 research, draft, review \u2014 each validating its input before hand-off."
+}

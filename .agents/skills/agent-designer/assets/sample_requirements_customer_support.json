@@ -1,0 +1,52 @@
+{
+  "goal": "Triage and answer tier-1 customer support requests across chat and email",
+  "description": "Incoming requests are classified by intent and urgency, answered from a knowledge base when confidence is high, and routed to human specialists otherwise. The system drafts responses and tracks resolution.",
+  "tasks": [
+    "Classify incoming requests by intent and urgency",
+    "Retrieve relevant knowledge-base articles",
+    "Draft answers for high-confidence cases",
+    "Route low-confidence or billing cases to humans",
+    "Track request status until resolution"
+  ],
+  "constraints": {
+    "max_response_time": 30000,
+    "budget_per_task": 0.2,
+    "quality_threshold": 0.9,
+    "concurrent_tasks": 100,
+    "data_retention_days": 365,
+    "compliance_requirements": [
+      "GDPR"
+    ]
+  },
+  "team_size": 5,
+  "performance_requirements": {
+    "high_throughput": true,
+    "fault_tolerance": true,
+    "low_latency": true,
+    "scalability": "high",
+    "availability": 0.995
+  },
+  "safety_requirements": [
+    "Never expose other customers' data",
+    "Escalate angry or legal-adjacent messages immediately",
+    "Human sign-off before refunds"
+  ],
+  "integration_requirements": [
+    "Chat platform adapter",
+    "Email gateway",
+    "Knowledge-base search service",
+    "CRM ticketing service"
+  ],
+  "scale_requirements": {
+    "initial_users": 500,
+    "peak_concurrent_users": 2000,
+    "data_volume_gb": 50,
+    "requests_per_hour": 5000,
+    "geographic_regions": [
+      "US",
+      "EU",
+      "APAC"
+    ],
+    "growth_projection": "100% per year"
+  }
+}

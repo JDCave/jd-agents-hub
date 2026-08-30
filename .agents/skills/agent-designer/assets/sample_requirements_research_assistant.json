@@ -1,0 +1,42 @@
+{
+  "goal": "A single research assistant that answers factual questions with citations",
+  "description": "One assistant with web search and note-taking capabilities answers questions, cites sources, and saves session notes. Volume is low; keeping it a single well-scoped helper is the point.",
+  "tasks": [
+    "Search the web for relevant sources",
+    "Extract and compare claims across sources",
+    "Compose an answer with citations",
+    "Save session notes"
+  ],
+  "constraints": {
+    "max_response_time": 60000,
+    "budget_per_task": 0.4,
+    "quality_threshold": 0.9,
+    "concurrent_tasks": 3
+  },
+  "team_size": 1,
+  "performance_requirements": {
+    "high_throughput": false,
+    "fault_tolerance": false,
+    "low_latency": false,
+    "scalability": "low",
+    "availability": 0.95
+  },
+  "safety_requirements": [
+    "Cite every factual claim",
+    "Refuse to answer medical or legal questions definitively"
+  ],
+  "integration_requirements": [
+    "Web search API",
+    "Local notes folder"
+  ],
+  "scale_requirements": {
+    "initial_users": 5,
+    "peak_concurrent_users": 10,
+    "data_volume_gb": 1,
+    "requests_per_hour": 50,
+    "geographic_regions": [
+      "US"
+    ],
+    "growth_projection": "10% per year"
+  }
+}

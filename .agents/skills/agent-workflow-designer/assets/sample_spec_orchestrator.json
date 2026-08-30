@@ -1,0 +1,5 @@
+{
+  "pattern": "orchestrator",
+  "name": "incident-triage",
+  "notes": "A planner coordinates specialists over a dependency graph of mitigation tasks."
+}
