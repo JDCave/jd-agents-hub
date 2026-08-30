@@ -76,6 +76,7 @@ Windows note: this machine runs without symlink privilege — directory links fe
 - 2026-08-30 — implemented `distribute`/`undistribute` (+ validate portability checks, exclusion config, manifest, Windows junction/hardlink fallbacks); validate adapted to reality: quoted frontmatter values parsed, skill `id` no longer required (Agent Skills standard), empty placeholder JSON warns; full test cycle distribute → idempotent re-run → exclusion matrix → undistribute recorded above; gates green
 - 2026-08-30 — in-progress → awaiting-acceptance; checklist ticked except manual tool-side discovery, which runs at acceptance (needs `distribute` + a fresh session in each tool)
 - 2026-08-30 — rework per user correction: `init_dotagents_folder.py` is init/validate only (the rename was to be recorded, not to host distribution) — distribution moved to its own `scripts/distribute.py`; full cycle re-tested with the split scripts, evidence above
+- 2026-08-30 — config relocated `scripts/distribute.json` → `.agents/distribute.json` (data-side config per protocol convergence; `scripts/` stays flat, no subdirectory); default `--config` now resolves under `--root`; verified by temp-excluding an agent (16 artifacts instead of 20, excluded everywhere), then restored and undistributed clean
 
 ## Acceptance record
 

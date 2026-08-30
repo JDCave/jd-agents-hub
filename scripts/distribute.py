@@ -26,9 +26,11 @@ tickets/requirement/multi-tool-distribution.md §3):
                 skills discovered in .agents/ natively
 
 Windows without symlink privilege: directory links fall back to junctions, file
-links to same-volume hardlinks. Exclusions and defaults live in distribute.json
-next to this script. The manifest (.agents/.backups/distribute-manifest.json)
-records exactly what was created so undistribute removes exactly that.
+links to same-volume hardlinks. Exclusions and defaults live in
+.agents/distribute.json in the project root (data-side config, following the
+protocol's .agents/ convergence, decoupled from script location). The manifest
+(.agents/.backups/distribute-manifest.json) records exactly what was created so
+undistribute removes exactly that.
 """
 
 import argparse
@@ -52,8 +54,8 @@ DEFAULT_CONFIG = {
 }
 
 
-def default_config_path() -> Path:
-    return Path(__file__).resolve().parent / "distribute.json"
+def default_config_path(root: Path) -> Path:
+    return root / ".agents" / "distribute.json"
 
 
 def load_config(config_path: Path) -> dict:
@@ -450,8 +452,8 @@ def main(argv=None) -> int:
                        help="project = repo-local tool dirs, user = home-level (default: config)")
         p.add_argument("--targets", metavar="A,B,C",
                        help=f"comma-separated subset of {','.join(TOOLS)} (default: config)")
-        p.add_argument("--config", type=Path, default=default_config_path(),
-                       help="distribute config (default: distribute.json next to this script)")
+        p.add_argument("--config", type=Path, default=None,
+                       help="distribute config (default: .agents/distribute.json under --root)")
 
     args = parser.parse_args(argv)
     if hasattr(sys.stdout, "reconfigure"):  # Windows consoles default to a legacy codepage
@@ -461,9 +463,10 @@ def main(argv=None) -> int:
     targets = None
     if args.targets:
         targets = [t.strip() for t in args.targets.split(",") if t.strip()]
+    config_path = args.config or default_config_path(args.root)
     if args.command == "distribute":
-        return cmd_distribute(args.root, args.scope, targets, args.config)
-    return cmd_undistribute(args.root, args.scope, targets, args.config)
+        return cmd_distribute(args.root, args.scope, targets, config_path)
+    return cmd_undistribute(args.root, args.scope, targets, config_path)
 
 
 if __name__ == "__main__":

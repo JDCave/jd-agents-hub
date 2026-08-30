@@ -1,6 +1,11 @@
 {
   "default_scope": "project",
-  "default_targets": ["claude", "codex", "opencode", "copilot"],
+  "default_targets": [
+    "claude",
+    "codex",
+    "opencode",
+    "copilot"
+  ],
   "exclude": {
     "agents": [],
     "skills": [],
