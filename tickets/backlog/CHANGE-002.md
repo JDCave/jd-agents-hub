@@ -2,7 +2,7 @@
 branch: feature/CHANGE-002-agent-discovery-commit
 created: 2026-08-30
 id: CHANGE-002
-status: in-progress
+status: awaiting-acceptance
 tag: (none)
 title: Evaluate .agents agents discovery and commit pending repo work
 type: idea
@@ -59,9 +59,10 @@ new session — agent files are not live-reloaded.
 
 | Command | Exit code | Result |
 | --- | --- | --- |
-| python .agents/skills/skill-tester/scripts/skill_gate.py --all | 1 | 5/6 PASS (agent-designer 94.5, agent-workflow-designer 92.8, change-ticket-deliver 90.7, skill-builder 90.5, skill-security-auditor 91.4); skill-tester 89.8 FAIL — caused solely by the uncommitted working-tree frontmatter regression that this change deliberately excludes; committed content scores 90.0 (verified on a temp copy, and registry history PASS 90.0 on 2026-08-28). CI gates committed content. |
+| python .agents/skills/skill-tester/scripts/skill_gate.py --all | 0 | 6/6 PASS after rework (agent-designer 94.5, agent-workflow-designer 92.8, change-ticket-deliver 90.7, skill-builder 90.5, skill-security-auditor 91.4, skill-tester 90.1) |
 | python .agents/skills/skill-tester/scripts/audit_skills.py | 0 | 6/6 skills PASS (100%), no ERROR |
-| pre-commit hook (automatic, skills commit 9454229) | 0 | agent-designer PASS 94.5, agent-workflow-designer PASS 92.8 |
+| pre-commit hook (automatic, commits 9454229 + 58b6869) | 0 | agent-designer 94.5, agent-workflow-designer 92.8, skill-builder 90.5, skill-security-auditor 91.4, skill-tester 90.1 — all PASS |
+| First-review run (superseded, kept for the record) | 1 | skill_gate --all was 5/6 with skill-tester 89.8 while the SKILL.md resets sat uncommitted in the working tree; committed content then scored 90.0. After the resets were committed per user decision (58b6869), skill-tester scores 90.1 with a When to Use section added to stay ≥90 without restoring the removed frontmatter |
 
 ## Progress log
 
@@ -72,6 +73,8 @@ new session — agent files are not live-reloaded.
 - 2026-08-30 — in-progress → awaiting-acceptance; checklist ticked, evidence above
 - 2026-08-30 — awaiting-acceptance → in-progress; user rejected: the 3 SKILL.md frontmatter changes are intentional (own baseline, attribution removed on purpose) and must be committed as part of this change
 - 2026-08-30 — scope updated per rejection: SKILL.md resets now included as-is; acceptance criterion 2 reworded accordingly
+- 2026-08-30 — SKILL.md resets committed (58b6869); the pre-commit gate initially blocked skill-tester at 89.8, resolved by adding a When to Use section (SKILL.md now 99 lines) without touching the reset frontmatter; skill_gate --all now 6/6 PASS
+- 2026-08-30 — in-progress → awaiting-acceptance (second review); evidence refreshed above
 
 ## Acceptance record
 
