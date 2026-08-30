@@ -2,7 +2,7 @@
 branch: feature/CHANGE-001-change-management-skill
 created: 2026-08-29
 id: CHANGE-001
-status: delivered
+status: merged
 tag: v0.1.0
 title: Add change ticket management workflow
 type: idea
@@ -53,6 +53,7 @@ Instructions, resume-by-ticket = Session Lifecycle).
 - 2026-08-30 — pre-merge rework per user decision: skill renamed change-management → change-ticket-deliver (directory, frontmatter name, registry key, and all path references); gates re-run below
 - 2026-08-30 — PR #1 merged into main (merge commit b6b04fe) carrying the pre-rename state; the rename commit was then rebased onto main as this ticket's follow-up
 - 2026-08-30 — v0.1.0 re-pointed from the pre-rename acceptance commit to the post-rename commit per user instruction (tag had already been pushed — force-push required; see Release record)
+- 2026-08-30 — PR #2 merged into main (52ade2a); ticket finalized as merged
 
 ## Acceptance record
 
@@ -63,4 +64,4 @@ Accepted · 2026-08-29 · user approved via interactive prompt (accept, push, an
 - Version: v0.1.0
 - Tag: v0.1.0 — originally annotated on the acceptance commit, pushed to origin; re-pointed to the post-rename commit on 2026-08-30 per user instruction (requires `git push origin v0.1.0 --force`)
 - PR: https://github.com/JDCave/jd-agents-hub/pull/1 (body = this ticket file) — merged 2026-08-30 (b6b04fe, pre-rename state)
-- Merged: 2026-08-30 via PR #1 (pre-rename); the rename follow-up is delivered from the same branch via PR #2: https://github.com/JDCave/jd-agents-hub/pull/2
+- Merged: 2026-08-30 via PR #1 (pre-rename, b6b04fe) + PR #2 (rename follow-up, 52ade2a) — full delivery now on main
