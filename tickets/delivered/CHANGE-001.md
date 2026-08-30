@@ -48,6 +48,7 @@ Instructions, resume-by-ticket = Session Lifecycle).
 - 2026-08-29 — accepted → delivered; branch + tag pushed; PR body prepared at tickets/CHANGE-001-pr.md (gh CLI not installed — PR to be opened manually via GitHub compare URL)
 - 2026-08-29 — layout change per user request: single ticket file (PR body = the ticket itself; CHANGE-001-pr.md removed), tickets reorganized into backlog/ + delivered/; this ticket moved to delivered/
 - 2026-08-30 — PR created via gh CLI after installation: https://github.com/JDCave/jd-agents-hub/pull/1
+- 2026-08-30 — CI fix: EXAMPLES.md renamed to examples.md in change-management and skill-builder (Linux glob is case-sensitive; uppercase files were not counted as example assets, dropping quality to 89.7 < 90); CI green on run 33293508179
 
 ## Acceptance record
 
