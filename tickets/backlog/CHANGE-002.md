@@ -2,7 +2,7 @@
 branch: feature/CHANGE-002-agent-discovery-commit
 created: 2026-08-30
 id: CHANGE-002
-status: awaiting-acceptance
+status: in-progress
 tag: (none)
 title: Evaluate .agents agents discovery and commit pending repo work
 type: idea
@@ -51,7 +51,7 @@ new session — agent files are not live-reloaded.
 ## Acceptance criteria
 
 - [x] Discovery evaluation recorded in this ticket: definitive verdict (recognized / not recognized), the canonical agent discovery locations per official docs, and a recommendation for making the agents loadable
-- [x] Pending work committed on the branch, staged file by file (never `git add -A`), with the three suspicious SKILL.md frontmatter regressions (version downgrades + stripped license/attribution) explicitly left out and flagged to the user
+- [x] Pending work committed on the branch, staged file by file (never `git add -A`); per user decision at first review, the 3 SKILL.md frontmatter resets (version 1.0.0 baseline, license/attribution removed) are intentional and included as-is
 - [x] skill gate PASS (quality ≥90) for every skill including the two new ones, and the repo-wide audit has no ERROR
 - [x] CHANGE-002 itself follows the workflow record → start → verify with every transition logged in the progress log
 
@@ -70,10 +70,12 @@ new session — agent files are not live-reloaded.
 - 2026-08-30 — CHANGE-001 finalized as merged on main (52c9d9c) before this ticket was recorded (65c267e)
 - 2026-08-30 — discovery evaluation completed (see Findings); pending work landed in 4 commits: harness doc (d77c218), agent + .agents placeholders (d5b0a63), two new skills + registry (9454229), Claude settings (fc0c1b8); 3 SKILL.md frontmatter regressions deliberately excluded
 - 2026-08-30 — in-progress → awaiting-acceptance; checklist ticked, evidence above
+- 2026-08-30 — awaiting-acceptance → in-progress; user rejected: the 3 SKILL.md frontmatter changes are intentional (own baseline, attribution removed on purpose) and must be committed as part of this change
+- 2026-08-30 — scope updated per rejection: SKILL.md resets now included as-is; acceptance criterion 2 reworded accordingly
 
 ## Acceptance record
 
-(Verdict: accepted / rejected · date · notes)
+Rejected · 2026-08-30 · user decision: the 3 SKILL.md frontmatter changes (version reset to own baseline 1.0.0, license/attribution removed) are intentional — include them in this change as-is; re-present after landing
 
 ## Release record
 
