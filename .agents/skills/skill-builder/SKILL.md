@@ -38,7 +38,7 @@ Apply the top `improvement_roadmap` item from the gate output and re-run until P
 skill-name/
 ├── SKILL.md           # frontmatter + Quick start + Workflows (required)
 ├── REFERENCE.md       # detailed docs (if needed)
-├── EXAMPLES.md        # usage examples (if needed)
+├── examples.md        # usage examples (if needed)
 └── scripts/           # utility scripts (if needed)
 ```
 
@@ -76,7 +76,7 @@ After drafting, verify:
 
 ## Troubleshooting
 
-Common gate failures and their fixes: [references/troubleshooting.md](references/troubleshooting.md). Usage patterns and worked sessions: [EXAMPLES.md](EXAMPLES.md).
+Common gate failures and their fixes: [references/troubleshooting.md](references/troubleshooting.md). Usage patterns and worked sessions: [examples.md](examples.md).
 
 ## Gate and Optimize Loop
 

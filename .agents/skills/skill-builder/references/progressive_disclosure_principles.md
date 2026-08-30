@@ -9,7 +9,7 @@ Pair with `scripts/skill_structure_validator.py` for automated enforcement of th
 Progressive disclosure = present the minimum needed to act, with paths to deeper detail when needed. For agent skills:
 
 - **SKILL.md** = the description + minimum workflow the agent needs to invoke the skill
-- **REFERENCE.md / EXAMPLES.md / references/*.md** = deep detail invoked only when the SKILL.md workflow points there
+- **REFERENCE.md / examples.md / references/*.md** = deep detail invoked only when the SKILL.md workflow points there
 - **scripts/** = deterministic operations (no LLM token cost; no inconsistency risk)
 
 The goal: agent reads SKILL.md and either has enough to act, or has a clear link to the specific reference file that resolves its question. No deeper than that.
@@ -48,7 +48,7 @@ Operational consequence: keep `references/` flat. No nested subfolders.
 1. **SKILL.md as a complete manual** — 300-line SKILL.md with every workflow inline. Agent over-conditions; token cost on every invocation.
 2. **Reference soup** — 20 reference files at one level. Hard to scan; agent can't tell which to load.
 3. **Circular references** — `A.md` → `B.md` → `A.md`. Agent loops or fails.
-4. **No examples in SKILL.md** — "see EXAMPLES.md for usage." Forces agent to load another file to do anything. Provide a *minimum* example in SKILL.md.
+4. **No examples in SKILL.md** — "see examples.md for usage." Forces agent to load another file to do anything. Provide a *minimum* example in SKILL.md.
 5. **Versioned references** — `references/v1/` and `references/v2/`. Maintenance burden; pick one.
 6. **Auto-generated table-of-contents** — agents don't need this; humans rarely browse `references/`.
 
