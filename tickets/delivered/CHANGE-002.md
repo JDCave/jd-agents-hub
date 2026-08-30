@@ -86,5 +86,5 @@ Accepted · 2026-08-30 · user approved second review via interactive prompt (ac
 
 - Version: v0.2.0 (idea → minor)
 - Tag: v0.2.0 — annotated on the acceptance commit on feature/CHANGE-002-agent-discovery-commit
-- PR: (pending)
+- PR: https://github.com/JDCave/jd-agents-hub/pull/3 (body = this ticket file)
 - Merged: (pending)
