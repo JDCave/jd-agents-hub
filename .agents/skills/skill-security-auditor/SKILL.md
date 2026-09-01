@@ -12,6 +12,7 @@ description: >
   chain risks, (7) verifying file system access stays within skill boundaries.
   Triggers: "audit this skill", "is this skill safe", "scan skill for security",
   "check skill before install", "skill security check", "skill vulnerability scan".
+distribute: project-only
 ---
 
 # Skill Security Auditor

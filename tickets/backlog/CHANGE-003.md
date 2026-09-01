@@ -45,7 +45,7 @@ Two-part change:
 
 - [x] `tickets/requirement/multi-tool-distribution.md` committed with this change
 - [x] Rename landed: `scripts/init_agents.py` → `scripts/init_dotagents_folder.py`, references updated
-- [x] `distribute` implements the per-target strategy matrix from requirement doc §3, honoring the exclusion config
+- [x] `distribute` implements the per-target strategy matrix from requirement doc §3, honoring the exclusion policy (SSOT `distribute:` frontmatter + optional config)
 - [x] Generated files (OpenCode `.md`, Codex `.toml`) carry an auto-generated marker and correctly filtered frontmatter
 - [x] Re-running `distribute` is a no-op; `undistribute` removes exactly what was created and reports foreign files it refuses to touch
 - [x] `.agents/` SSOT files are byte-identical after `distribute` / `undistribute` (clean `git status` there)
@@ -84,6 +84,7 @@ Windows note: this machine runs without symlink privilege — directory links fe
 - 2026-08-30 — CLI extended per user request: `--dest-root` (project scope into another project, with `.agents/skills` links created in the destination so Codex/OpenCode native discovery works there), `validate` subcommand (read-only drift check: missing/broken/stale/foreign + manifest cross-check), `--dry-run` on distribute/undistribute. Tested end to end against a temp project: dry-run creates nothing; 16 artifacts installed cross-drive (junctions cross-volume OK); validate detects a hand-removed link (`[missing]` + manifest `[gone]`, exit 1); undistribute removes exactly the project-scope set
 - 2026-08-30 — safety guard added after the live user distribution was found wiped (bare `undistribute` had removed every scope): undistribute without `--scope`/`--targets` now refuses to run unless `--all` is passed; user scope restored via `distribute --scope user` (16 artifacts, 2 known `[unavail]`)
 - 2026-08-30 — manual verification completed: Claude Code TUI loads all 6 user-scope skills + both agents live (skills hot-reloaded mid-session, agents in the Agent tool listing); the VS Code extension initially showed nothing but a Developer: Reload Window picked everything up — distribution itself confirmed working, the gap was extension-host caching only
+- 2026-08-30 — exclusion policy rehomed per user request: the skill-lifecycle chain (`skill-builder`, `skill-tester`, `skill-security-auditor`, `change-ticket-deliver`, agent `skill-lifecycle-orchestrator`) is repo-only — each SSOT entry now carries `distribute: project-only` frontmatter read at plan time (`all`/`project-only`/`none`); `.agents/distribute.json` deleted (`--config` stays as an optional override), skill-builder's frontmatter spec taught the new key so the gate stays green; user scope re-applied: only the agent-design set (1 agent + 2 skills) installs globally, 5 `[excl]` lines report the repo-only set
 
 ## Acceptance record
 

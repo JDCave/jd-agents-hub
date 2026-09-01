@@ -38,11 +38,12 @@ tickets/requirement/multi-tool-distribution.md §3):
                 skills discovered in .agents/ natively
 
 Windows without symlink privilege: directory links fall back to junctions, file
-links to same-volume hardlinks. Exclusions and defaults live in
-.agents/distribute.json in the project root (data-side config, following the
-protocol's .agents/ convergence, decoupled from script location). The manifest
-(.agents/.backups/distribute-manifest.json) records exactly what was created so
-undistribute removes exactly that.
+links to same-volume hardlinks. Exclusions live in the SSOT itself: an entry's
+frontmatter may set `distribute: project-only` (skip user scope),
+`distribute: none` (never distribute), or omit the key / `all` (default).
+An optional `--config` file can still override defaults and add list-based
+exclusions. The manifest (.agents/.backups/distribute-manifest.json) records
+exactly what was created so undistribute removes exactly that.
 """
 
 import argparse
@@ -118,14 +119,11 @@ def list_ssot(root: Path, kind: str):
                   if c.is_dir() and (c / entry_file).is_file())
 
 
-def default_config_path(root: Path) -> Path:
-    return root / ".agents" / "distribute.json"
-
-
-def load_config(config_path: Path) -> dict:
+def load_config(config_path) -> dict:
+    """Optional config: built-in defaults apply unless --config points at a file."""
     config = json.loads(json.dumps(DEFAULT_CONFIG))  # deep copy
-    if config_path.is_file():
-        user = json.loads(config_path.read_text(encoding="utf-8"))
+    if config_path is not None and Path(config_path).is_file():
+        user = json.loads(Path(config_path).read_text(encoding="utf-8"))
         for key in ("default_scope", "default_targets"):
             if key in user:
                 config[key] = user[key]
@@ -136,6 +134,13 @@ def load_config(config_path: Path) -> dict:
                 config["exclude"][key] = value
         config["opencode"].update(user.get("opencode", {}))
     return config
+
+
+def entry_distribute_mode(root: Path, kind: str, name: str) -> str:
+    """SSOT frontmatter `distribute` value: all (default) | project-only | none."""
+    entry_file = root / ".agents" / kind / name / ("agent.md" if kind == "agents" else "SKILL.md")
+    meta, _ = parse_frontmatter(entry_file.read_text(encoding="utf-8"))
+    return ((meta or {}).get("distribute", "all") or "all").strip()
 
 
 def is_excluded(config: dict, kind: str, name: str, target: str) -> bool:
@@ -265,21 +270,35 @@ def render_codex_agent(name: str, meta: dict, body: str) -> str:
 # --- plan ------------------------------------------------------------------------
 
 def build_plan(root: Path, scope: str, targets, config: dict, dest_root: Path = None):
-    """Distribution plan: list of action dicts.
+    """Distribution plan: (plan, skipped).
 
     link     -> dest symlink/junction/hardlink to source
     generate -> dest file rendered from the SSOT entry
     native   -> the tool discovers the SSOT location itself, nothing to do
                 (project scope with destination == hub only)
+    skipped  -> (kind, name, mode) entries the SSOT frontmatter holds back for
+                this scope (`distribute: project-only` under user scope, or `none`)
     """
     home = Path.home()
     dest_root = dest_root or root
     same_repo = dest_root.resolve() == root.resolve()
     opencode_dir = config.get("opencode", {}).get("agents_dir", "agents")
     plan = []
+    skipped = []
+
+    active = {}
+    for kind in ("agents", "skills"):
+        names = []
+        for name in list_ssot(root, kind):
+            mode = entry_distribute_mode(root, kind, name)
+            if mode == "none" or (mode == "project-only" and scope == "user"):
+                skipped.append((kind, name, mode))
+            else:
+                names.append(name)
+        active[kind] = names
 
     for target in targets:
-        for name in list_ssot(root, "agents"):
+        for name in active["agents"]:
             if is_excluded(config, "agents", name, target):
                 continue
             src_dir = (root / ".agents" / "agents" / name).resolve()
@@ -305,7 +324,7 @@ def build_plan(root: Path, scope: str, targets, config: dict, dest_root: Path = 
                                  dest=base / "agents" / f"{name}.toml",
                                  renderer="codex"))
 
-        for name in list_ssot(root, "skills"):
+        for name in active["skills"]:
             if is_excluded(config, "skills", name, target):
                 continue
             src_dir = (root / ".agents" / "skills" / name).resolve()
@@ -331,7 +350,7 @@ def build_plan(root: Path, scope: str, targets, config: dict, dest_root: Path = 
                 plan.append(dict(action="link", kind="skills", target=target, name=name,
                                  dest=dest_root / ".agents" / "skills" / name,
                                  source=src_dir, is_dir=True))
-    return plan
+    return plan, skipped
 
 
 # --- manifest ---------------------------------------------------------------------
@@ -375,17 +394,20 @@ def cmd_distribute(root: Path, scope, targets, config_path: Path,
         print(f"error: unknown targets {unknown}; valid: {TOOLS}", file=sys.stderr)
         return 2
 
-    plan = build_plan(root, scope, targets, config, dest_root)
+    plan, skipped = build_plan(root, scope, targets, config, dest_root)
+    for kind, name, mode in sorted(skipped):
+        reason = "never distributed" if mode == "none" else f"skipped for {scope} scope"
+        print(f"[excl   ] {kind}/{name} distribute={mode} — {reason}")
 
-    excluded_for = {}  # (kind, name) -> targets that skip it
+    excluded_for = {}  # (kind, name) -> targets that skip it (optional --config lists)
     for target in targets:
         for kind in ("agents", "skills"):
             for name in list_ssot(root, kind):
                 if is_excluded(config, kind, name, target):
                     excluded_for.setdefault((kind, name), []).append(target)
-    for (kind, name), skipped in sorted(excluded_for.items()):
-        scope_note = "everywhere" if len(skipped) == len(targets) else ",".join(sorted(skipped))
-        print(f"[excl   ] {kind}/{name} excluded ({scope_note})")
+    for (kind, name), skipped_targets in sorted(excluded_for.items()):
+        scope_note = "everywhere" if len(skipped_targets) == len(targets) else ",".join(sorted(skipped_targets))
+        print(f"[excl   ] {kind}/{name} excluded via config ({scope_note})")
 
     manifest = load_manifest(root)
     entries = manifest["entries"]
@@ -597,7 +619,7 @@ def cmd_validate(root: Path, scope, targets, config_path: Path,
     if not targets:
         targets = list(config.get("default_targets", TOOLS))
 
-    plan = build_plan(root, scope, targets, config, dest_root)
+    plan, _ = build_plan(root, scope, targets, config, dest_root)
     ok = 0
     problems = 0
     checked = set()  # unique dests — shared links appear once per target in the plan
@@ -680,7 +702,8 @@ def main(argv=None) -> int:
         p.add_argument("--targets", metavar="A,B,C",
                        help=f"comma-separated subset of {','.join(TOOLS)} (default: config)")
         p.add_argument("--config", type=Path, default=None,
-                       help="distribute config (default: .agents/distribute.json under --root)")
+                       help="optional config overriding defaults and adding list "
+                            "exclusions (no default file; SSOT frontmatter governs)")
         if name in ("distribute", "validate"):
             p.add_argument("--dest-root", type=Path, default=None, metavar="PATH",
                            help="destination project for project scope (default: --root)")
@@ -700,7 +723,7 @@ def main(argv=None) -> int:
     targets = None
     if args.targets:
         targets = [t.strip() for t in args.targets.split(",") if t.strip()]
-    config_path = args.config or default_config_path(args.root)
+    config_path = args.config  # optional override; no default file anymore
     if args.command == "distribute":
         return cmd_distribute(args.root, args.scope, targets, config_path,
                               dest_root=args.dest_root, dry_run=args.dry_run)

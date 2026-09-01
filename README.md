@@ -12,7 +12,6 @@ formats are compatible, generated files where they are not.
 .agents/                     # SSOT — the single source of truth
 ├── agents/<name>/agent.md   # sub-agent profiles (frontmatter + system prompt)
 ├── skills/<name>/SKILL.md   # skills (+ references/ scripts/ assets/)
-├── distribute.json          # distribution config: defaults + exclusions
 └── ...
 doc/dotagents/               # .agents protocol doc + init/validate script
 scripts/distribute.py        # the distribution engine
@@ -73,10 +72,10 @@ Options:
 | --- | --- | --- | --- |
 | `--scope` | all | `project` \| `user` | `project` writes the destination project's tool dirs (default); `user` writes home-level locations available in every project. |
 | `--dest-root` | distribute, validate | path | Destination project for project scope — defaults to `--root` (the hub itself). When set, Codex/OpenCode skills get `.agents/skills` links in the destination so native discovery works there. |
-| `--targets` | all | any subset of `claude`, `codex`, `opencode`, `copilot` (comma-separated) | Which tools to install for. Default: `default_targets` in `.agents/distribute.json` (all four). |
+| `--targets` | all | any subset of `claude`, `codex`, `opencode`, `copilot` (comma-separated) | Which tools to install for. Default: all four. |
 | `--dry-run` | distribute, undistribute | flag | Print what would happen — no links, files, or manifest changes. |
 | `--all` | undistribute | flag | Remove every manifest entry (both scopes). Required when no `--scope`/`--targets` filter is given — a bare `undistribute` refuses to run as a safety guard. |
-| `--config` | all | path | Config file to use. Default: `.agents/distribute.json` under `--root`. |
+| `--config` | all | path | Optional config overriding defaults (scope/targets, OpenCode dir) and adding list-based exclusions. No default file — the SSOT frontmatter governs. |
 | `--root` | all | path | The hub project holding `.agents/`. Default: current working directory. |
 
 `validate` re-derives what should be installed and checks it read-only: missing
@@ -99,19 +98,40 @@ On Windows without symlink privilege, directory links fall back to junctions
 Mode needed. 🪟 Cross-volume file links (e.g. user-scope Copilot agents when
 the repo sits on another drive) are reported as `[unavail]` with remediation
 instead of failing the run; enable Developer Mode and re-run to install them.
-Excluded entries print one `[excl]` line so silent skips stay visible.
+Skipped entries print an `[excl]` line so silent skips stay visible.
 
-Exclusions and defaults live in `.agents/distribute.json`:
+## 🏷️ Distribution policy lives in the SSOT
+
+Each agent/skill decides its own reach via the `distribute` frontmatter key —
+no central config to keep in sync:
+
+```yaml
+distribute: project-only   # hub-repo only; never installed at user scope
+distribute: none           # never distributed anywhere
+# omitted / all           # default: distributed everywhere
+```
+
+This repo marks the skill-lifecycle chain that way — `skill-builder`,
+`skill-tester`, `skill-security-auditor`, `change-ticket-deliver` and the
+`skill-lifecycle-orchestrator` agent are `project-only`: they manage THIS
+repo's skills and tickets, so they make no sense in other projects. The
+agent-design set ships globally. An optional `--config` file can still
+override defaults for special cases.
+
+For special cases, an optional config file can still override defaults:
 
 ```json
 {
   "default_scope": "project",
   "exclude": {
     "agents": ["agent-you-dont-want"],
-    "skills": [],
     "per_target": { "codex": { "skills": ["skill-not-for-codex"] } }
   }
 }
+```
+
+```bash
+python scripts/distribute.py distribute --config path/to/that/config.json
 ```
 
 ### `doc/dotagents/init_dotagents_folder.py` — init & validate 🧱

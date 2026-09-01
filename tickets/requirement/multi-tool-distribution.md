@@ -91,7 +91,7 @@ https://code.visualstudio.com/docs/agent-customization/agent-skills
 | --- | --- |
 | FR1 | `distribute` command in its own script `scripts/distribute.py` (`doc/dotagents/init_dotagents_folder.py` stays init/validate-only) that installs agents and skills for a selectable target set: `claude`, `codex`, `opencode`, `copilot` (default: all present on the machine) |
 | FR2 | Per-target strategy per the matrix in §3: skills → symlinked directories; agents → symlink (Claude, Copilot) or generated files (OpenCode `<name>.md`, Codex `<name>.toml`) |
-| FR3 | Exclusion config: named agents/skills skipped globally, optionally per target; see open questions for file location |
+| FR3 | Exclusion policy on the SSOT items themselves: `distribute:` frontmatter (`all` default / `project-only` / `none`); an optional `--config` file can still add list-based and per-target exclusions |
 | FR4 | Generated files carry a first-line comment identifying them as auto-generated from the SSOT path |
 | FR5 | `undistribute` command removes exactly the links/files created earlier (tracked via a manifest, e.g. `.agents/.backups/`-adjacent state file), and reports foreign files it refuses to touch |
 | FR6 | Drift detection: report broken links, SSOT entries missing a manifest record, and manifest entries whose SSOT source disappeared |
@@ -108,7 +108,7 @@ https://code.visualstudio.com/docs/agent-customization/agent-skills
 ## 8. Decisions (resolved 2026-08-30, recorded in CHANGE-003)
 
 1. **Distribution scope** — *decided*: both, user-selectable per run via `--scope {project,user}`, default `project`. Project mode writes the repo-local tool directories; user mode writes the home-level locations (`~/.claude/`, `~/.copilot/`, `~/.codex/`, `~/.config/opencode/`, and the shared `~/.agents/skills/` which serves Codex, OpenCode, and Copilot user-level skill discovery natively).
-2. **Exclusion config location** — *decided, amended same day*: `.agents/distribute.json` in the project root — the config filters SSOT content, so it belongs with the data under the protocol's `.agents/` convergence, decoupled from script location. (Initial decision was `scripts/distribute.json` next to the script; relocated per review discussion. `scripts/` stays flat — no `distribute/` subdirectory while distribution is a single script.)
+2. **Exclusion config location** — *decided, superseded*: exclusions moved onto the SSOT items themselves (`distribute: all | project-only | none` frontmatter key, runtime-read by scripts/distribute.py) — policy travels with the item instead of a central list that drifts. The `.agents/distribute.json` file (the interim decision) was removed; `--config` remains as an optional override for defaults and list-based exclusions. `scripts/` stays flat — no `distribute/` subdirectory.
 3. **OpenCode directory name** — *decided*: configurable via the exclusion/config file (`opencode.agents_dir`, default `agents` per the 2026-08 docs; older releases used the singular `agent/`).
 4. **SSOT frontmatter normalization** — *decided*: no normalization in this change. `validate` reports non-kebab agent `name` values as warnings (portability guidance); adapters derive generated/symlinked identities from the directory name, so display-style names stay functional everywhere.
 5. **Copilot via `.claude/agents` reuse** — *decided*: no coupling — the Copilot target owns its `.github/agents/<name>.md` links (project) / `~/.copilot/agents/<name>.md` (user) regardless of whether the Claude target is enabled.

@@ -4,6 +4,7 @@ version: "1.0.0"
 license: MIT
 description: "Manages the full change lifecycle for reported problems and proposed ideas — record each as a numbered markdown ticket (tickets/backlog/CHANGE-001.md), create a feature branch, verify with the repo skill gate, tag accepted changes with semantic versions, and open PRs to main. Use when the user reports a problem or bug, proposes an idea or new requirement, or mentions a change ticket, CHANGE id, version tag, or asks to resume, accept, or deliver a change."
 when_to_use: "Recording a reported problem or proposed idea as a ticket; starting, verifying, tagging, or PR-ing a change; resuming an in-flight change ticket."
+distribute: project-only
 ---
 
 # Change Ticket Deliver

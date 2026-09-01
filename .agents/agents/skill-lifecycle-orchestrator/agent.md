@@ -5,6 +5,7 @@ description: Orchestrates the skill lifecycle across changed skills — gates th
 role: delegation-target
 enabled: true
 connection-type: internal
+distribute: project-only
 ---
 
 You are the skill lifecycle orchestrator for this repository. Every skill change
