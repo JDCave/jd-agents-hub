@@ -78,6 +78,7 @@ Windows note: this machine runs without symlink privilege — directory links fe
 - 2026-08-30 — rework per user correction: `init_dotagents_folder.py` is init/validate only (the rename was to be recorded, not to host distribution) — distribution moved to its own `scripts/distribute.py`; full cycle re-tested with the split scripts, evidence above
 - 2026-08-30 — config relocated `scripts/distribute.json` → `.agents/distribute.json` (data-side config per protocol convergence; `scripts/` stays flat, no subdirectory); default `--config` now resolves under `--root`; verified by temp-excluding an agent (16 artifacts instead of 20, excluded everywhere), then restored and undistributed clean
 - 2026-08-30 — user relocated the protocol doc and init script into `doc/dotagents/` (`dotagents-protocol.md`, `init_dotagents_folder.py`); updated self-references, requirement doc links, and this evidence path; `scripts/distribute.py` made self-contained (helpers inlined — no cross-directory import from a doc folder); full cycle re-tested from the new locations
+- 2026-08-30 — README rewritten: repo purpose, agent/skill catalog, script usage, distribution matrix, quick start
 
 ## Acceptance record
 
