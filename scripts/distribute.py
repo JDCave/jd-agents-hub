@@ -7,11 +7,22 @@ Python 3.8+; self-contained (no imports from the init script).
 
 Usage:
     python scripts/distribute.py distribute [--root PATH] [--scope project|user]
+                                            [--dest-root PATH] [--dry-run]
                                             [--targets claude,codex,opencode,copilot]
                                             [--config PATH]
     python scripts/distribute.py undistribute [--root PATH] [--scope project|user]
                                               [--targets claude,codex,opencode,copilot]
-                                              [--config PATH]
+                                              [--config PATH] [--dry-run]
+    python scripts/distribute.py validate [--root PATH] [--scope project|user]
+                                          [--dest-root PATH]
+                                          [--targets claude,codex,opencode,copilot]
+                                          [--config PATH]
+
+`--root` is the hub that holds `.agents/`. For project scope the destination
+project defaults to the hub itself; point `--dest-root` at another project to
+install there (skills for Codex/OpenCode then get `.agents/skills` links in
+the destination, since that repo has no SSOT of its own). `validate` checks
+the installed state against the SSOT without changing anything.
 
 Strategy matrix (verified 2026-08-30 against official docs — see
 tickets/requirement/multi-tool-distribution.md §3):
@@ -253,14 +264,17 @@ def render_codex_agent(name: str, meta: dict, body: str) -> str:
 
 # --- plan ------------------------------------------------------------------------
 
-def build_plan(root: Path, scope: str, targets, config: dict):
+def build_plan(root: Path, scope: str, targets, config: dict, dest_root: Path = None):
     """Distribution plan: list of action dicts.
 
     link     -> dest symlink/junction/hardlink to source
     generate -> dest file rendered from the SSOT entry
     native   -> the tool discovers the SSOT location itself, nothing to do
+                (project scope with destination == hub only)
     """
     home = Path.home()
+    dest_root = dest_root or root
+    same_repo = dest_root.resolve() == root.resolve()
     opencode_dir = config.get("opencode", {}).get("agents_dir", "agents")
     plan = []
 
@@ -271,22 +285,22 @@ def build_plan(root: Path, scope: str, targets, config: dict):
             src_dir = (root / ".agents" / "agents" / name).resolve()
             src_file = src_dir / "agent.md"
             if target == "claude":
-                base = root if scope == "project" else home
+                base = dest_root if scope == "project" else home
                 plan.append(dict(action="link", kind="agents", target=target, name=name,
                                  dest=base / ".claude" / "agents" / name,
                                  source=src_dir, is_dir=True))
             elif target == "copilot":
-                base = root / ".github" if scope == "project" else home / ".copilot"
+                base = dest_root / ".github" if scope == "project" else home / ".copilot"
                 plan.append(dict(action="link", kind="agents", target=target, name=name,
                                  dest=base / "agents" / f"{name}.md",
                                  source=src_file, is_dir=False))
             elif target == "opencode":
-                base = root / ".opencode" if scope == "project" else home / ".config" / "opencode"
+                base = dest_root / ".opencode" if scope == "project" else home / ".config" / "opencode"
                 plan.append(dict(action="generate", kind="agents", target=target, name=name,
                                  dest=base / opencode_dir / f"{name}.md",
                                  renderer="opencode"))
             elif target == "codex":
-                base = root / ".codex" if scope == "project" else home / ".codex"
+                base = dest_root / ".codex" if scope == "project" else home / ".codex"
                 plan.append(dict(action="generate", kind="agents", target=target, name=name,
                                  dest=base / "agents" / f"{name}.toml",
                                  renderer="codex"))
@@ -296,21 +310,27 @@ def build_plan(root: Path, scope: str, targets, config: dict):
                 continue
             src_dir = (root / ".agents" / "skills" / name).resolve()
             if target == "claude":
-                base = root if scope == "project" else home
+                base = dest_root if scope == "project" else home
                 plan.append(dict(action="link", kind="skills", target=target, name=name,
                                  dest=base / ".claude" / "skills" / name,
                                  source=src_dir, is_dir=True))
             elif target == "copilot" and scope == "project":
                 plan.append(dict(action="link", kind="skills", target=target, name=name,
-                                 dest=root / ".github" / "skills" / name,
+                                 dest=dest_root / ".github" / "skills" / name,
                                  source=src_dir, is_dir=True))
             elif target in SHARED_SKILL_TARGETS and scope == "user":
                 # One ~/.agents/skills/<name> link serves Codex, OpenCode, and Copilot.
                 plan.append(dict(action="link", kind="skills", target=target, name=name,
                                  dest=home / ".agents" / "skills" / name,
                                  source=src_dir, is_dir=True))
-            elif scope == "project":
+            elif scope == "project" and same_repo:
                 plan.append(dict(action="native", kind="skills", target=target, name=name))
+            else:
+                # Project scope into a different repo: give it .agents/skills links so
+                # Codex/OpenCode native discovery works there too.
+                plan.append(dict(action="link", kind="skills", target=target, name=name,
+                                 dest=dest_root / ".agents" / "skills" / name,
+                                 source=src_dir, is_dir=True))
     return plan
 
 
@@ -338,11 +358,15 @@ def save_manifest(root: Path, manifest: dict) -> None:
 
 # --- commands ----------------------------------------------------------------------
 
-def cmd_distribute(root: Path, scope, targets, config_path: Path) -> int:
+def cmd_distribute(root: Path, scope, targets, config_path: Path,
+                   dest_root: Path = None, dry_run: bool = False) -> int:
     config = load_config(config_path)
     scope = scope or config.get("default_scope", "project")
     if scope not in ("project", "user"):
         print(f"error: --scope must be 'project' or 'user', got {scope!r}", file=sys.stderr)
+        return 2
+    if scope == "user" and dest_root is not None:
+        print("error: --dest-root only applies to --scope project", file=sys.stderr)
         return 2
     if not targets:
         targets = list(config.get("default_targets", TOOLS))
@@ -351,7 +375,7 @@ def cmd_distribute(root: Path, scope, targets, config_path: Path) -> int:
         print(f"error: unknown targets {unknown}; valid: {TOOLS}", file=sys.stderr)
         return 2
 
-    plan = build_plan(root, scope, targets, config)
+    plan = build_plan(root, scope, targets, config, dest_root)
 
     excluded_for = {}  # (kind, name) -> targets that skip it
     for target in targets:
@@ -398,19 +422,23 @@ def cmd_distribute(root: Path, scope, targets, config_path: Path) -> int:
                     print(f"[conflict] {dest} exists but does not point to "
                           f"{item['source']} — resolve manually", file=sys.stderr)
             else:
-                dest.parent.mkdir(parents=True, exist_ok=True)
-                try:
-                    how = make_link(item["source"], dest, item["is_dir"])
-                except LinkUnavailable as exc:
-                    unavailable += 1
-                    print(f"[unavail] {dest}: {exc}", file=sys.stderr)
-                    continue
-                except OSError as exc:
-                    problems += 1
-                    print(f"[error ] cannot create link {dest}: {exc}", file=sys.stderr)
-                    continue
-                counts["new"] += 1
-                print(f"[link  ] {dest} -> {item['source']} ({how})")
+                if dry_run:
+                    counts["new"] += 1
+                    print(f"[dry   ] would link {dest} -> {item['source']}")
+                else:
+                    dest.parent.mkdir(parents=True, exist_ok=True)
+                    try:
+                        how = make_link(item["source"], dest, item["is_dir"])
+                    except LinkUnavailable as exc:
+                        unavailable += 1
+                        print(f"[unavail] {dest}: {exc}", file=sys.stderr)
+                        continue
+                    except OSError as exc:
+                        problems += 1
+                        print(f"[error ] cannot create link {dest}: {exc}", file=sys.stderr)
+                        continue
+                    counts["new"] += 1
+                    print(f"[link  ] {dest} -> {item['source']} ({how})")
 
         elif item["action"] == "generate":
             meta, body = read_agent(root, name)
@@ -428,25 +456,35 @@ def cmd_distribute(root: Path, scope, targets, config_path: Path) -> int:
                 if text == content:
                     counts["skip"] += 1
                     print(f"[skip  ] {dest} up to date")
+                elif dry_run:
+                    counts["updated"] += 1
+                    print(f"[dry   ] would regenerate {dest} from SSOT")
                 else:
                     atomic_write(dest, content)
                     counts["updated"] += 1
                     print(f"[update] {dest} regenerated from SSOT")
+            elif dry_run:
+                counts["new"] += 1
+                print(f"[dry   ] would generate {dest} from SSOT")
             else:
                 atomic_write(dest, content)
                 counts["new"] += 1
                 print(f"[gen   ] {dest} generated from SSOT")
 
-        entry = entries.setdefault(str(dest), {
-            "source": str(item.get("source", "")),
-            "kind_of": item["action"], "scope": scope, "targets": [],
-        })
-        entry["targets"] = sorted(set(entry["targets"]) | {target})
+        if not dry_run:
+            entry = entries.setdefault(str(dest), {
+                "source": str(item.get("source", "")),
+                "kind_of": item["action"], "scope": scope, "targets": [],
+            })
+            entry["targets"] = sorted(set(entry["targets"]) | {target})
 
-    save_manifest(root, manifest)
-    print(f"\n{scope}-scope distribute to {', '.join(targets)}: "
+    if not dry_run:
+        save_manifest(root, manifest)
+    where = f" into {dest_root}" if (dest_root and scope == "project") else ""
+    print(f"\n{scope}-scope distribute{where} to {', '.join(targets)}: "
           f"{counts['new']} new, {counts['updated']} updated, {counts['skip']} unchanged, "
-          f"{counts['native']} native, {unavailable} unavailable, {problems} conflict(s).")
+          f"{counts['native']} native, {unavailable} unavailable, {problems} conflict(s)"
+          f"{' — dry run, nothing written' if dry_run else ''}.")
     if unavailable:
         print(f"note: {unavailable} link(s) could not be created in this environment — "
               f"see the [unavail] lines above for how to enable them", file=sys.stderr)
@@ -456,9 +494,14 @@ def cmd_distribute(root: Path, scope, targets, config_path: Path) -> int:
     return 0
 
 
-def cmd_undistribute(root: Path, scope, targets, config_path: Path) -> int:
+def cmd_undistribute(root: Path, scope, targets, config_path: Path,
+                     dry_run: bool = False, remove_all: bool = False) -> int:
     config = load_config(config_path)  # same config so defaults stay symmetric
     if scope is None and targets is None:
+        if not remove_all:
+            print("error: refusing to remove everything — narrow with --scope/--targets, "
+                  "or pass --all to wipe every manifest entry", file=sys.stderr)
+            return 2
         scope_filter = None
         target_filter = None
     else:
@@ -498,13 +541,16 @@ def cmd_undistribute(root: Path, scope, targets, config_path: Path) -> int:
                 print(f"[gone  ] {path_str} already absent")
                 drop_entry = True
             elif link_points_to(path, Path(entry["source"])):
-                if remove_link(path):
+                if dry_run:
+                    print(f"[dry   ] would remove {path_str}")
+                    drop_entry = True
+                elif remove_link(path):
                     removed += 1
                     print(f"[rm    ] {path_str}")
+                    drop_entry = True
                 else:
                     problems += 1
                     print(f"[error ] could not remove link {path_str}", file=sys.stderr)
-                drop_entry = True
             else:
                 foreign += 1
                 print(f"[foreign] {path_str} no longer points to {entry['source']} — "
@@ -514,10 +560,14 @@ def cmd_undistribute(root: Path, scope, targets, config_path: Path) -> int:
                 print(f"[gone  ] {path_str} already absent")
                 drop_entry = True
             elif MARKER in path.read_text(encoding="utf-8")[:400]:
-                path.unlink()
-                removed += 1
-                print(f"[rm    ] {path_str}")
-                drop_entry = True
+                if dry_run:
+                    print(f"[dry   ] would remove {path_str}")
+                    drop_entry = True
+                else:
+                    path.unlink()
+                    removed += 1
+                    print(f"[rm    ] {path_str}")
+                    drop_entry = True
             else:
                 foreign += 1
                 print(f"[foreign] {path_str} lost its generated marker — leaving it alone",
@@ -525,10 +575,93 @@ def cmd_undistribute(root: Path, scope, targets, config_path: Path) -> int:
         if drop_entry:
             del entries[path_str]
 
-    save_manifest(root, manifest)
+    if not dry_run:
+        save_manifest(root, manifest)
     print(f"\nundistribute: {removed} removed, {kept_partial} kept for remaining targets, "
-          f"{foreign} foreign, {problems} error(s).")
+          f"{foreign} foreign, {problems} error(s)"
+          f"{' — dry run, nothing written' if dry_run else ''}.")
     return 1 if (problems or foreign) else 0
+
+
+def cmd_validate(root: Path, scope, targets, config_path: Path,
+                 dest_root: Path = None) -> int:
+    """Check the installed state against the SSOT without changing anything."""
+    config = load_config(config_path)
+    scope = scope or config.get("default_scope", "project")
+    if scope not in ("project", "user"):
+        print(f"error: --scope must be 'project' or 'user', got {scope!r}", file=sys.stderr)
+        return 2
+    if scope == "user" and dest_root is not None:
+        print("error: --dest-root only applies to --scope project", file=sys.stderr)
+        return 2
+    if not targets:
+        targets = list(config.get("default_targets", TOOLS))
+
+    plan = build_plan(root, scope, targets, config, dest_root)
+    ok = 0
+    problems = 0
+    checked = set()  # unique dests — shared links appear once per target in the plan
+
+    for item in plan:
+        if item["action"] == "native":
+            ok += 1
+            continue
+        dest = item["dest"]
+        if str(dest) in checked:
+            continue
+        checked.add(str(dest))
+        if item["action"] == "link":
+            if not os.path.lexists(dest):
+                problems += 1
+                print(f"[missing] {dest} is not installed")
+            elif not link_points_to(dest, item["source"]):
+                problems += 1
+                print(f"[broken ] {dest} does not point to {item['source']}")
+            else:
+                ok += 1
+        else:  # generate
+            if not dest.exists():
+                problems += 1
+                print(f"[missing] {dest} is not installed")
+                continue
+            text = dest.read_text(encoding="utf-8")
+            if MARKER not in text:
+                problems += 1
+                print(f"[foreign] {dest} exists without the generated marker")
+            elif item["renderer"] == "opencode":
+                meta, body = read_agent(root, item["name"])
+                if text == render_opencode_agent(item["name"], meta, body):
+                    ok += 1
+                else:
+                    problems += 1
+                    print(f"[stale  ] {dest} differs from SSOT — re-run distribute")
+            else:
+                meta, body = read_agent(root, item["name"])
+                if text == render_codex_agent(item["name"], meta, body):
+                    ok += 1
+                else:
+                    problems += 1
+                    print(f"[stale  ] {dest} differs from SSOT — re-run distribute")
+
+    # Manifest entries that vanished from disk (links removed by hand, etc.)
+    scope_filter = scope
+    target_filter = set(targets)
+    for path_str, entry in sorted(load_manifest(root)["entries"].items()):
+        if entry.get("scope") != scope_filter:
+            continue
+        if not set(entry.get("targets", [])) & target_filter:
+            continue
+        if not os.path.lexists(path_str):
+            problems += 1
+            print(f"[gone   ] manifest records {path_str} but it is absent")
+
+    where = f" in {dest_root}" if (dest_root and scope == "project") else ""
+    if problems:
+        print(f"\n{scope}-scope validate{where}: {ok} ok, {problems} problem(s) "
+              f"(missing/broken/stale/foreign) — run distribute to fix")
+        return 1
+    print(f"{scope}-scope validate{where}: all {ok} artifact(s) ok")
+    return 0
 
 
 def main(argv=None) -> int:
@@ -538,6 +671,7 @@ def main(argv=None) -> int:
     for name, help_text in (
         ("distribute", "install SSOT agents/skills into each tool's discovery location"),
         ("undistribute", "remove exactly what distribute created (per the manifest)"),
+        ("validate", "check installed links/generated files against the SSOT (read-only)"),
     ):
         p = sub.add_parser(name, help=help_text)
         p.add_argument("--root", type=Path, default=Path.cwd(), help="project root (default: cwd)")
@@ -547,6 +681,16 @@ def main(argv=None) -> int:
                        help=f"comma-separated subset of {','.join(TOOLS)} (default: config)")
         p.add_argument("--config", type=Path, default=None,
                        help="distribute config (default: .agents/distribute.json under --root)")
+        if name in ("distribute", "validate"):
+            p.add_argument("--dest-root", type=Path, default=None, metavar="PATH",
+                           help="destination project for project scope (default: --root)")
+        if name in ("distribute", "undistribute"):
+            p.add_argument("--dry-run", action="store_true",
+                           help="show what would be done without writing anything")
+        if name == "undistribute":
+            p.add_argument("--all", action="store_true", dest="remove_all",
+                           help="remove every manifest entry (both scopes); required "
+                                "when no --scope/--targets filter is given")
 
     args = parser.parse_args(argv)
     if hasattr(sys.stdout, "reconfigure"):  # Windows consoles default to a legacy codepage
@@ -558,8 +702,13 @@ def main(argv=None) -> int:
         targets = [t.strip() for t in args.targets.split(",") if t.strip()]
     config_path = args.config or default_config_path(args.root)
     if args.command == "distribute":
-        return cmd_distribute(args.root, args.scope, targets, config_path)
-    return cmd_undistribute(args.root, args.scope, targets, config_path)
+        return cmd_distribute(args.root, args.scope, targets, config_path,
+                              dest_root=args.dest_root, dry_run=args.dry_run)
+    if args.command == "undistribute":
+        return cmd_undistribute(args.root, args.scope, targets, config_path,
+                                dry_run=args.dry_run, remove_all=args.remove_all)
+    return cmd_validate(args.root, args.scope, targets, config_path,
+                        dest_root=args.dest_root)
 
 
 if __name__ == "__main__":

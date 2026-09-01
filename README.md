@@ -48,25 +48,42 @@ modified, foreign files are never touched.
 ```bash
 # project scope (default): repo-local .claude/, .github/, .codex/, .opencode/
 python scripts/distribute.py distribute
-python scripts/distribute.py undistribute
+python scripts/distribute.py undistribute --scope project
+
+# distribute into ANOTHER project (its tool dirs + .agents/skills links)
+python scripts/distribute.py distribute --dest-root d:/code/some-project
 
 # user scope: home-level (~/.claude/, ~/.copilot/, ~/.codex/, ~/.agents/, ...)
 python scripts/distribute.py distribute --scope user
 python scripts/distribute.py undistribute --scope user
+
+# preview without writing / check drift
+python scripts/distribute.py distribute --dry-run
+python scripts/distribute.py undistribute --all --dry-run
+python scripts/distribute.py validate
 
 # pick targets / a different config
 python scripts/distribute.py distribute --targets claude,copilot
 python scripts/distribute.py distribute --config path/to/config.json
 ```
 
-Options (same for `distribute` and `undistribute`):
+Options:
 
-| Option | Values | Meaning |
-| --- | --- | --- |
-| `--scope` | `project` \| `user` | `project` writes repo-local tool dirs (default); `user` writes home-level locations available in every project. |
-| `--targets` | any subset of `claude`, `codex`, `opencode`, `copilot` (comma-separated) | Which tools to install for. Default: `default_targets` in `.agents/distribute.json` (all four). |
-| `--config` | filesystem path | Config file to use. Default: `.agents/distribute.json` under `--root`. |
-| `--root` | filesystem path | Project root that holds `.agents/`. Default: current working directory. |
+| Option | Applies to | Values | Meaning |
+| --- | --- | --- | --- |
+| `--scope` | all | `project` \| `user` | `project` writes the destination project's tool dirs (default); `user` writes home-level locations available in every project. |
+| `--dest-root` | distribute, validate | path | Destination project for project scope — defaults to `--root` (the hub itself). When set, Codex/OpenCode skills get `.agents/skills` links in the destination so native discovery works there. |
+| `--targets` | all | any subset of `claude`, `codex`, `opencode`, `copilot` (comma-separated) | Which tools to install for. Default: `default_targets` in `.agents/distribute.json` (all four). |
+| `--dry-run` | distribute, undistribute | flag | Print what would happen — no links, files, or manifest changes. |
+| `--all` | undistribute | flag | Remove every manifest entry (both scopes). Required when no `--scope`/`--targets` filter is given — a bare `undistribute` refuses to run as a safety guard. |
+| `--config` | all | path | Config file to use. Default: `.agents/distribute.json` under `--root`. |
+| `--root` | all | path | The hub project holding `.agents/`. Default: current working directory. |
+
+`validate` re-derives what should be installed and checks it read-only: missing
+links/files, broken links, generated files that drifted from the SSOT
+(`[stale]`), foreign files, and manifest entries whose target vanished. Links
+that were `[unavail]` during install (cross-volume, no symlink privilege)
+appear as `[missing]` — run `validate --targets ...` to narrow the check.
 
 How each tool is served:
 
