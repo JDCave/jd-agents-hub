@@ -135,11 +135,18 @@ def is_excluded(config: dict, kind: str, name: str, target: str) -> bool:
     return name in per_target.get(kind, [])
 
 
+class LinkUnavailable(OSError):
+    """The environment cannot create any link flavor (e.g. no symlink privilege
+    and a cross-volume file link). Reported as a warning with remediation,
+    not a hard failure."""
+
+
 def make_link(source: Path, link: Path, is_dir: bool) -> str:
     """Create link -> source; returns how: 'symlink', 'junction', or 'hardlink'.
 
     Windows falls back because directory symlinks need Developer Mode/admin:
-    junctions for directories, hardlinks for files (same volume only).
+    junctions for directories (any local volume), hardlinks for files (same
+    volume only). Raises LinkUnavailable when no flavor can work here.
     """
     try:
         os.symlink(str(source), str(link), target_is_directory=is_dir)
@@ -153,11 +160,13 @@ def make_link(source: Path, link: Path, is_dir: bool) -> str:
             if result.returncode == 0:
                 return "junction" if is_dir else "hardlink"
             detail = (result.stderr or result.stdout).strip()
-            hint = ""
-            if not is_dir:
-                hint = ("; a file hardlink needs the same volume, and a real symlink "
-                        "needs Developer Mode or an elevated shell")
-            raise OSError(f"symlink failed and 'mklink {kind}' failed: {detail}{hint}")
+            raise LinkUnavailable(
+                f"symlink failed and 'mklink {kind}' failed: {detail}. "
+                f"Enable Windows Developer Mode (or run from an elevated shell) "
+                f"so a real symlink can be created"
+                if not is_dir else
+                f"symlink failed and 'mklink {kind}' failed: {detail}"
+            )
         raise
 
 
@@ -343,9 +352,22 @@ def cmd_distribute(root: Path, scope, targets, config_path: Path) -> int:
         return 2
 
     plan = build_plan(root, scope, targets, config)
+
+    excluded_for = {}  # (kind, name) -> targets that skip it
+    for target in targets:
+        for kind in ("agents", "skills"):
+            for name in list_ssot(root, kind):
+                if is_excluded(config, kind, name, target):
+                    excluded_for.setdefault((kind, name), []).append(target)
+    for (kind, name), skipped in sorted(excluded_for.items()):
+        scope_note = "everywhere" if len(skipped) == len(targets) else ",".join(sorted(skipped))
+        print(f"[excl   ] {kind}/{name} excluded ({scope_note})")
+
     manifest = load_manifest(root)
     entries = manifest["entries"]
     problems = 0
+    unavailable = 0
+    handled = set()  # dests already processed this run (shared links serve several targets)
     counts = {"new": 0, "updated": 0, "skip": 0, "native": 0}
 
     for item in plan:
@@ -354,6 +376,17 @@ def cmd_distribute(root: Path, scope, targets, config_path: Path) -> int:
             print(f"[native] {item['target']} discovers skills/{item['name']} in .agents/ itself")
             continue
         dest, target, name = item["dest"], item["target"], item["name"]
+
+        if str(dest) in handled:
+            # Same destination already verified/created this run (the shared
+            # ~/.agents/skills link serves codex, opencode, and copilot).
+            entry = entries.setdefault(str(dest), {
+                "source": str(item.get("source", "")),
+                "kind_of": item["action"], "scope": scope, "targets": [],
+            })
+            entry["targets"] = sorted(set(entry["targets"]) | {target})
+            continue
+        handled.add(str(dest))
 
         if item["action"] == "link":
             if os.path.lexists(dest):
@@ -368,6 +401,10 @@ def cmd_distribute(root: Path, scope, targets, config_path: Path) -> int:
                 dest.parent.mkdir(parents=True, exist_ok=True)
                 try:
                     how = make_link(item["source"], dest, item["is_dir"])
+                except LinkUnavailable as exc:
+                    unavailable += 1
+                    print(f"[unavail] {dest}: {exc}", file=sys.stderr)
+                    continue
                 except OSError as exc:
                     problems += 1
                     print(f"[error ] cannot create link {dest}: {exc}", file=sys.stderr)
@@ -409,7 +446,10 @@ def cmd_distribute(root: Path, scope, targets, config_path: Path) -> int:
     save_manifest(root, manifest)
     print(f"\n{scope}-scope distribute to {', '.join(targets)}: "
           f"{counts['new']} new, {counts['updated']} updated, {counts['skip']} unchanged, "
-          f"{counts['native']} native, {problems} conflict(s).")
+          f"{counts['native']} native, {unavailable} unavailable, {problems} conflict(s).")
+    if unavailable:
+        print(f"note: {unavailable} link(s) could not be created in this environment — "
+              f"see the [unavail] lines above for how to enable them", file=sys.stderr)
     if problems:
         print("FAIL: resolve the conflicts above and re-run", file=sys.stderr)
         return 1

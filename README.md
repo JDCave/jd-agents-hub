@@ -78,7 +78,11 @@ How each tool is served:
 | Codex | generated `<name>.toml` | **native** — reads `.agents/skills/` directly |
 
 On Windows without symlink privilege, directory links fall back to junctions
-and file links to same-volume hardlinks — no Developer Mode needed. 🪟
+(works across drives) and file links to same-volume hardlinks — no Developer
+Mode needed. 🪟 Cross-volume file links (e.g. user-scope Copilot agents when
+the repo sits on another drive) are reported as `[unavail]` with remediation
+instead of failing the run; enable Developer Mode and re-run to install them.
+Excluded entries print one `[excl]` line so silent skips stay visible.
 
 Exclusions and defaults live in `.agents/distribute.json`:
 
