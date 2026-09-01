@@ -12,6 +12,7 @@ formats are compatible, generated files where they are not.
 .agents/                     # SSOT — the single source of truth
 ├── agents/<name>/agent.md   # sub-agent profiles (frontmatter + system prompt)
 ├── skills/<name>/SKILL.md   # skills (+ references/ scripts/ assets/)
+├── distribute.json          # distribution policy: defaults + hub_only set
 └── ...
 doc/dotagents/               # .agents protocol doc + init/validate script
 scripts/distribute.py        # the distribution engine
@@ -75,7 +76,7 @@ Options:
 | `--targets` | all | any subset of `claude`, `codex`, `opencode`, `copilot` (comma-separated) | Which tools to install for. Default: all four. |
 | `--dry-run` | distribute, undistribute | flag | Print what would happen — no links, files, or manifest changes. |
 | `--all` | undistribute | flag | Remove every manifest entry (both scopes). Required when no `--scope`/`--targets` filter is given — a bare `undistribute` refuses to run as a safety guard. |
-| `--config` | all | path | Optional config overriding defaults (scope/targets, OpenCode dir) and adding list-based exclusions. No default file — the SSOT frontmatter governs. |
+| `--config` | all | path | Policy file to use. Default: `.agents/distribute.json` under `--root`. |
 | `--root` | all | path | The hub project holding `.agents/`. Default: current working directory. |
 
 `validate` re-derives what should be installed and checks it read-only: missing
@@ -100,32 +101,20 @@ the repo sits on another drive) are reported as `[unavail]` with remediation
 instead of failing the run; enable Developer Mode and re-run to install them.
 Skipped entries print an `[excl]` line so silent skips stay visible.
 
-## 🏷️ Distribution policy lives in the SSOT
+## ⚙️ Distribution policy
 
-Each agent/skill decides its own reach via the `distribute` frontmatter key —
-no central config to keep in sync:
+The policy is configurable in one file, [.agents/distribute.json](.agents/distribute.json)
+(schema sample: [distribute-config.sample.json](scripts/distribute-config.sample.json)):
 
-```yaml
-distribute: project-only   # hub-repo only; never installed at user scope
-distribute: none           # never distributed anywhere
-# omitted / all           # default: distributed everywhere
-```
+| Key | Meaning |
+| --- | --- |
+| `default_scope` / `default_targets` | CLI defaults (`project` / all four tools). |
+| `hub_only.agents` / `hub_only.skills` | Entries that exist to manage THIS repo (skill/ticket/quality tooling). They install only when the hub is distributed into itself — never at user scope, never into another project via `--dest-root`. |
 
-This repo marks the skill-lifecycle chain that way — `skill-builder`,
-`skill-tester`, `skill-security-auditor`, `change-ticket-deliver` and the
-`skill-lifecycle-orchestrator` agent are `project-only`: they manage THIS
-repo's skills and tickets, so they make no sense in other projects. The
-agent-design set ships globally. An optional `--config` file can still
-override defaults for special cases.
-
-For special cases, an optional config file can still override defaults —
-full schema in [distribute-config.sample.json](scripts/distribute-config.sample.json)
-(that file is inert; copy it, edit, and pass `--config`):
-
-```bash
-cp scripts/distribute-config.sample.json my-dist-config.json
-python scripts/distribute.py distribute --config my-dist-config.json
-```
+Everything not listed in `hub_only` ships wherever you point the distributor.
+`validate` flags `hub_only` names that no longer match an SSOT entry, so renames
+and typos can't silently re-ship a management tool. Skipped entries print an
+`[excl]` line so silent skips stay visible.
 
 ### `doc/dotagents/init_dotagents_folder.py` — init & validate 🧱
 

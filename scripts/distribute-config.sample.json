@@ -1,12 +1,9 @@
 {
   "default_scope": "project",
   "default_targets": ["claude", "codex", "opencode", "copilot"],
-  "exclude": {
+  "hub_only": {
     "agents": [],
-    "skills": [],
-    "per_target": {
-      "codex": { "agents": [], "skills": [] }
-    }
+    "skills": []
   },
   "opencode": {
     "agents_dir": "agents"

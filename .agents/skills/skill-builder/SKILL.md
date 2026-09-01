@@ -3,7 +3,6 @@ name: skill-builder
 version: "1.0.0"
 description: Create new agent skills with proper structure, progressive disclosure, and bundled resources. Use when user wants to create, write, build, or author a new skill.
 when_to_use: Authoring or substantially rewriting any skill; drafting SKILL.md; deciding what goes in SKILL.md vs references/ and scripts/.
-distribute: project-only
 ---
 
 # Writing Skills

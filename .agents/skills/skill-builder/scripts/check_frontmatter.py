@@ -77,14 +77,12 @@ AGENT_SPEC_KEYS = {
     "background", "effort", "isolation", "color", "initialPrompt",
 }
 
-# Pre-existing repo conventions. Reported separately from genuine typos so the
-# migration in the v5 plan has a worklist rather than noise. `distribute` is
-# runtime-read by scripts/distribute.py (all | project-only | none).
+# Pre-existing repo conventions that no runtime reads. Reported separately from
+# genuine typos so the migration in the v5 plan has a worklist rather than noise.
 KNOWN_REPO_EXTRAS = {
     "license", "metadata", "version", "author", "tags", "compatible_tools",
     "triggers", "command", "domain", "title", "emoji", "vibe", "tier",
     "category", "dependencies", "not_for", "agents", "source", "attribution",
-    "distribute",
 }
 
 # Combined description + when_to_use budget per entry in the skill listing.

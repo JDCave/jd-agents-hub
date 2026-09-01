@@ -1,0 +1,23 @@
+{
+  "default_scope": "project",
+  "default_targets": [
+    "claude",
+    "codex",
+    "opencode",
+    "copilot"
+  ],
+  "hub_only": {
+    "agents": [
+      "skill-lifecycle-orchestrator"
+    ],
+    "skills": [
+      "skill-builder",
+      "skill-tester",
+      "skill-security-auditor",
+      "change-ticket-deliver"
+    ]
+  },
+  "opencode": {
+    "agents_dir": "agents"
+  }
+}
