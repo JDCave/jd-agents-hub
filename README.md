@@ -59,6 +59,15 @@ python scripts/distribute.py distribute --targets claude,copilot
 python scripts/distribute.py distribute --config path/to/config.json
 ```
 
+Options (same for `distribute` and `undistribute`):
+
+| Option | Values | Meaning |
+| --- | --- | --- |
+| `--scope` | `project` \| `user` | `project` writes repo-local tool dirs (default); `user` writes home-level locations available in every project. |
+| `--targets` | any subset of `claude`, `codex`, `opencode`, `copilot` (comma-separated) | Which tools to install for. Default: `default_targets` in `.agents/distribute.json` (all four). |
+| `--config` | filesystem path | Config file to use. Default: `.agents/distribute.json` under `--root`. |
+| `--root` | filesystem path | Project root that holds `.agents/`. Default: current working directory. |
+
 How each tool is served:
 
 | Tool | Agents | Skills |
