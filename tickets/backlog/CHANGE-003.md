@@ -85,6 +85,7 @@ Windows note: this machine runs without symlink privilege — directory links fe
 - 2026-08-30 — safety guard added after the live user distribution was found wiped (bare `undistribute` had removed every scope): undistribute without `--scope`/`--targets` now refuses to run unless `--all` is passed; user scope restored via `distribute --scope user` (16 artifacts, 2 known `[unavail]`)
 - 2026-08-30 — manual verification completed: Claude Code TUI loads all 6 user-scope skills + both agents live (skills hot-reloaded mid-session, agents in the Agent tool listing); the VS Code extension initially showed nothing but a Developer: Reload Window picked everything up — distribution itself confirmed working, the gap was extension-host caching only
 - 2026-08-30 — exclusion policy rehomed per user request: the skill-lifecycle chain (`skill-builder`, `skill-tester`, `skill-security-auditor`, `change-ticket-deliver`, agent `skill-lifecycle-orchestrator`) is repo-only — each SSOT entry now carries `distribute: project-only` frontmatter read at plan time (`all`/`project-only`/`none`); `.agents/distribute.json` deleted (`--config` stays as an optional override), skill-builder's frontmatter spec taught the new key so the gate stays green; user scope re-applied: only the agent-design set (1 agent + 2 skills) installs globally, 5 `[excl]` lines report the repo-only set
+- 2026-08-30 — added `scripts/distribute-config.sample.json` documenting the full optional-config schema (inert by design — copy, edit, pass via `--config`); README points at it
 
 ## Acceptance record
 

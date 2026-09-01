@@ -118,20 +118,13 @@ repo's skills and tickets, so they make no sense in other projects. The
 agent-design set ships globally. An optional `--config` file can still
 override defaults for special cases.
 
-For special cases, an optional config file can still override defaults:
-
-```json
-{
-  "default_scope": "project",
-  "exclude": {
-    "agents": ["agent-you-dont-want"],
-    "per_target": { "codex": { "skills": ["skill-not-for-codex"] } }
-  }
-}
-```
+For special cases, an optional config file can still override defaults —
+full schema in [distribute-config.sample.json](scripts/distribute-config.sample.json)
+(that file is inert; copy it, edit, and pass `--config`):
 
 ```bash
-python scripts/distribute.py distribute --config path/to/that/config.json
+cp scripts/distribute-config.sample.json my-dist-config.json
+python scripts/distribute.py distribute --config my-dist-config.json
 ```
 
 ### `doc/dotagents/init_dotagents_folder.py` — init & validate 🧱
