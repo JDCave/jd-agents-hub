@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """Initialize and validate a .agents/ directory per the .agents Protocol.
 
-Protocol reference: https://dotagentsprotocol.com/ (see doc/dotagents-protocol.md)
+Protocol reference: https://dotagentsprotocol.com/ (see dotagents-protocol.md in this directory)
 
 Pure standard library; runs on Windows / macOS / Linux with Python 3.8+.
 
 Usage:
-    python scripts/init_dotagents_folder.py init [--root PATH] [--examples] [--force]
-    python scripts/init_dotagents_folder.py validate [--root PATH]
+    python doc/dotagents/init_dotagents_folder.py init [--root PATH] [--examples] [--force]
+    python doc/dotagents/init_dotagents_folder.py validate [--root PATH]
 
 This script only creates and checks the folder. Distributing agents/skills into
 each AI tool's discovery locations is a separate concern — see distribute.py.

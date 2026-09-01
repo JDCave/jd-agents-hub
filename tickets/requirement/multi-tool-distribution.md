@@ -9,7 +9,7 @@
 ## 1. Background
 
 This repo (`jd-agents-hub`) manages personal and open-source agents and skills under
-`.agents/` following the dotagents protocol (`doc/dotagents-protocol.md`). The SSOT
+`.agents/` following the dotagents protocol (`doc/dotagents/dotagents-protocol.md`). The SSOT
 layouts are:
 
 - Agents: `.agents/agents/<name>/agent.md` (frontmatter + system prompt)
@@ -89,7 +89,7 @@ https://code.visualstudio.com/docs/agent-customization/agent-skills
 
 | # | Requirement |
 | --- | --- |
-| FR1 | `distribute` command in its own script `scripts/distribute.py` (`init_dotagents_folder.py` stays init/validate-only) that installs agents and skills for a selectable target set: `claude`, `codex`, `opencode`, `copilot` (default: all present on the machine) |
+| FR1 | `distribute` command in its own script `scripts/distribute.py` (`doc/dotagents/init_dotagents_folder.py` stays init/validate-only) that installs agents and skills for a selectable target set: `claude`, `codex`, `opencode`, `copilot` (default: all present on the machine) |
 | FR2 | Per-target strategy per the matrix in §3: skills → symlinked directories; agents → symlink (Claude, Copilot) or generated files (OpenCode `<name>.md`, Codex `<name>.toml`) |
 | FR3 | Exclusion config: named agents/skills skipped globally, optionally per target; see open questions for file location |
 | FR4 | Generated files carry a first-line comment identifying them as auto-generated from the SSOT path |

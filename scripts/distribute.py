@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Distribute the .agents/ SSOT into each AI tool's native discovery locations.
 
-Companion to init_dotagents_folder.py, which only creates and validates the
-.agents/ folder. Pure standard library; Windows / macOS / Linux, Python 3.8+.
+Companion to doc/dotagents/init_dotagents_folder.py, which only creates and
+validates the .agents/ folder. Pure standard library; Windows / macOS / Linux,
+Python 3.8+; self-contained (no imports from the init script).
 
 Usage:
     python scripts/distribute.py distribute [--root PATH] [--scope project|user]
@@ -38,9 +39,8 @@ import json
 import os
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
-
-from init_dotagents_folder import atomic_write, json_text, list_ssot, parse_frontmatter
 
 TOOLS = ["claude", "codex", "opencode", "copilot"]
 SHARED_SKILL_TARGETS = {"codex", "opencode", "copilot"}  # user scope: one ~/.agents/skills link serves all
@@ -52,6 +52,59 @@ DEFAULT_CONFIG = {
     "exclude": {"agents": [], "skills": [], "per_target": {}},
     "opencode": {"agents_dir": "agents"},  # current docs say agents/; older releases used agent/
 }
+
+
+def atomic_write(path: Path, content: str) -> None:
+    """Safe-by-default write: temp file + rename (atomic on POSIX and Windows)."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fd, tmp = tempfile.mkstemp(dir=str(path.parent), prefix=path.name + ".", suffix=".tmp")
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8", newline="\n") as f:
+            f.write(content)
+        os.replace(tmp, str(path))
+    except BaseException:
+        try:
+            os.unlink(tmp)
+        except OSError:
+            pass
+        raise
+
+
+def json_text(obj) -> str:
+    return json.dumps(obj, indent=2, sort_keys=True) + "\n"
+
+
+def parse_frontmatter(text: str):
+    """Parse simple '---' fenced key:value frontmatter. Returns (dict, body).
+
+    Not full YAML by design; matching surrounding quotes on a value are
+    stripped so `name: "x"` == `name: x`. Returns (None, text) without a
+    complete frontmatter block.
+    """
+    if not text.startswith("---"):
+        return None, text
+    lines = text.splitlines()
+    meta = {}
+    for i, line in enumerate(lines[1:], start=1):
+        if line.strip() == "---":
+            return meta, "\n".join(lines[i + 1:])
+        key, sep, value = line.partition(":")
+        if sep:
+            value = value.strip()
+            if len(value) >= 2 and value[0] == value[-1] and value[0] in "'\"":
+                value = value[1:-1]
+            meta[key.strip()] = value
+    return None, text
+
+
+def list_ssot(root: Path, kind: str):
+    """Names of SSOT entries: agents/<name>/agent.md or skills/<name>/SKILL.md."""
+    directory = root / ".agents" / kind
+    entry_file = "agent.md" if kind == "agents" else "SKILL.md"
+    if not directory.is_dir():
+        return []
+    return sorted(c.name for c in directory.iterdir()
+                  if c.is_dir() and (c / entry_file).is_file())
 
 
 def default_config_path(root: Path) -> Path:

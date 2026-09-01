@@ -57,7 +57,7 @@ Two-part change:
 
 | Command | Exit code | Result |
 | --- | --- | --- |
-| python scripts/init_dotagents_folder.py validate | 0 | OK: 44 file(s) valid, 3 warning(s) — empty `models.json` placeholder; 2 agent names non-kebab (known decision §8.4, adapters derive identity from the directory name) |
+| python doc/dotagents/init_dotagents_folder.py validate | 0 | OK: 45 file(s) valid, 3 warning(s) — empty `models.json` placeholder; 2 agent names non-kebab (known decision §8.4, adapters derive identity from the directory name); path updated after the doc/dotagents/ relocation |
 | python scripts/distribute.py distribute --scope project | 0 | 8 claude links (junctions), 2 codex `.toml` + 2 opencode `.md` generated, 8 copilot artifacts (2 file hardlinks + 6 skill junctions), 12 native (codex/opencode skills), 0 conflicts |
 | python scripts/distribute.py distribute --scope project (re-run) | 0 | 0 new, 0 updated, 20 unchanged, 12 native — idempotent |
 | python scripts/distribute.py undistribute | 0 | 20 removed, 0 kept, 0 foreign, 0 error(s); all six target dirs left empty |
@@ -77,6 +77,7 @@ Windows note: this machine runs without symlink privilege — directory links fe
 - 2026-08-30 — in-progress → awaiting-acceptance; checklist ticked except manual tool-side discovery, which runs at acceptance (needs `distribute` + a fresh session in each tool)
 - 2026-08-30 — rework per user correction: `init_dotagents_folder.py` is init/validate only (the rename was to be recorded, not to host distribution) — distribution moved to its own `scripts/distribute.py`; full cycle re-tested with the split scripts, evidence above
 - 2026-08-30 — config relocated `scripts/distribute.json` → `.agents/distribute.json` (data-side config per protocol convergence; `scripts/` stays flat, no subdirectory); default `--config` now resolves under `--root`; verified by temp-excluding an agent (16 artifacts instead of 20, excluded everywhere), then restored and undistributed clean
+- 2026-08-30 — user relocated the protocol doc and init script into `doc/dotagents/` (`dotagents-protocol.md`, `init_dotagents_folder.py`); updated self-references, requirement doc links, and this evidence path; `scripts/distribute.py` made self-contained (helpers inlined — no cross-directory import from a doc folder); full cycle re-tested from the new locations
 
 ## Acceptance record
 
