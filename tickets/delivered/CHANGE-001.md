@@ -17,7 +17,7 @@ requirement), record it as a numbered markdown ticket (`tickets/CHANGE-NNN.md`),
 create a `feature/CHANGE-NNN-xxx` branch to fix or implement it, verify with the repo
 skill gate, and after user acceptance tag a semantic version (first tag v0.1.0;
 problem = patch bump, idea = minor bump), finally opening a PR back to main via the gh
-CLI. The whole flow must align with the five subsystems of doc/harness-engineering.md
+CLI. The whole flow must align with the five subsystems of docs/harness-engineering.md
 (ticket = State, acceptance criteria = Scope, gates = Verification, SKILL.md =
 Instructions, resume-by-ticket = Session Lifecycle).
 
@@ -31,12 +31,12 @@ Instructions, resume-by-ticket = Session Lifecycle).
 
 ## Verification evidence
 
-| Command | Exit code | Result |
-| --- | --- | --- |
-| python .agents/skills/skill-tester/scripts/skill_gate.py .agents/skills/change-management --update-registry | 0 | PASS (quality 91.3/90, all 8 checks green) |
-| python .agents/skills/skill-tester/scripts/audit_skills.py | 0 | 6 skills all 6/6, no ERROR |
-| python .agents/skills/skill-tester/scripts/skill_gate.py .agents/skills/change-ticket-deliver --update-registry | 0 | PASS (quality 90.7/90, all 8 checks green) — after rename |
-| python -m unittest discover -s tests (inside change-ticket-deliver) | 0 | 13/13 OK — after rename |
+| Command                                                                                                         | Exit code | Result                                                    |
+| --------------------------------------------------------------------------------------------------------------- | --------- | --------------------------------------------------------- |
+| python .agents/skills/skill-tester/scripts/skill_gate.py .agents/skills/change-management --update-registry     | 0         | PASS (quality 91.3/90, all 8 checks green)                |
+| python .agents/skills/skill-tester/scripts/audit_skills.py                                                      | 0         | 6 skills all 6/6, no ERROR                                |
+| python .agents/skills/skill-tester/scripts/skill_gate.py .agents/skills/change-ticket-deliver --update-registry | 0         | PASS (quality 90.7/90, all 8 checks green) — after rename |
+| python -m unittest discover -s tests (inside change-ticket-deliver)                                             | 0         | 13/13 OK — after rename                                   |
 
 ## Progress log
 

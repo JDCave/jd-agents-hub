@@ -17,7 +17,7 @@ change-ticket-deliver workflow at acceptance/tag time from the corresponding tic
 
 ### Changed
 
-- CHANGE-003: `scripts/init_agents.py` renamed `init_dotagents_folder.py` and relocated to `doc/dotagents/` next to the protocol doc; init/validate only, with new cross-tool portability checks (skill `name` matches lowercase-kebab directory, agent `name` kebab warning, quoted frontmatter values parsed, empty placeholder JSON warns).
+- CHANGE-003: `scripts/init_agents.py` renamed `init_dotagents_folder.py` and relocated to `docs/dotagents/` next to the protocol doc; init/validate only, with new cross-tool portability checks (skill `name` matches lowercase-kebab directory, agent `name` kebab warning, quoted frontmatter values parsed, empty placeholder JSON warns).
 
 ## [v0.2.0] - 2026-08-30
 

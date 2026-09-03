@@ -4,13 +4,14 @@ Validation tools layered on top of Matt's write-a-skill. Use these when authorin
 
 ## Validation Tools (stdlib Python)
 
-| Tool | Purpose | Run before |
-|---|---|---|
-| `scripts/skill_description_validator.py` | Validates description: ≤1024 chars, third person, "Use when" trigger, action verb in first sentence | First draft of SKILL.md |
-| `scripts/skill_structure_validator.py` | Validates folder structure: SKILL.md present, ≤100 lines, references one level deep, no circular refs | Pre-commit |
-| `scripts/skill_review_checklist_runner.py` | Runs all 6 review-checklist items from Matt's write-a-skill against a skill folder | Final check before PR |
+| Tool                                       | Purpose                                                                                               | Run before              |
+| ------------------------------------------ | ----------------------------------------------------------------------------------------------------- | ----------------------- |
+| `scripts/skill_description_validator.py`   | Validates description: ≤1024 chars, third person, "Use when" trigger, action verb in first sentence   | First draft of SKILL.md |
+| `scripts/skill_structure_validator.py`     | Validates folder structure: SKILL.md present, ≤100 lines, references one level deep, no circular refs | Pre-commit              |
+| `scripts/skill_review_checklist_runner.py` | Runs all 6 review-checklist items from Matt's write-a-skill against a skill folder                    | Final check before PR   |
 
 All three tools:
+
 - Stdlib-only (no external dependencies)
 - Run with embedded sample if no path provided
 - Output text or JSON (`--output json`)
@@ -25,13 +26,14 @@ python .agents/skills/skill-tester/scripts/skill_gate.py .agents/skills/<name>  
 python .agents/skills/skill-tester/scripts/skill_gate.py --all                  # every skill
 ```
 
-Single exit code: 0 = pass, 1 = blocked. Pre-commit and CI call this — see [doc/skill-lifecycle-management.md](../../../../../doc/skill-lifecycle-management.md) for the full lifecycle.
+Single exit code: 0 = pass, 1 = blocked. Pre-commit and CI call this — see [docs/skill-lifecycle-management.md](../../../../../docs/skill-lifecycle-management.md) for the full lifecycle.
 
 ## Interrogation Questions (from Matt's review-with-user phase)
 
 **Opening question:** "What capability does this skill provide, and what's the trigger phrase that distinguishes it from existing skills?"
 
 **Six forcing questions** (matches the review checklist):
+
 1. What's the description? Is it ≤1024 chars + third person + has "Use when ..."?
 2. Is SKILL.md under 100 lines? If not, where will the split land (REFERENCE.md / examples.md / references/)?
 3. Are there time-sensitive claims (dates, "as of YYYY")?

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Distribute the .agents/ SSOT into each AI tool's native discovery locations.
 
-Companion to doc/dotagents/init_dotagents_folder.py, which only creates and
+Companion to docs/dotagents/init_dotagents_folder.py, which only creates and
 validates the .agents/ folder. Pure standard library; Windows / macOS / Linux,
 Python 3.8+; self-contained (no imports from the init script).
 

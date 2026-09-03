@@ -33,21 +33,21 @@ Full transition table, tagging rules, and edge cases: [references/lifecycle.md](
 
 ## Layout
 
-| Path | Purpose |
-| --- | --- |
-| `SKILL.md` | Workflow instructions for the agent (authoritative) |
-| `scripts/ticket_utils.py` | Deterministic helpers: `new-ticket`, `next-id`, `next-version` |
-| `assets/ticket-template.md` | Ticket skeleton copied for every new ticket |
-| `assets/example-ticket.md` | A fully filled-in example ticket |
-| `examples/session-example.md` | Per-state command cheat sheet |
-| `examples/pr-example.md` | Opening a PR by hand when gh CLI is absent |
-| `expected_outputs/*.json` | Documented `--json` output shapes of the helpers |
-| `tests/test_ticket_utils.py` | Unit tests (`python -m unittest discover -s tests`) |
-| `references/*.md` | Lifecycle, ticket fields, versioning, verification/delivery |
+| Path                          | Purpose                                                        |
+| ----------------------------- | -------------------------------------------------------------- |
+| `SKILL.md`                    | Workflow instructions for the agent (authoritative)            |
+| `scripts/ticket_utils.py`     | Deterministic helpers: `new-ticket`, `next-id`, `next-version` |
+| `assets/ticket-template.md`   | Ticket skeleton copied for every new ticket                    |
+| `assets/example-ticket.md`    | A fully filled-in example ticket                               |
+| `examples/session-example.md` | Per-state command cheat sheet                                  |
+| `examples/pr-example.md`      | Opening a PR by hand when gh CLI is absent                     |
+| `expected_outputs/*.json`     | Documented `--json` output shapes of the helpers               |
+| `tests/test_ticket_utils.py`  | Unit tests (`python -m unittest discover -s tests`)            |
+| `references/*.md`             | Lifecycle, ticket fields, versioning, verification/delivery    |
 
 Tickets live in `tickets/backlog/` until they are delivered, then move to
 `tickets/delivered/`; id allocation scans both so numbers are never reused.
 
-The workflow implements the harness-engineering model (doc/harness-engineering.md):
+The workflow implements the harness-engineering model (docs/harness-engineering.md):
 the ticket file is State, its acceptance checklist is Scope, the repo skill gate is
 Verification, and resuming means reading the newest non-merged ticket.

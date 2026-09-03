@@ -19,7 +19,6 @@ Two-part change:
    its agents and skills into Claude Code, Codex, OpenCode, and GitHub Copilot
    (VS Code), using per-target strategies verified against official docs
    (2026-08-30):
-
    - Skills: Codex and OpenCode scan `.agents/skills/` natively (zero
      distribution); Claude needs `.claude/skills/<name>` symlinks (officially
      supported); Copilot needs `.github/skills/<name>` at project level.
@@ -55,16 +54,16 @@ Two-part change:
 
 ## Verification evidence
 
-| Command | Exit code | Result |
-| --- | --- | --- |
-| python doc/dotagents/init_dotagents_folder.py validate | 0 | OK: 45 file(s) valid, 3 warning(s) — empty `models.json` placeholder; 2 agent names non-kebab (known decision §8.4, adapters derive identity from the directory name); path updated after the doc/dotagents/ relocation |
-| python scripts/distribute.py distribute --scope project | 0 | 8 claude links (junctions), 2 codex `.toml` + 2 opencode `.md` generated, 8 copilot artifacts (2 file hardlinks + 6 skill junctions), 12 native (codex/opencode skills), 0 conflicts |
-| python scripts/distribute.py distribute --scope project (re-run) | 0 | 0 new, 0 updated, 20 unchanged, 12 native — idempotent |
-| python scripts/distribute.py undistribute | 0 | 20 removed, 0 kept, 0 foreign, 0 error(s); all six target dirs left empty |
-| python scripts/distribute.py distribute --config \<temp exclusions\> | 0 | globally excluded agent+skill absent from every target; per-target `copilot.skills` exclusion removed only `.github/skills/skill-tester` while claude kept its link |
-| python .agents/skills/skill-tester/scripts/skill_gate.py --all | 0 | 6/6 skills PASS (min score 90, security FAIL blocks) |
-| python .agents/skills/skill-tester/scripts/audit_skills.py | 0 | 6/6 skills PASS (100%), no ERROR |
-| git status after distribute → undistribute | 0 | nothing under `.agents/` — SSOT untouched; only the intended working-tree changes (script, config, .gitignore) remain |
+| Command                                                              | Exit code | Result                                                                                                                                                                                                                   |
+| -------------------------------------------------------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| python docs/dotagents/init_dotagents_folder.py validate              | 0         | OK: 45 file(s) valid, 3 warning(s) — empty `models.json` placeholder; 2 agent names non-kebab (known decision §8.4, adapters derive identity from the directory name); path updated after the docs/dotagents/ relocation |
+| python scripts/distribute.py distribute --scope project              | 0         | 8 claude links (junctions), 2 codex `.toml` + 2 opencode `.md` generated, 8 copilot artifacts (2 file hardlinks + 6 skill junctions), 12 native (codex/opencode skills), 0 conflicts                                     |
+| python scripts/distribute.py distribute --scope project (re-run)     | 0         | 0 new, 0 updated, 20 unchanged, 12 native — idempotent                                                                                                                                                                   |
+| python scripts/distribute.py undistribute                            | 0         | 20 removed, 0 kept, 0 foreign, 0 error(s); all six target dirs left empty                                                                                                                                                |
+| python scripts/distribute.py distribute --config \<temp exclusions\> | 0         | globally excluded agent+skill absent from every target; per-target `copilot.skills` exclusion removed only `.github/skills/skill-tester` while claude kept its link                                                      |
+| python .agents/skills/skill-tester/scripts/skill_gate.py --all       | 0         | 6/6 skills PASS (min score 90, security FAIL blocks)                                                                                                                                                                     |
+| python .agents/skills/skill-tester/scripts/audit_skills.py           | 0         | 6/6 skills PASS (100%), no ERROR                                                                                                                                                                                         |
+| git status after distribute → undistribute                           | 0         | nothing under `.agents/` — SSOT untouched; only the intended working-tree changes (script, config, .gitignore) remain                                                                                                    |
 
 Windows note: this machine runs without symlink privilege — directory links fell back to junctions and copilot agent files to same-volume hardlinks (`link_points_to` verifies realpath or inode identity), so no Developer Mode was required.
 
@@ -77,7 +76,7 @@ Windows note: this machine runs without symlink privilege — directory links fe
 - 2026-08-30 — in-progress → awaiting-acceptance; checklist ticked except manual tool-side discovery, which runs at acceptance (needs `distribute` + a fresh session in each tool)
 - 2026-08-30 — rework per user correction: `init_dotagents_folder.py` is init/validate only (the rename was to be recorded, not to host distribution) — distribution moved to its own `scripts/distribute.py`; full cycle re-tested with the split scripts, evidence above
 - 2026-08-30 — config relocated `scripts/distribute.json` → `.agents/distribute.json` (data-side config per protocol convergence; `scripts/` stays flat, no subdirectory); default `--config` now resolves under `--root`; verified by temp-excluding an agent (16 artifacts instead of 20, excluded everywhere), then restored and undistributed clean
-- 2026-08-30 — user relocated the protocol doc and init script into `doc/dotagents/` (`dotagents-protocol.md`, `init_dotagents_folder.py`); updated self-references, requirement doc links, and this evidence path; `scripts/distribute.py` made self-contained (helpers inlined — no cross-directory import from a doc folder); full cycle re-tested from the new locations
+- 2026-08-30 — user relocated the protocol doc and init script into `docs/dotagents/` (`dotagents-protocol.md`, `init_dotagents_folder.py`); updated self-references, requirement doc links, and this evidence path; `scripts/distribute.py` made self-contained (helpers inlined — no cross-directory import from a doc folder); full cycle re-tested from the new locations
 - 2026-08-30 — README rewritten: repo purpose, agent/skill catalog, script usage, distribution matrix, quick start
 - 2026-08-30 — output hardening after a real user-scope run: shared `~/.agents/skills` links now report once per run instead of once per target; environment-incapable links (cross-volume file links without symlink privilege) classify as `[unavail]` warnings with remediation instead of FAIL; excluded entries print an `[excl]` line (a user-configured `change-ticket-deliver` exclusion had been invisible). Live evidence: this Claude Code session picked up the 5 user-scope skills in the Skill tool listing immediately after the user's distribute run
 - 2026-08-30 — Claude Code manual verification complete for user scope: both agents appeared in the live session's Agent tool listing (`Agent Design Orchestrator`, `Skill Lifecycle Orchestrator` from `~/.claude/agents` junctions) on top of the earlier skill listing — agents + skills both confirmed discovered. Remaining: codex/opencode/copilot checks by user; the 2 `[unavail]` copilot user-scope agent links to be created via a one-off elevated run

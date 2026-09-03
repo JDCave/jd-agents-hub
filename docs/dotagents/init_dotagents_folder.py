@@ -6,8 +6,8 @@ Protocol reference: https://dotagentsprotocol.com/ (see dotagents-protocol.md in
 Pure standard library; runs on Windows / macOS / Linux with Python 3.8+.
 
 Usage:
-    python doc/dotagents/init_dotagents_folder.py init [--root PATH] [--examples] [--force]
-    python doc/dotagents/init_dotagents_folder.py validate [--root PATH]
+    python docs/dotagents/init_dotagents_folder.py init [--root PATH] [--examples] [--force]
+    python docs/dotagents/init_dotagents_folder.py validate [--root PATH]
 
 This script only creates and checks the folder. Distributing agents/skills into
 each AI tool's discovery locations is a separate concern — see distribute.py.
