@@ -2,11 +2,11 @@
 branch: feature/CHANGE-003-multi-tool-distribution
 created: 2026-08-30
 id: CHANGE-003
-status: accepted
+status: delivered
 tag: v0.3.0
 title: Distribute agents and skills to Claude, Codex, OpenCode, and Copilot
 type: idea
-updated: 2026-08-30
+updated: 2026-10-14
 ---
 
 ## Description
@@ -87,6 +87,7 @@ Windows note: this machine runs without symlink privilege — directory links fe
 - 2026-08-30 — added `scripts/distribute-config.sample.json` documenting the full optional-config schema (inert by design — copy, edit, pass via `--config`); README points at it
 - 2026-08-30 — distribution policy redesigned per user direction (third and final iteration): frontmatter markers reverted; policy now lives in `.agents/distribute.json` with `defaults` + `hub_only` sets. `hub_only` = entries serving this repo's own management (skill-builder, skill-tester, skill-security-auditor, change-ticket-deliver, agent skill-lifecycle-orchestrator) — installed ONLY when the hub is distributed into itself; excluded from user scope AND from other projects via `--dest-root` (the interim `project-only` frontmatter lacked the second half of that semantic). Tested all three paths: user scope excl ×5; temp dest-root excl ×5 (only agent-design set installed); hub project scope installs everything. `validate` now reports `hub_only` names with no matching SSOT entry (drift guard); skill-builder frontmatter spec reverted to match
 - 2026-08-30 — awaiting-acceptance → accepted; user confirmed; tagged v0.3.0
+- 2026-10-14 — accepted → delivered: header status corrected (mv to tickets/delivered/ had landed in 4396ba9 without it); post-acceptance commits on the branch (docs for .agents protocol / harness engineering / skill lifecycle, multi-tool doc+script updates, registry timestamp refresh) ride along in the PR; branch + tag v0.3.0 pushed, PR opened
 
 ## Acceptance record
 
