@@ -24,28 +24,29 @@ Registry entry recorded (gate PASS 96.1 on 2026-10-13). Not in `hub_only` → de
 
 ## Acceptance criteria
 
-- [ ] Skill committed under `.agents/skills/agent-resume-review/` (SKILL.md, scripts, tests, references, assets, expected_outputs, README, examples) — no build artifacts (`__pycache__` stays ignored)
-- [ ] `registry.json` carries the `agent-resume-review` entry with its latest gate result
-- [ ] Lint demo run exits 0; lint reproduces `expected_outputs/` scores for the four bundled samples (zh/en × strong/weak)
-- [ ] `python -m unittest discover .agents/skills/agent-resume-review/tests` passes
-- [ ] `init_dotagents_folder.py validate` clean for the new skill (kebab-case name matches directory, required frontmatter present)
-- [ ] skill gate PASS (quality ≥90) for all skills and repo-wide audit has no ERROR
-- [ ] Manual: after `distribute --scope user`, the skill appears in a fresh session's skill listing
+- [x] Skill committed under `.agents/skills/agent-resume-review/` (SKILL.md, scripts, tests, references, assets, expected_outputs, README, examples) — no build artifacts (`__pycache__` stays ignored)
+- [x] `registry.json` carries the `agent-resume-review` entry with its latest gate result
+- [x] Lint demo run exits 0; lint reproduces `expected_outputs/` scores for the four bundled samples (zh/en × strong/weak)
+- [x] `python -m unittest discover .agents/skills/agent-resume-review/tests` passes
+- [x] `init_dotagents_folder.py validate` clean for the new skill (kebab-case name matches directory, required frontmatter present)
+- [x] skill gate PASS (quality ≥90) for all skills and repo-wide audit has no ERROR
+- [ ] Manual: after `distribute --scope user`, the skill appears in a fresh session's skill listing — Claude side proven (this session lists the skill via the existing `~/.claude/skills/agent-resume-review` junction); the literal `distribute --scope user` run is currently blocked by 2 pre-existing conflicts in unrelated entries (see Progress log)
 
 ## Verification evidence
 
 | Command | Exit code | Result |
 | --- | --- | --- |
-| python .agents/skills/agent-resume-review/scripts/resume_lint.py |  |  |
-| python -m unittest discover .agents/skills/agent-resume-review/tests |  |  |
-| python docs/dotagents/init_dotagents_folder.py validate |  |  |
-| python .agents/skills/skill-tester/scripts/skill_gate.py --all |  |  |
-| python .agents/skills/skill-tester/scripts/audit_skills.py |  |  |
+| python .agents/skills/agent-resume-review/scripts/resume_lint.py (4 bundled samples, --json vs expected_outputs/) | 0 | 4/4 MATCH — weak 45.7 zh · strong 100.0 zh · weak-en 43.6 en · strong-en 100.0 en |
+| python -m unittest discover .agents/skills/agent-resume-review/tests | 0 | 15 tests OK |
+| python docs/dotagents/init_dotagents_folder.py validate | 0 | OK: 52 file(s) valid, 3 warning(s) — all pre-existing (empty models.json placeholder; 2 non-kebab agent names, CHANGE-003 §8.4 decision); no new warnings from this skill |
+| python .agents/skills/skill-tester/scripts/skill_gate.py --all | 0 | 7/7 skills PASS (min score 90); agent-resume-review quality 96.1 (A+); also enforced by the pre-commit hook at 2b3d2e1 |
+| python .agents/skills/skill-tester/scripts/audit_skills.py | 0 | 7/7 skills PASS (100%), 0 ERROR |
 
 ## Progress log
 
 - 2026-10-14 — open: ticket created
 - 2026-10-14 — open → in-progress; branch feature/CHANGE-004-agent-resume-review created; scope: land the pre-built skill (built and gate-passed 2026-10-13, quality 96.1) from the working tree — no new feature work, only verification + registration
+- 2026-10-14 — skill (21 files) + registry entry committed (2b3d2e1); pre-commit skill gate PASS 96.1; full verification suite recorded above; distribution state: claude user+project links already in place (live session lists the skill), project-scope re-run added the missing `.github/skills/agent-resume-review` junction for copilot. Pre-existing, out-of-scope leftovers noted: 8 broken copilot links under `.github/*` (repo relocation) and 2 `~/.agents/skills` conflicts (agent-designer, agent-workflow-designer point elsewhere) that make `distribute --scope user` refuse — resolving them is a user decision, not this ticket's scope
 
 ## Acceptance record
 
