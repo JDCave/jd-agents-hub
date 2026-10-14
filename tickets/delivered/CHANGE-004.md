@@ -2,7 +2,7 @@
 branch: feature/CHANGE-004-agent-resume-review
 created: 2026-10-14
 id: CHANGE-004
-status: delivered
+status: merged
 tag: v0.4.0
 title: agent-resume-review skill
 type: idea
@@ -49,6 +49,7 @@ Registry entry recorded (gate PASS 96.1 on 2026-10-13). Not in `hub_only` → de
 - 2026-10-14 — skill (21 files) + registry entry committed (2b3d2e1); pre-commit skill gate PASS 96.1; full verification suite recorded above; distribution state: claude user+project links already in place (live session lists the skill), project-scope re-run added the missing `.github/skills/agent-resume-review` junction for copilot. Pre-existing, out-of-scope leftovers noted: 8 broken copilot links under `.github/*` (repo relocation) and 2 `~/.agents/skills` conflicts (agent-designer, agent-workflow-designer point elsewhere) that make `distribute --scope user` refuse — resolving them is a user decision, not this ticket's scope
 - 2026-10-14 — relocation leftovers resolved with explicit user approval: 8 broken `.github/*` artifacts deleted and recreated by project-scope re-run (0 conflicts; validate: all 36 artifacts ok); the 2 stale `~/.agents/skills` junctions (pointed at the pre-relocation clone `D:\Code\...`, which stays untouched) deleted on user confirmation, then `distribute --scope user` re-run clean — 3 new links incl. shared `agent-resume-review`, 0 conflicts; 1 known `[unavail]` copilot cross-volume agent link carried over from CHANGE-003 (needs a one-off elevated run, out of scope). All checklist items ticked → awaiting-acceptance
 - 2026-10-14 — awaiting-acceptance → accepted; user confirmed; tagged v0.4.0
+- 2026-10-14 — delivered → merged: PR #5 merged as merge commit 65d1615; local main fast-forwarded (96b12d1 → 65d1615), tag v0.4.0 in merged history; remote feature branch deleted
 
 ## Acceptance record
 
@@ -59,4 +60,4 @@ Accepted · 2026-10-14 · user confirmed after the full acceptance package (7/7 
 - Version: v0.4.0 (idea → minor)
 - Tag: v0.4.0 — annotated on the acceptance commit on feature/CHANGE-004-agent-resume-review
 - PR: [#5](https://github.com/JDCave/jd-agents-hub/pull/5) — [CHANGE-004] agent-resume-review skill
-- Merged: (pending)
+- Merged: 2026-10-14 — merge commit 65d1615 on main
