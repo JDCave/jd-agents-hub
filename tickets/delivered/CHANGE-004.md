@@ -58,5 +58,5 @@ Accepted · 2026-10-14 · user confirmed after the full acceptance package (7/7 
 
 - Version: v0.4.0 (idea → minor)
 - Tag: v0.4.0 — annotated on the acceptance commit on feature/CHANGE-004-agent-resume-review
-- PR: (pending)
+- PR: [#5](https://github.com/JDCave/jd-agents-hub/pull/5) — [CHANGE-004] agent-resume-review skill
 - Merged: (pending)
