@@ -97,5 +97,5 @@ Accepted · 2026-08-30 · user confirmed acceptance after the third policy-desig
 
 - Version: v0.3.0 (idea → minor)
 - Tag: v0.3.0 — annotated on the acceptance commit on feature/CHANGE-003-multi-tool-distribution
-- PR: (pending)
+- PR: [#4](https://github.com/JDCave/jd-agents-hub/pull/4) — [CHANGE-003] Distribute agents and skills to Claude, Codex, OpenCode, and Copilot
 - Merged: (pending)
