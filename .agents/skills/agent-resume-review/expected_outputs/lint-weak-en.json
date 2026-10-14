@@ -1,0 +1,72 @@
+{
+  "score": 43.6,
+  "language": "en",
+  "components": {
+    "sections": 20,
+    "quantification": 0.0,
+    "weak_verbs": 0,
+    "keywords": 8.6,
+    "mastery_claims": 5,
+    "length": 10
+  },
+  "stats": {
+    "bullets": 8,
+    "quantified_ratio": 0.0,
+    "weak_verb_hits": [
+      "assisted",
+      "helped",
+      "participated"
+    ],
+    "mastery_claims": 0,
+    "nonempty_lines": 25,
+    "tier1_found": [
+      "python",
+      "agent",
+      "llm",
+      "rag"
+    ],
+    "tier1_missing": [
+      "prompt",
+      "function calling",
+      "asyncio"
+    ],
+    "tier2_found": [],
+    "tier2_missing": [
+      "mcp",
+      "langchain",
+      "nanobot",
+      "向量数据库",
+      "transformer",
+      "fastapi",
+      "docker",
+      "git"
+    ]
+  },
+  "findings": [
+    {
+      "check": "quantification",
+      "severity": "high",
+      "detail": "only 0% of 8 bullets carry a number (target ≥ 60%)",
+      "suggestion": "Rewrite results with STAR numbers: 提升 X% / improved by X%, 日均 X 次 / X requests per day."
+    },
+    {
+      "check": "weak_verbs",
+      "severity": "high",
+      "detail": "weak verbs present: assisted, helped, participated",
+      "suggestion": "Lead with ownership verbs: 主导 / 设计 / 实现 / 优化 (zh) or led / designed / built / optimized (en)."
+    },
+    {
+      "check": "keywords",
+      "severity": "high",
+      "detail": "tier-1 keywords missing: prompt, function calling, asyncio",
+      "suggestion": "Fold must-have keywords into skills/projects naturally (2-3 times each)."
+    },
+    {
+      "check": "keywords",
+      "severity": "medium",
+      "detail": "tier-2 keywords missing: mcp, langchain, nanobot, 向量数据库, transformer, fastapi, docker, git",
+      "suggestion": "Add the ones you actually used; never pad keywords you cannot defend."
+    }
+  ],
+  "file": "assets/sample-resume-weak-en.md"
+}

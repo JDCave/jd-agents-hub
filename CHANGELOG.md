@@ -6,6 +6,12 @@ All notable changes to this repo are documented here. Format based on
 change-ticket-deliver workflow at acceptance/tag time from the corresponding ticket
 (`tickets/CHANGE-NNN.md`).
 
+## [v0.4.0] - 2026-10-14
+
+### Added
+
+- CHANGE-004: new skill `agent-resume-review` (v1.1.0) — bilingual (zh/en) evaluation and rewrite for AI Agent engineer resumes: deterministic lint (`resume_lint.py` — language detection, sections, quantified bullets, weak verbs, keyword tiers, mastery claims, one-page length), six-dimension judgment rubric with a scorecard JSON contract, STAR/ownership-verb rewrite patterns with re-lint proof, bundled zh+en sample resumes and expected outputs, unittest suite, and registry entry.
+
 ## [v0.3.0] - 2026-08-30
 
 ### Added

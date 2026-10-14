@@ -46,5 +46,13 @@
       "verdict": "PASS",
       "quality_score": 90.7
     }
+  },
+  "agent-resume-review": {
+    "status": "draft",
+    "last_gate": {
+      "timestamp": "2026-10-14T03:17:53+00:00",
+      "verdict": "PASS",
+      "quality_score": 96.1
+    }
   }
 }

@@ -1,0 +1,42 @@
+{
+  "score": 100.0,
+  "language": "zh",
+  "components": {
+    "sections": 20,
+    "quantification": 25.0,
+    "weak_verbs": 15,
+    "keywords": 25.0,
+    "mastery_claims": 5,
+    "length": 10
+  },
+  "stats": {
+    "bullets": 9,
+    "quantified_ratio": 0.89,
+    "weak_verb_hits": [],
+    "mastery_claims": 1,
+    "nonempty_lines": 29,
+    "tier1_found": [
+      "python",
+      "agent",
+      "llm",
+      "prompt",
+      "rag",
+      "function calling",
+      "asyncio"
+    ],
+    "tier1_missing": [],
+    "tier2_found": [
+      "mcp",
+      "langchain",
+      "nanobot",
+      "向量数据库",
+      "transformer",
+      "fastapi",
+      "docker",
+      "git"
+    ],
+    "tier2_missing": []
+  },
+  "findings": [],
+  "file": "assets/sample-resume-strong.md"
+}
