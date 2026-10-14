@@ -1,3 +1,11 @@
 __pycache__/
 *.pyc
 .claude/
+
+# CHANGE-003: local distribution outputs and distribute state — never commit these
+.agents/.backups/*
+!.agents/.backups/.gitkeep
+.github/agents/
+.github/skills/
+.opencode/
+.codex/

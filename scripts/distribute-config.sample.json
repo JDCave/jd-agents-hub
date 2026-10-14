@@ -1,0 +1,11 @@
+{
+  "default_scope": "project",
+  "default_targets": ["claude", "codex", "opencode", "copilot"],
+  "hub_only": {
+    "agents": [],
+    "skills": []
+  },
+  "opencode": {
+    "agents_dir": "agents"
+  }
+}

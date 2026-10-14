@@ -6,6 +6,19 @@ All notable changes to this repo are documented here. Format based on
 change-ticket-deliver workflow at acceptance/tag time from the corresponding ticket
 (`tickets/CHANGE-NNN.md`).
 
+## [v0.3.0] - 2026-08-30
+
+### Added
+
+- CHANGE-003: multi-tool distribution — `scripts/distribute.py` installs the `.agents/` SSOT into Claude Code, Codex, OpenCode, and Copilot (VS Code) via symlinks where formats are compatible and generated files (OpenCode markdown, Codex TOML) where they are not; idempotent, manifest-tracked `undistribute`, read-only `validate` drift check, `--scope project|user`, `--dest-root` for other projects, `--dry-run`, and an `undistribute --all` safety guard.
+- CHANGE-003: configurable distribution policy — `.agents/distribute.json` with `defaults` and `hub_only` sets (repo-management tooling installs only into the hub itself; schema sample in `scripts/distribute-config.sample.json`).
+- CHANGE-003: requirement analysis `tickets/requirement/multi-tool-distribution.md` (per-tool format research, decisions log) and the `tickets/requirement/` convention.
+- CHANGE-003: README rewritten — repo purpose, agent/skill catalog, script usage, options table, distribution matrix, quick start.
+
+### Changed
+
+- CHANGE-003: `scripts/init_agents.py` renamed `init_dotagents_folder.py` and relocated to `docs/dotagents/` next to the protocol doc; init/validate only, with new cross-tool portability checks (skill `name` matches lowercase-kebab directory, agent `name` kebab warning, quoted frontmatter values parsed, empty placeholder JSON warns).
+
 ## [v0.2.0] - 2026-08-30
 
 ### Added

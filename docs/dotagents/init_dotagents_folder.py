@@ -1,23 +1,29 @@
 #!/usr/bin/env python3
 """Initialize and validate a .agents/ directory per the .agents Protocol.
 
-Protocol reference: https://dotagentsprotocol.com/ (see doc/dotagents-protocol.md)
+Protocol reference: https://dotagentsprotocol.com/ (see dotagents-protocol.md in this directory)
 
 Pure standard library; runs on Windows / macOS / Linux with Python 3.8+.
 
 Usage:
-    python scripts/init_agents.py init [--root PATH] [--examples] [--force]
-    python scripts/init_agents.py validate [--root PATH]
+    python docs/dotagents/init_dotagents_folder.py init [--root PATH] [--examples] [--force]
+    python docs/dotagents/init_dotagents_folder.py validate [--root PATH]
+
+This script only creates and checks the folder. Distributing agents/skills into
+each AI tool's discovery locations is a separate concern — see distribute.py.
 """
 
 import argparse
 import json
 import os
+import re
 import sys
 import tempfile
 from pathlib import Path
 
 DIRS = ["layouts", "skills", "agents", "tasks", "memories", ".backups"]
+
+KEBAB_RE = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
 
 AGENTS_MD = """\
 # AGENTS.md
@@ -130,7 +136,8 @@ def json_text(obj) -> str:
 def parse_frontmatter(text: str):
     """Parse simple '---' fenced key:value frontmatter. Returns (dict, body).
 
-    Not full YAML by design; list values stay raw CSV strings.
+    Not full YAML by design; list values stay raw CSV strings. Matching
+    surrounding quotes on a value are stripped so `name: "x"` == `name: x`.
     Returns (None, text) if no complete frontmatter block is present.
     """
     if not text.startswith("---"):
@@ -142,7 +149,10 @@ def parse_frontmatter(text: str):
             return meta, "\n".join(lines[i + 1:])
         key, sep, value = line.partition(":")
         if sep:
-            meta[key.strip()] = value.strip()
+            value = value.strip()
+            if len(value) >= 2 and value[0] == value[-1] and value[0] in "'\"":
+                value = value[1:-1]
+            meta[key.strip()] = value
     return None, text
 
 
@@ -182,6 +192,18 @@ def cmd_init(root: Path, examples: bool, force: bool) -> int:
     return 0
 
 
+def list_ssot(root: Path, kind: str):
+    """Names of SSOT entries: agents/<name>/agent.md or skills/<name>/SKILL.md."""
+    directory = root / ".agents" / kind
+    entry_file = "agent.md" if kind == "agents" else "SKILL.md"
+    if not directory.is_dir():
+        return []
+    return sorted(c.name for c in directory.iterdir()
+                  if c.is_dir() and (c / entry_file).is_file())
+
+
+# --- validate -------------------------------------------------------------------
+
 def iter_md_files(directory: Path):
     if not directory.is_dir():
         return []
@@ -191,15 +213,15 @@ def iter_md_files(directory: Path):
 def check_md(path: Path, required_keys, errors, warnings):
     text = path.read_text(encoding="utf-8")
     meta, body = parse_frontmatter(text)
-    rel = path.relative_to(path.parents[-2] if len(path.parents) >= 2 else path.parent)
     if meta is None:
         errors.append(f"{path}: missing '---' frontmatter block")
-        return
+        return None
     for key in required_keys:
         if key not in meta or not meta[key]:
             errors.append(f"{path}: frontmatter missing required key '{key}'")
     if not body.strip():
         warnings.append(f"{path}: empty body")
+    return meta
 
 
 def cmd_validate(root: Path) -> int:
@@ -214,22 +236,51 @@ def cmd_validate(root: Path) -> int:
         if not (agents_dir / name).is_dir():
             warnings.append(f"missing directory: {agents_dir / name}")
 
-    # JSON files must parse and be well-formed objects
+    # JSON files must parse and be well-formed objects (empty placeholders only warn)
     json_files = [p for p in agents_dir.rglob("*.json") if ".backups" not in p.parts]
     for path in sorted(json_files):
+        raw = path.read_text(encoding="utf-8")
+        if not raw.strip():
+            warnings.append(f"{path}: empty placeholder JSON file")
+            continue
         try:
-            data = json.loads(path.read_text(encoding="utf-8"))
+            data = json.loads(raw)
         except (json.JSONDecodeError, UnicodeDecodeError) as exc:
             errors.append(f"{path}: invalid JSON ({exc})")
             continue
         if not isinstance(data, dict):
             errors.append(f"{path}: top-level value must be an object")
 
-    for path in iter_md_files(agents_dir / "skills"):
-        check_md(path, ["id", "name", "description"], errors, warnings)
+    # Skills: one canonical SKILL.md per directory; portability per the Agent Skills standard
+    # (name + description required; `id` is protocol-specific and optional here)
+    for name in list_ssot(root, "skills"):
+        path = agents_dir / "skills" / name / "SKILL.md"
+        meta = check_md(path, ["name", "description"], errors, warnings)
+        if meta is None:
+            continue
+        skill_name = meta.get("name", "")
+        if skill_name != name:
+            errors.append(f"{path}: frontmatter 'name' ({skill_name!r}) must match "
+                          f"the directory name ({name!r})")
+        elif not KEBAB_RE.match(skill_name) or not 1 <= len(skill_name) <= 64:
+            errors.append(f"{path}: name must be 1-64 chars of lowercase kebab-case")
+        if len(meta.get("description", "")) > 1024:
+            warnings.append(f"{path}: description exceeds 1024 chars "
+                            f"(tools may reject or truncate it)")
 
-    for path in iter_md_files(agents_dir / "agents"):
-        check_md(path, ["id", "name", "description"], errors, warnings)
+    # Agents: one canonical agent.md per directory; frontmatter usable by every adapter
+    for name in list_ssot(root, "agents"):
+        path = agents_dir / "agents" / name / "agent.md"
+        meta = check_md(path, ["id", "name", "description"], errors, warnings)
+        if meta is None:
+            continue
+        agent_name = meta.get("name", "")
+        if agent_name.startswith("-") or ":" in agent_name:
+            errors.append(f"{path}: name must not start with '-' or contain ':' "
+                          f"(Claude Code skips such agents)")
+        elif not KEBAB_RE.match(agent_name):
+            warnings.append(f"{path}: name {agent_name!r} is not lowercase kebab-case — "
+                            f"works, but kebab-case matching the id is the portable form")
 
     for path in iter_md_files(agents_dir / "memories"):
         check_md(path, ["id", "title"], errors, warnings)
@@ -247,17 +298,13 @@ def cmd_validate(root: Path) -> int:
             if not meta.get("intervalMinutes"):
                 warnings.append(f"{path}: no 'intervalMinutes' set (one-shot task?)")
 
-    for path in sorted(agents_dir.glob("*.md")):
-        pass  # top-level md (agents.md, system-prompt.md) has no required format
-
     for w in warnings:
         print(f"warn: {w}")
     for e in errors:
         print(f"error: {e}", file=sys.stderr)
 
-    checked = len(json_files) + sum(
-        len(list(iter_md_files(agents_dir / d))) for d in ("skills", "agents", "memories", "tasks")
-    )
+    checked = (len(json_files) + len(list_ssot(root, "skills")) + len(list_ssot(root, "agents"))
+               + sum(len(list(iter_md_files(agents_dir / d))) for d in ("memories", "tasks")))
     if errors:
         print(f"\nFAIL: {len(errors)} error(s), {len(warnings)} warning(s) in {checked} file(s)")
         return 1
@@ -274,7 +321,7 @@ def main(argv=None) -> int:
     p_init.add_argument("--examples", action="store_true", help="also create example skill/agent/task/memory")
     p_init.add_argument("--force", action="store_true", help="overwrite existing files")
 
-    p_val = sub.add_parser("validate", help="check .agents/ structure and file formats")
+    p_val = sub.add_parser("validate", help="check .agents/ structure, formats, and cross-tool portability")
     p_val.add_argument("--root", type=Path, default=Path.cwd(), help="project root (default: cwd)")
 
     args = parser.parse_args(argv)

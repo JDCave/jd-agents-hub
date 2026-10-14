@@ -23,7 +23,7 @@ Two-part housekeeping change:
 2. **Land pending uncommitted work.** The repo has accumulated uncommitted work:
    new skills `agent-designer` and `agent-workflow-designer`, the
    `agent-design-orchestrator` agent, harness files (`.agents/models.json`,
-   `.agents/system-prompt.md`), `doc/harness-engineering.md`,
+   `.agents/system-prompt.md`), `docs/harness-engineering.md`,
    and the hook-updated `.agents/skills/registry.json`. Commit them through this
    workflow with the skill gate green, staging explicit paths only.
 
@@ -57,12 +57,12 @@ new session — agent files are not live-reloaded.
 
 ## Verification evidence
 
-| Command | Exit code | Result |
-| --- | --- | --- |
-| python .agents/skills/skill-tester/scripts/skill_gate.py --all | 0 | 6/6 PASS after rework (agent-designer 94.5, agent-workflow-designer 92.8, change-ticket-deliver 90.7, skill-builder 90.5, skill-security-auditor 91.4, skill-tester 90.1) |
-| python .agents/skills/skill-tester/scripts/audit_skills.py | 0 | 6/6 skills PASS (100%), no ERROR |
-| pre-commit hook (automatic, commits 9454229 + 617d401) | 0 | agent-designer 94.5, agent-workflow-designer 92.8, skill-builder 90.5, skill-security-auditor 91.4, skill-tester 90.1 — all PASS |
-| First-review run (superseded, kept for the record) | 1 | skill_gate --all was 5/6 with skill-tester 89.8 while the SKILL.md resets sat uncommitted in the working tree; committed content then scored 90.0. After the resets were committed per user decision (617d401), skill-tester scores 90.1 with a When to Use section added to stay ≥90 without restoring the removed frontmatter |
+| Command                                                        | Exit code | Result                                                                                                                                                                                                                                                                                                                          |
+| -------------------------------------------------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| python .agents/skills/skill-tester/scripts/skill_gate.py --all | 0         | 6/6 PASS after rework (agent-designer 94.5, agent-workflow-designer 92.8, change-ticket-deliver 90.7, skill-builder 90.5, skill-security-auditor 91.4, skill-tester 90.1)                                                                                                                                                       |
+| python .agents/skills/skill-tester/scripts/audit_skills.py     | 0         | 6/6 skills PASS (100%), no ERROR                                                                                                                                                                                                                                                                                                |
+| pre-commit hook (automatic, commits 9454229 + 617d401)         | 0         | agent-designer 94.5, agent-workflow-designer 92.8, skill-builder 90.5, skill-security-auditor 91.4, skill-tester 90.1 — all PASS                                                                                                                                                                                                |
+| First-review run (superseded, kept for the record)             | 1         | skill_gate --all was 5/6 with skill-tester 89.8 while the SKILL.md resets sat uncommitted in the working tree; committed content then scored 90.0. After the resets were committed per user decision (617d401), skill-tester scores 90.1 with a When to Use section added to stay ≥90 without restoring the removed frontmatter |
 
 ## Progress log
 
