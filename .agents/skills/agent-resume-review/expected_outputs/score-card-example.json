@@ -1,0 +1,78 @@
+{
+  "resume": "assets/sample-resume-weak.md",
+  "target_role": "ai-agent-engineer",
+  "language": "zh",
+  "lint_score": 45.7,
+  "dimensions": [
+    {
+      "name": "content_impact",
+      "weight": 25,
+      "score": 15,
+      "evidence": [
+        "0/8 project bullets carry a number",
+        "Bullets are task lists (负责后端接口的开发工作), not results"
+      ],
+      "top_fix": "Rewrite every project bullet as STAR with a number (提升 X%, 日均 X 次)"
+    },
+    {
+      "name": "agent_depth",
+      "weight": 25,
+      "score": 30,
+      "evidence": [
+        "No framework source-code understanding signal",
+        "No MCP / protocol experience; API usage only",
+        "No end-to-end ownership (participation verbs throughout)"
+      ],
+      "top_fix": "Add one deep project: framework internals + MCP server development + shipped outcome"
+    },
+    {
+      "name": "keyword_jd_fit",
+      "weight": 15,
+      "score": 40,
+      "evidence": [
+        "Tier-1 present: python, agent, llm (大模型), prompt, rag",
+        "Missing tier-1: function calling, asyncio/异步",
+        "Tier-2 nearly empty (no MCP, no framework, no docker)"
+      ],
+      "top_fix": "Cover missing tier-1/2 keywords with real evidence only"
+    },
+    {
+      "name": "structure_format",
+      "weight": 15,
+      "score": 70,
+      "evidence": [
+        "Standard sections present and ordered correctly",
+        "Projects lack the 7-element block (no role, no tech-stack line, no separate results)"
+      ],
+      "top_fix": "Give each project: 周期 / 角色 / 技术栈 / 描述 / 3-5 职责 / 1-2 量化成果"
+    },
+    {
+      "name": "credibility",
+      "weight": 10,
+      "score": 60,
+      "evidence": [
+        "No 精通 over-claims (good)",
+        "学习了 Prompt 和 RAG 相关知识 — learning claims carry no weight"
+      ],
+      "top_fix": "Convert learning claims into built-and-measured claims or drop them"
+    },
+    {
+      "name": "ats_delivery",
+      "weight": 10,
+      "score": 70,
+      "evidence": [
+        "Contact + GitHub present; headings are parseable",
+        "File naming and PDF delivery unknown from the text alone"
+      ],
+      "top_fix": "Deliver as PDF named 姓名-岗位-联系方式.pdf; keep plain formatting"
+    }
+  ],
+  "overall": 41,
+  "verdict": "rewrite",
+  "top_actions": [
+    "Rewrite both projects with STAR bullets and numbers (content_impact)",
+    "Replace 参与/协助/帮助 with ownership verbs (content_impact)",
+    "Add an AI Agent depth project: framework source-code study + MCP server (agent_depth)",
+    "Cover function calling + asyncio with real evidence (keyword_jd_fit)"
+  ]
+}
