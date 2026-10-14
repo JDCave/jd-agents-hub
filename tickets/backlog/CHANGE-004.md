@@ -2,8 +2,8 @@
 branch: feature/CHANGE-004-agent-resume-review
 created: 2026-10-14
 id: CHANGE-004
-status: awaiting-acceptance
-tag: (none)
+status: accepted
+tag: v0.4.0
 title: agent-resume-review skill
 type: idea
 updated: 2026-10-14
@@ -48,14 +48,15 @@ Registry entry recorded (gate PASS 96.1 on 2026-10-13). Not in `hub_only` → de
 - 2026-10-14 — open → in-progress; branch feature/CHANGE-004-agent-resume-review created; scope: land the pre-built skill (built and gate-passed 2026-10-13, quality 96.1) from the working tree — no new feature work, only verification + registration
 - 2026-10-14 — skill (21 files) + registry entry committed (2b3d2e1); pre-commit skill gate PASS 96.1; full verification suite recorded above; distribution state: claude user+project links already in place (live session lists the skill), project-scope re-run added the missing `.github/skills/agent-resume-review` junction for copilot. Pre-existing, out-of-scope leftovers noted: 8 broken copilot links under `.github/*` (repo relocation) and 2 `~/.agents/skills` conflicts (agent-designer, agent-workflow-designer point elsewhere) that make `distribute --scope user` refuse — resolving them is a user decision, not this ticket's scope
 - 2026-10-14 — relocation leftovers resolved with explicit user approval: 8 broken `.github/*` artifacts deleted and recreated by project-scope re-run (0 conflicts; validate: all 36 artifacts ok); the 2 stale `~/.agents/skills` junctions (pointed at the pre-relocation clone `D:\Code\...`, which stays untouched) deleted on user confirmation, then `distribute --scope user` re-run clean — 3 new links incl. shared `agent-resume-review`, 0 conflicts; 1 known `[unavail]` copilot cross-volume agent link carried over from CHANGE-003 (needs a one-off elevated run, out of scope). All checklist items ticked → awaiting-acceptance
+- 2026-10-14 — awaiting-acceptance → accepted; user confirmed; tagged v0.4.0
 
 ## Acceptance record
 
-(Verdict: accepted / rejected · date · notes)
+Accepted · 2026-10-14 · user confirmed after the full acceptance package (7/7 checklist ticked, verification evidence above, relocation-leftover cleanup called out); no rework requested.
 
 ## Release record
 
-- Version: (pending)
-- Tag: (pending)
+- Version: v0.4.0 (idea → minor)
+- Tag: v0.4.0 — annotated on the acceptance commit on feature/CHANGE-004-agent-resume-review
 - PR: (pending)
 - Merged: (pending)
