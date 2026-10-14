@@ -1,8 +1,8 @@
 ---
-branch: (none)
+branch: feature/CHANGE-004-agent-resume-review
 created: 2026-10-14
 id: CHANGE-004
-status: open
+status: in-progress
 tag: (none)
 title: agent-resume-review skill
 type: idea
@@ -45,6 +45,7 @@ Registry entry recorded (gate PASS 96.1 on 2026-10-13). Not in `hub_only` → de
 ## Progress log
 
 - 2026-10-14 — open: ticket created
+- 2026-10-14 — open → in-progress; branch feature/CHANGE-004-agent-resume-review created; scope: land the pre-built skill (built and gate-passed 2026-10-13, quality 96.1) from the working tree — no new feature work, only verification + registration
 
 ## Acceptance record
 
