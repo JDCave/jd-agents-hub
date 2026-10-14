@@ -2,7 +2,7 @@
 branch: feature/CHANGE-004-agent-resume-review
 created: 2026-10-14
 id: CHANGE-004
-status: accepted
+status: delivered
 tag: v0.4.0
 title: agent-resume-review skill
 type: idea
