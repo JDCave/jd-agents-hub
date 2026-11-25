@@ -32,10 +32,13 @@ tickets/                     # change tickets (backlog → delivered) + requirem
 | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `agent-designer`          | Design multi-agent systems: orchestration pattern choice (supervisor/swarm/pipeline), provider-ready tool schemas, and execution-log analysis for cost/latency bottlenecks.    |
 | `agent-workflow-designer` | Architect production-grade multi-agent workflows — sequential/parallel/router/orchestrator/evaluator patterns, handoff contracts, failure handling, and cost/context controls. |
+| `bugfix-triage` | Three-stage bug triage (assess → fix → test) with durable per-bug reports under `.specify/bugs/<slug>/`, an evidence-based remediation, and an honest verification verdict. |
 | `change-ticket-deliver`   | Full change lifecycle: record numbered tickets, branch, verify via the skill gate, tag accepted changes with semver, and open PRs.                                             |
+| `idea-assessment`         | Five-stage discovery funnel (intake → research → define → shape → decide) that turns an idea into a documented go, needs-clarification, or kill verdict before SDD starts.     |
 | `skill-builder`           | Create new skills with proper structure, progressive disclosure, and bundled resources.                                                                                        |
 | `skill-security-auditor`  | Security audit and vulnerability scanner for skills before installation — dangerous Python patterns, prompt injection, exfiltration, and supply-chain risks.                   |
 | `skill-tester`            | Validate and score skill quality (structure, scripts, multi-dimensional grading) — also powers the repo's pre-commit gate and CI checks.                                       |
+| `spec-driven-development` | Spec-driven delivery: durable constitution, spec, plan, and tasks under `.specify/`, with clarify/checklist/analyze quality gates and an append-only converge loop.           |
 
 ## 🔧 Scripts
 

@@ -1,0 +1,8 @@
+TypeError: cannot read properties of undefined (reading 'token')
+    at refreshSession (src/auth/session.js:42:18)
+    at async refreshIfStale (src/auth/session.js:88:11)
+    at async onFocus (src/auth/listeners.js:17:5)
+
+Caused by: the refresh promise resolved after the caller already read the
+session, so the second tab observed a half-updated session object. The same
+trace reproduces on the staging deployment and never on a single-tab session.

@@ -1,0 +1,19 @@
+{
+  "slug": "login-timeout",
+  "title": "Login times out after token refresh",
+  "severity": "high",
+  "verdict": "valid",
+  "source": "pasted report",
+  "stages": {
+    "assessment": "recorded",
+    "fix": "pending",
+    "test": "pending"
+  },
+  "files": {
+    "assessment": "assessment.md",
+    "fix": "fix.md",
+    "test": "test.md"
+  },
+  "next_stage": "fix",
+  "verdict_vocabulary": ["verified", "partial", "failed", "not-run"]
+}

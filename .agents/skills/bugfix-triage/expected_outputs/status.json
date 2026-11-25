@@ -1,0 +1,24 @@
+{
+  "action": "status",
+  "root": ".",
+  "bugs_root": ".specify/bugs",
+  "count": 1,
+  "bugs": [
+    {
+      "slug": "login-timeout",
+      "directory": ".specify/bugs/login-timeout",
+      "files": {
+        "assess": true,
+        "fix": true,
+        "test": true
+      },
+      "stages": {
+        "assess": false,
+        "fix": false,
+        "test": false
+      },
+      "present": [],
+      "next_stage": "assess"
+    }
+  ]
+}

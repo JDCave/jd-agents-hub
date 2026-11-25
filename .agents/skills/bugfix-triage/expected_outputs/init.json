@@ -1,0 +1,20 @@
+{
+  "action": "init",
+  "root": ".",
+  "requested_slug": "login-timeout",
+  "slug": "login-timeout",
+  "renamed": false,
+  "title": "Login times out after token refresh",
+  "directory": ".specify/bugs/login-timeout",
+  "artifacts": [
+    "assessment.md",
+    "fix.md",
+    "test.md"
+  ],
+  "created": [
+    "assessment.md",
+    "fix.md",
+    "test.md"
+  ],
+  "skipped": []
+}

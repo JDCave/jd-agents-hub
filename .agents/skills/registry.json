@@ -54,5 +54,29 @@
       "verdict": "PASS",
       "quality_score": 96.1
     }
+  },
+  "spec-driven-development": {
+    "status": "draft",
+    "last_gate": {
+      "timestamp": "2026-11-25T15:23:09+00:00",
+      "verdict": "PASS",
+      "quality_score": 98.9
+    }
+  },
+  "bugfix-triage": {
+    "status": "draft",
+    "last_gate": {
+      "timestamp": "2026-11-25T15:23:07+00:00",
+      "verdict": "PASS",
+      "quality_score": 98.3
+    }
+  },
+  "idea-assessment": {
+    "status": "draft",
+    "last_gate": {
+      "timestamp": "2026-11-25T15:23:08+00:00",
+      "verdict": "PASS",
+      "quality_score": 97.9
+    }
   }
 }

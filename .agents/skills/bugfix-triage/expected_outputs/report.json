@@ -1,0 +1,9 @@
+{
+  "action": "report",
+  "root": ".",
+  "slug": "login-timeout",
+  "directory": ".specify/bugs/login-timeout",
+  "next_stage": "assess",
+  "complete": false,
+  "path": ".specify/bugs/login-timeout/assessment.md"
+}

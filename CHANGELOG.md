@@ -6,6 +6,12 @@ All notable changes to this repo are documented here. Format based on
 change-ticket-deliver workflow at acceptance/tag time from the corresponding ticket
 (`tickets/CHANGE-NNN.md`).
 
+## [v0.5.0] - 2026-11-25
+
+### Added
+
+- CHANGE-005: three process skills absorbed from GitHub spec-kit — `spec-driven-development` (constitution → specify → clarify → plan → checklist → tasks → analyze → implement → converge, with durable `.specify/` artifacts), `bugfix-triage` (assess → fix → test reports under `.specify/bugs/`), and `idea-assessment` (intake → research → define → shape → decide funnel under `.specify/assessments/`); each ships gate-clean references, bundled page/report templates, a stdlib workflow script, and a unit suite, with MIT attribution pinned to spec-kit commit `c4384940`.
+
 ## [v0.4.0] - 2026-10-14
 
 ### Added

@@ -1,0 +1,1 @@
+{"action": "status", "slug": "offline-mode", "assessment_dir": ".specify/assessments/offline-mode", "stages_present": ["intake.md", "problem.md"], "next_stage": "research", "verdict": null}
