@@ -2,8 +2,8 @@
 branch: feature/CHANGE-005-spec-kit-absorption
 created: 2026-11-25
 id: CHANGE-005
-status: awaiting-acceptance
-tag: (none)
+status: accepted
+tag: v0.5.0
 title: spec-kit skill absorption
 type: idea
 updated: 2026-11-25
@@ -93,17 +93,21 @@ edit. None of these are staged or committed here.
   needed beyond the 2026-11-08 implementation.
 - 2026-11-25 — in-progress → awaiting-acceptance: checklist ticked, evidence recorded,
   awaiting explicit user acceptance before tag/push/PR
+- 2026-11-25 — awaiting-acceptance → accepted: explicit user acceptance; annotated tag
+  `v0.5.0` created on this commit, CHANGELOG `[v0.5.0]` section added
 - 2026-11-08 — prior session: analysis of spec-kit's 17 command-skills, porting
   strategy, and implementation of the three hub skills (quality 99.0 / 98.3 / 97.9
   at that time)
 
 ## Acceptance record
 
-(Verdict: pending — awaiting explicit user acceptance · 2026-11-25)
+Verdict: **accepted** · 2026-11-25 · user accepted through the session acceptance
+prompt after reviewing the checklist and verification evidence above; no changes
+requested.
 
 ## Release record
 
-- Version: (pending)
-- Tag: (pending)
+- Version: v0.5.0
+- Tag: v0.5.0 (annotated, on the `feature/CHANGE-005-spec-kit-absorption` branch)
 - PR: (pending)
 - Merged: (pending)
