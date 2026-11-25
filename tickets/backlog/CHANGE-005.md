@@ -2,7 +2,7 @@
 branch: feature/CHANGE-005-spec-kit-absorption
 created: 2026-11-25
 id: CHANGE-005
-status: in-progress
+status: awaiting-acceptance
 tag: (none)
 title: spec-kit skill absorption
 type: idea
@@ -54,30 +54,30 @@ edit. None of these are staged or committed here.
 
 ## Acceptance criteria
 
-- [ ] Three skills committed under `.agents/skills/{spec-driven-development,bugfix-triage,idea-assessment}/`, each with SKILL.md, README.md, flat references/, assets/, expected_outputs/, stdlib scripts/, and tests/ — no `__pycache__` or stray files
-- [ ] `skill_gate.py <skill> --json` returns PASS with 8/8 checks and quality ≥ 90 for each of the three skills
-- [ ] Unit suites pass: `python -m unittest discover -s .agents/skills/<skill>/tests` (32 + 29 + 27 tests, all OK)
-- [ ] `registry.json` carries the three new entries (`status: draft` + `last_gate` PASS/score), and no out-of-scope entry is committed
-- [ ] `README.md` skills catalog lists the three skills
-- [ ] Requirement analysis `tickets/requirement/spec-kit-absorption.md` committed alongside
-- [ ] `python docs/dotagents/init_dotagents_folder.py validate --root .` exits 0 with no new errors or warnings caused by this change
-- [ ] `python scripts/distribute.py distribute --dry-run` reports 0 conflicts and would install the three skills
-- [ ] Scope guard: the pre-existing out-of-scope working-tree changes remain uncommitted and unmodified
+- [x] Three skills committed under `.agents/skills/{spec-driven-development,bugfix-triage,idea-assessment}/`, each with SKILL.md, README.md, flat references/, assets/, expected_outputs/, stdlib scripts/, and tests/ — no `__pycache__` or stray files
+- [x] `skill_gate.py <skill> --json` returns PASS with 8/8 checks and quality ≥ 90 for each of the three skills
+- [x] Unit suites pass: `python -m unittest discover -s .agents/skills/<skill>/tests` (32 + 29 + 27 tests, all OK)
+- [x] `registry.json` carries the three new entries (`status: draft` + `last_gate` PASS/score), and no out-of-scope entry is committed
+- [x] `README.md` skills catalog lists the three skills
+- [x] Requirement analysis `tickets/requirement/spec-kit-absorption.md` committed alongside
+- [x] `python docs/dotagents/init_dotagents_folder.py validate --root .` exits 0 with no new errors or warnings caused by this change
+- [x] `python scripts/distribute.py distribute --dry-run` reports 0 conflicts and would install the three skills
+- [x] Scope guard: the pre-existing out-of-scope working-tree changes remain uncommitted and unmodified
 
 ## Verification evidence
 
 | Command | Exit code | Result |
 | --- | --- | --- |
-| python .agents/skills/skill-tester/scripts/skill_gate.py .agents/skills/spec-driven-development --json |  |  |
-| python .agents/skills/skill-tester/scripts/skill_gate.py .agents/skills/bugfix-triage --json |  |  |
-| python .agents/skills/skill-tester/scripts/skill_gate.py .agents/skills/idea-assessment --json |  |  |
-| python -m unittest discover -s .agents/skills/spec-driven-development/tests |  |  |
-| python -m unittest discover -s .agents/skills/bugfix-triage/tests |  |  |
-| python -m unittest discover -s .agents/skills/idea-assessment/tests |  |  |
-| python docs/dotagents/init_dotagents_folder.py validate --root . |  |  |
-| python scripts/distribute.py distribute --dry-run |  |  |
-| python .agents/skills/skill-tester/scripts/audit_skills.py |  |  |
-| python .agents/skills/skill-tester/scripts/skill_gate.py --all |  |  |
+| python .agents/skills/skill-tester/scripts/skill_gate.py .agents/skills/spec-driven-development --json | 0 | PASS, 8/8 checks, quality 98.9 (Docs 96.6 · Code 98.0 · Complete 100 · Security 100 · Usability 100) |
+| python .agents/skills/skill-tester/scripts/skill_gate.py .agents/skills/bugfix-triage --json | 0 | PASS, 8/8 checks, quality 98.3 (Docs 98.3 · Code 98.0 · Complete 100 · Security 100 · Usability 95.0) |
+| python .agents/skills/skill-tester/scripts/skill_gate.py .agents/skills/idea-assessment --json | 0 | PASS, 8/8 checks, quality 97.9 (Docs 96.5 · Code 98.0 · Complete 100 · Security 100 · Usability 95.0) |
+| python -m unittest discover -s .agents/skills/spec-driven-development/tests | 0 | Ran 32 tests, OK |
+| python -m unittest discover -s .agents/skills/bugfix-triage/tests | 0 | Ran 29 tests, OK |
+| python -m unittest discover -s .agents/skills/idea-assessment/tests | 0 | Ran 27 tests, OK |
+| python docs/dotagents/init_dotagents_folder.py validate --root . | 0 | OK: 82 file(s) valid, 3 warning(s) — all pre-existing (empty models.json placeholder; 2 non-kebab agent names, CHANGE-003 decision); no new warnings from this change |
+| python scripts/distribute.py distribute --dry-run | 0 | 31 new, 0 updated, 13 unchanged, 36 native, 0 unavailable, 0 conflicts (31 includes pre-existing untracked caveman/speckit-* skills; the three CHANGE-005 skills link into `.claude/skills/` and `.github/skills/` and are native for Codex/OpenCode) |
+| python .agents/skills/skill-tester/scripts/audit_skills.py | 0 | 18 SKILL.md audited, 11 PASS (6/6), 0 ERROR — the 7 non-passing are the pre-existing untracked `speckit-*` skills, out of scope |
+| python .agents/skills/skill-tester/scripts/skill_gate.py --all | 1 | 11/18 pass; BLOCKED: 7 pre-existing untracked `speckit-*` skills only (out of scope). All 10 committed skills (7 existing + 3 from CHANGE-005) pass; CI gates the committed tree, so the PR gate is expected to pass |
 
 ## Progress log
 
@@ -87,13 +87,19 @@ edit. None of these are staged or committed here.
 - 2026-11-25 — open → in-progress: branch `feature/CHANGE-005-spec-kit-absorption`
   created; scope = the three absorbed skills + README/registry/requirement analysis
   only (pre-existing unrelated working-tree changes stay out)
+- 2026-11-25 — work + verify: three skills re-gated (PASS 8/8, quality 98.9/98.3/97.9),
+  unit suites 32+29+27 OK, SSOT validate clean, distribution dry-run 0 conflicts;
+  registry entries recorded; accepted scope guard verified. No code changes were
+  needed beyond the 2026-11-08 implementation.
+- 2026-11-25 — in-progress → awaiting-acceptance: checklist ticked, evidence recorded,
+  awaiting explicit user acceptance before tag/push/PR
 - 2026-11-08 — prior session: analysis of spec-kit's 17 command-skills, porting
   strategy, and implementation of the three hub skills (quality 99.0 / 98.3 / 97.9
   at that time)
 
 ## Acceptance record
 
-(Verdict: accepted / rejected · date · notes)
+(Verdict: pending — awaiting explicit user acceptance · 2026-11-25)
 
 ## Release record
 
