@@ -1,0 +1,11 @@
+prereqs example for feature specs/001-add-user-auth
+
+FEATURE_DIR: specs/001-add-user-auth
+FEATURE_SPEC: specs/001-add-user-auth/spec.md
+IMPL_PLAN: specs/001-add-user-auth/plan.md
+TASKS: specs/001-add-user-auth/tasks.md
+AVAILABLE_DOCS:
+  research.md
+  data-model.md
+  contracts/
+  quickstart.md

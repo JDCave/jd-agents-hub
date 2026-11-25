@@ -1,0 +1,1 @@
+{"action": "check", "slug": "offline-mode", "stage": "decide", "ok": true, "stages_present": ["intake.md", "problem.md", "decision.md"], "next_stage": "research", "declared_verdict": "go", "verdict": "needs-clarification", "downgraded": true, "problems": []}

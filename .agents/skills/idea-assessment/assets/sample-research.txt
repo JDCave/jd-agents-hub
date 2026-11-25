@@ -1,0 +1,25 @@
+Research notes (pasted evidence, for a sample intake run)
+
+Users & demand
+- 14 support tickets in the last two quarters mention lost notes in low-signal
+  areas. [source: support queue export] (confidence: medium)
+- Two technicians described retyping notes hours later. [source: interview
+  notes] (confidence: medium)
+- Nobody has measured how often the app is opened without connectivity.
+  [ASSUMPTION] (confidence: low)
+
+Prior art
+- The mobile client already caches the last 20 form templates locally.
+  [source: codebase pointer] (confidence: high)
+- A competing field tool advertises offline capture but reviewers report sync
+  conflicts. [source: public review page] (confidence: low)
+
+Evidence against the idea
+- The current sync layer assumes a single writer; offline edits would introduce
+  conflicts the team has never had to resolve. [ASSUMPTION] (confidence: medium)
+- Storage limits on the oldest supported devices may be too small for photos.
+  [ASSUMPTION] (confidence: low)
+
+Open questions
+- What does "sync when the signal returns" mean for conflicting edits?
+- Is photo capture in scope or is this notes only?

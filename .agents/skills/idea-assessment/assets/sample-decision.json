@@ -1,0 +1,18 @@
+{
+  "slug": "offline-mode",
+  "title": "Offline mode for field teams",
+  "verdict": "needs-clarification",
+  "scorecard": {
+    "problem_validity": "adequate",
+    "evidence_strength": "low",
+    "value_vs_inaction": "adequate",
+    "feasibility_appetite": "unknown",
+    "strategic_fit": "adequate",
+    "risk_posture": "weak"
+  },
+  "blocking_questions": [
+    "Which sync conflict policy is acceptable to field operations?",
+    "What is the largest offline window the current storage budget allows?"
+  ],
+  "revisit_stage": "research"
+}
