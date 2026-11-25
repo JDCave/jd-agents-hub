@@ -1,8 +1,8 @@
 ---
-branch: (none)
+branch: feature/CHANGE-005-spec-kit-absorption
 created: 2026-11-25
 id: CHANGE-005
-status: open
+status: in-progress
 tag: (none)
 title: spec-kit skill absorption
 type: idea
@@ -84,6 +84,9 @@ edit. None of these are staged or committed here.
 - 2026-11-25 — open: ticket created; the three skills and supporting files already
   exist in the working tree from the 2026-11-08 analysis session, re-gated before
   recording
+- 2026-11-25 — open → in-progress: branch `feature/CHANGE-005-spec-kit-absorption`
+  created; scope = the three absorbed skills + README/registry/requirement analysis
+  only (pre-existing unrelated working-tree changes stay out)
 - 2026-11-08 — prior session: analysis of spec-kit's 17 command-skills, porting
   strategy, and implementation of the three hub skills (quality 99.0 / 98.3 / 97.9
   at that time)
