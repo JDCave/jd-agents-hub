@@ -2,7 +2,7 @@
 branch: feature/CHANGE-005-spec-kit-absorption
 created: 2026-11-25
 id: CHANGE-005
-status: delivered
+status: merged
 tag: v0.5.0
 title: spec-kit skill absorption
 type: idea
@@ -50,7 +50,9 @@ this ticket): the untracked `caveman` skill, the seven untracked `speckit-*`
 native skills, local edits to `skill-tester` scripts
 (`script_tester.py`, `security_scorer.py`), the deletion of
 `.github/workflows/skill-gate.yml`, and the `skill-builder/SKILL.md` attribution
-edit. None of these are staged or committed here.
+edit. None of these are staged or committed here. (The seven `speckit-*`
+skills were later deleted by the user after delivery; the other out-of-scope
+items remain untouched.)
 
 ## Acceptance criteria
 
@@ -78,6 +80,7 @@ edit. None of these are staged or committed here.
 | python scripts/distribute.py distribute --dry-run | 0 | 31 new, 0 updated, 13 unchanged, 36 native, 0 unavailable, 0 conflicts (31 includes pre-existing untracked caveman/speckit-* skills; the three CHANGE-005 skills link into `.claude/skills/` and `.github/skills/` and are native for Codex/OpenCode) |
 | python .agents/skills/skill-tester/scripts/audit_skills.py | 0 | 18 SKILL.md audited, 11 PASS (6/6), 0 ERROR — the 7 non-passing are the pre-existing untracked `speckit-*` skills, out of scope |
 | python .agents/skills/skill-tester/scripts/skill_gate.py --all | 1 | 11/18 pass; BLOCKED: 7 pre-existing untracked `speckit-*` skills only (out of scope). All 10 committed skills (7 existing + 3 from CHANGE-005) pass; CI gates the committed tree, so the PR gate is expected to pass |
+| python .agents/skills/skill-tester/scripts/skill_gate.py --all (post-delivery, after the user deleted the 7 orphan `speckit-*`) | 0 | 11/11 PASS — repo fully green |
 
 ## Progress log
 
@@ -99,6 +102,11 @@ edit. None of these are staged or committed here.
   tag pushed to origin, PR opened to `main`
 - 2026-11-25 — PR #6 opened (https://github.com/JDCave/jd-agents-hub/pull/6); waiting
   for the CI skill-gate and user merge decision
+- 2026-11-25 — delivered → merged: PR #6 squash-merged into `main` as `78d6714`; tag
+  `v0.5.0` remains on the accepted commit `0db0139`
+- 2026-11-25 — post-delivery cleanup: the user deleted the seven orphan `speckit-*`
+  native skills; `skill_gate.py --all` is now 11/11 PASS and `audit_skills.py` 11/11
+  (the pre-cleanup blocker in the evidence table above is gone)
 - 2026-11-08 — prior session: analysis of spec-kit's 17 command-skills, porting
   strategy, and implementation of the three hub skills (quality 99.0 / 98.3 / 97.9
   at that time)
@@ -114,4 +122,4 @@ requested.
 - Version: v0.5.0
 - Tag: v0.5.0 (annotated, on the `feature/CHANGE-005-spec-kit-absorption` branch)
 - PR: #6 — https://github.com/JDCave/jd-agents-hub/pull/6
-- Merged: (pending)
+- Merged: 2026-11-25 — squash `78d6714` ("Merge pull request #6 from JDCave/feature/CHANGE-005-spec-kit-absorption")
