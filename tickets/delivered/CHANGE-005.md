@@ -2,7 +2,7 @@
 branch: feature/CHANGE-005-spec-kit-absorption
 created: 2026-11-25
 id: CHANGE-005
-status: accepted
+status: delivered
 tag: v0.5.0
 title: spec-kit skill absorption
 type: idea
@@ -95,6 +95,10 @@ edit. None of these are staged or committed here.
   awaiting explicit user acceptance before tag/push/PR
 - 2026-11-25 — awaiting-acceptance → accepted: explicit user acceptance; annotated tag
   `v0.5.0` created on this commit, CHANGELOG `[v0.5.0]` section added
+- 2026-11-25 — accepted → delivered: ticket moved to `tickets/delivered/`, branch and
+  tag pushed to origin, PR opened to `main`
+- 2026-11-25 — PR #6 opened (https://github.com/JDCave/jd-agents-hub/pull/6); waiting
+  for the CI skill-gate and user merge decision
 - 2026-11-08 — prior session: analysis of spec-kit's 17 command-skills, porting
   strategy, and implementation of the three hub skills (quality 99.0 / 98.3 / 97.9
   at that time)
@@ -109,5 +113,5 @@ requested.
 
 - Version: v0.5.0
 - Tag: v0.5.0 (annotated, on the `feature/CHANGE-005-spec-kit-absorption` branch)
-- PR: (pending)
+- PR: #6 — https://github.com/JDCave/jd-agents-hub/pull/6
 - Merged: (pending)
